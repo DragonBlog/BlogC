@@ -1,7 +1,10 @@
-# Tauri + React + Typescript
+# 博客管理功能分析
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+1. git操作，能通过git 提交pr和拉取代码（支持ssk密钥，或者登陆密码）
+2. 能够预览博客
+3. 能够批量导入博客内容和设置分类，标签等
+4. 支持markdown编辑器
+5. 支持图片上传和管理
+6. 支持文章分类和标签管理
+7. 部署功能（github pages,vercel）
+8. 博客配置功能
