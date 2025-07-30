@@ -12,7 +12,8 @@ function App() {
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
     // setGreetMsg(await invoke("greet", { name }));
     start((url) => {
-      openUrl(url);
+      console.log("Opening URL:", url);
+      openUrl(url, "inAppBrowser");
     });
   }
 

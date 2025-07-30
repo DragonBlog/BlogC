@@ -18,4 +18,5 @@ pub struct Params {
 }
 async fn get_code(params: Query<Params>, state: State<Sender<Params>>) -> impl IntoResponse {
     state.send(params.0).await.unwrap();
+    "Code received"
 }

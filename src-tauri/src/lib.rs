@@ -1,9 +1,10 @@
+use std::sync::Arc;
 use tauri::Manager;
-
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use tokio::sync::Mutex;
+use tokio_util::sync::CancellationToken;
 mod commands;
-pub use commands::*;
 mod oauth;
+pub use commands::*;
 
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -13,6 +14,7 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     dotenv::dotenv().unwrap();
+    tracing_subscriber::fmt::init();
 
     let client_id = std::env::var("CLIENT_ID").expect("CLIENT_ID not set");
     let client_secret = std::env::var("CLIENT_SECRET").expect("CLIENT_SECRET not set");
@@ -20,7 +22,8 @@ pub fn run() {
     tauri::Builder::default()
         .setup(move |app| {
             let oauth = oauth::Oauth::new(&client_id, &client_secret, "http://localhost:8080")?;
-            app.manage(oauth);
+            app.manage(Arc::new(oauth));
+            app.manage(Mutex::new(CancellationToken::new()));
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())
