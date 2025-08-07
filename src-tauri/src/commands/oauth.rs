@@ -1,19 +1,22 @@
 use crate::oauth::{self, server::Params, Oauth};
 use oauth2::{CsrfToken, TokenResponse};
 use std::sync::Arc;
-use tauri::{ipc::Channel, State};
+use tauri::{ipc::Channel, AppHandle, State};
+use tauri_plugin_store::StoreExt;
 use tokio::{net::TcpListener, select, sync::Mutex};
 use tokio_util::sync::CancellationToken;
-use tracing::info;
 
 #[tauri::command]
 pub async fn start(
+    app: AppHandle,
     state: State<'_, Arc<Oauth>>,
     cancellation_token: State<'_, Mutex<CancellationToken>>,
     cb: Channel<String>,
 ) -> tauri::Result<()> {
+    // 停止之前的任务
     cancellation_token.lock().await.cancel();
 
+    // 创建新的取消令牌
     let new_cancellation_token = CancellationToken::new();
     *cancellation_token.lock().await = new_cancellation_token.clone();
     let cancellation_token_clone = new_cancellation_token.clone();
@@ -25,8 +28,6 @@ pub async fn start(
     let oauth = state.inner().clone();
 
     let handler = tauri::async_runtime::spawn(async move {
-        info!("Starting OAuth server at http://localhost:8080");
-
         let router = oauth::server::oauth_router(tx);
         let listener = TcpListener::bind("localhost:8080").await?;
 
@@ -34,9 +35,8 @@ pub async fn start(
             _ = axum::serve(listener, router)
             .with_graceful_shutdown(async move {
                 cancellation_token_clone.cancelled().await;
-                info!("Shutting down OAuth server");
             })=>{
-                info!("OAuth server stopped");
+                Err(anyhow::anyhow!("Server shutdown").into())
             }
             Some(params) = rx.recv()=> {
                 let csrf_state = CsrfToken::new(params.state);
@@ -45,15 +45,20 @@ pub async fn start(
                 }
                 let res = oauth.exchange_code(&params.code, pkce_verifier).await?;
 
-                info!("Access token: {}", res.access_token().secret());
                 new_cancellation_token.cancel();
+                 Ok::<String, tauri::Error>(res.access_token().secret().to_string())
             }
         }
-
-        info!("OAuth server stopped 2");
-        Ok::<(), tauri::Error>(())
     });
 
-    handler.await??;
+    let token = handler.await??;
+    let store = app
+        .store("access_token")
+        .map_err(|e| anyhow::anyhow!("Failed to store access token: {}", e))?;
+    store.set("access_token", token);
+    store
+        .save()
+        .map_err(|e| anyhow::anyhow!("Failed to save access token: {}", e))?;
+
     Ok(())
 }

@@ -1,9 +1,12 @@
 use std::sync::Arc;
 use tauri::Manager;
+use tauri_plugin_store::StoreExt;
 use tokio::sync::Mutex;
 use tokio_util::sync::CancellationToken;
 mod commands;
+mod git;
 mod oauth;
+
 pub use commands::*;
 
 #[tauri::command]
@@ -20,14 +23,16 @@ pub fn run() {
     let client_secret = std::env::var("CLIENT_SECRET").expect("CLIENT_SECRET not set");
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::new().build())
+        .plugin(tauri_plugin_opener::init())
         .setup(move |app| {
             let oauth = oauth::Oauth::new(&client_id, &client_secret, "http://localhost:8080")?;
             app.manage(Arc::new(oauth));
             app.manage(Mutex::new(CancellationToken::new()));
+            app.store("access_token")?;
             Ok(())
         })
-        .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, start])
+        .invoke_handler(tauri::generate_handler![greet, start,])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
