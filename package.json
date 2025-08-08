@@ -7,7 +7,13 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "commit": "cz"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/prompt"
+    }
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
@@ -19,10 +25,15 @@
     "zustand": "^5.0.7"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.1.4",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/prompt": "^19.8.1",
     "@tauri-apps/cli": "^2",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "commitizen": "^4.3.1",
     "typescript": "~5.6.2",
     "vite": "^6.0.3"
   }
