@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import "./App.css";
-import { start } from "./commands";
+import { start } from "./command";
 import { getStore } from "@tauri-apps/plugin-store";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 
