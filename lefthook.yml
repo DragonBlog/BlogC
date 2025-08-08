@@ -1,3 +1,12 @@
+prepare-commit-msg:
+  commands:
+    "prepare commit message":
+      run: pnpm cz --hook
+      interactive: true
+      env:
+        LEFTHOOK: "0"
+      
+
 pre-commit:
   commands:
     check:
@@ -8,4 +17,8 @@ pre-commit:
       glob: "*.{css,scss,less}"
       run: pnpm stylelint {staged_files}  --custom-syntax postcss-less --allow-empty-input --fix
       stage_fixed: true
-  
+
+commit-msg:
+  commands:
+    "lint commit message":
+      run: pnpm commitlint --edit {1}
