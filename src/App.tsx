@@ -9,7 +9,6 @@ import { start } from "./command";
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [, setName] = useState("");
-
   useEffect(() => {
     Promise.resolve().then(async () => {
       const store = await getStore("access_token");

@@ -39,9 +39,9 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^19.8.1
         version: 19.8.1
-      '@commitlint/prompt':
+      '@commitlint/cz-commitlint':
         specifier: ^19.8.1
-        version: 19.8.1(@types/node@24.2.0)(typescript@5.6.3)
+        version: 19.8.1(@types/node@24.2.0)(commitizen@4.3.1(@types/node@24.2.0)(typescript@5.6.3))(inquirer@9.3.7)(typescript@5.6.3)
       '@tauri-apps/cli':
         specifier: ^2
         version: 2.7.1
@@ -57,6 +57,12 @@ importers:
       commitizen:
         specifier: ^4.3.1
         version: 4.3.1(@types/node@24.2.0)(typescript@5.6.3)
+      inquirer:
+        specifier: ^9.3.7
+        version: 9.3.7
+      lefthook:
+        specifier: ^1.12.2
+        version: 1.12.2
       typescript:
         specifier: ~5.6.2
         version: 5.6.3
@@ -261,6 +267,13 @@ packages:
     resolution: {integrity: sha512-0jvJ4u+eqGPBIzzSdqKNX1rvdbSU1lPNYlfQQRIFnBgLy26BtC0cFnr7c/AyuzExMxWsMOte6MkTi9I3SQ3iGQ==}
     engines: {node: '>=v18'}
 
+  '@commitlint/cz-commitlint@19.8.1':
+    resolution: {integrity: sha512-GndsziRLYQbmDSukwgQSp8G/cTlhJNn2U8nKZaNG9NiBxv17uMTI69u7c9RJTcAQCjVNOWWB4+CT/aPFxcbzSQ==}
+    engines: {node: '>=v18'}
+    peerDependencies:
+      commitizen: ^4.0.3
+      inquirer: ^9.0.0
+
   '@commitlint/ensure@19.8.1':
     resolution: {integrity: sha512-mXDnlJdvDzSObafjYrOSvZBwkD01cqB4gbnnFuVyNpGUM5ijwU/r/6uqUmBXAAOKRfyEjpkGVZxaDsCVnHAgyw==}
     engines: {node: '>=v18'}
@@ -291,10 +304,6 @@ packages:
 
   '@commitlint/parse@19.8.1':
     resolution: {integrity: sha512-mmAHYcMBmAgJDKWdkjIGq50X4yB0pSGpxyOODwYmoexxxiUCy5JJT99t1+PEMK7KtsCtzuWYIAXYAiKR+k+/Jw==}
-    engines: {node: '>=v18'}
-
-  '@commitlint/prompt@19.8.1':
-    resolution: {integrity: sha512-IH3zJBJ2GSffgAJtW5EklK72skEAa3PZsbWQ5+Ybumd9QjKMnI9vagz5lprGRImdysaFREsMCOVpmcWjxpxPxg==}
     engines: {node: '>=v18'}
 
   '@commitlint/read@19.8.1':
@@ -1259,6 +1268,60 @@ packages:
     resolution: {integrity: sha512-POQXvpdL69+CluYsillJ7SUhKvytYjW9vG/GKpnf+xP8UWgYEM/RaMzHHofbALDiKbbP1W8UEYmgGl39WkPZsg==}
     engines: {'0': node >= 0.2.0}
 
+  lefthook-darwin-arm64@1.12.2:
+    resolution: {integrity: sha512-fTxeI9tEskrHjc3QyEO+AG7impBXY2Ed8V5aiRc3fw9POfYtVh9b5jRx90fjk2+ld5hf+Z1DsyyLq/vOHDFskQ==}
+    cpu: [arm64]
+    os: [darwin]
+
+  lefthook-darwin-x64@1.12.2:
+    resolution: {integrity: sha512-T1dCDKAAfdHgYZ8qtrS02SJSHoR52RFcrGArFNll9Mu4ZSV19Sp8BO+kTwDUOcLYdcPGNaqOp9PkRBQGZWQC7g==}
+    cpu: [x64]
+    os: [darwin]
+
+  lefthook-freebsd-arm64@1.12.2:
+    resolution: {integrity: sha512-2n9z7Q4BKeMBoB9cuEdv0UBQH82Z4GgBQpCrfjCtyzpDnYQwrH8Tkrlnlko4qPh9MM6nLLGIYMKsA5nltzo8Cg==}
+    cpu: [arm64]
+    os: [freebsd]
+
+  lefthook-freebsd-x64@1.12.2:
+    resolution: {integrity: sha512-1hNY/irY+/3kjRzKoJYxG+m3BYI8QxopJUK1PQnknGo1Wy5u302SdX+tR7pnpz6JM5chrNw4ozSbKKOvdZ5VEw==}
+    cpu: [x64]
+    os: [freebsd]
+
+  lefthook-linux-arm64@1.12.2:
+    resolution: {integrity: sha512-1W4swYIVRkxq/LFTuuK4oVpd6NtTKY4E3VY2Uq2JDkIOJV46+8qGBF+C/QA9K3O9chLffgN7c+i+NhIuGiZ/Vw==}
+    cpu: [arm64]
+    os: [linux]
+
+  lefthook-linux-x64@1.12.2:
+    resolution: {integrity: sha512-J6VGuMfhq5iCsg1Pv7xULbuXC63gP5LaikT0PhkyBNMi3HQneZFDJ8k/sp0Ue9HkQv6QfWIo3/FgB9gz38MCFw==}
+    cpu: [x64]
+    os: [linux]
+
+  lefthook-openbsd-arm64@1.12.2:
+    resolution: {integrity: sha512-wncDRW3ml24DaOyH22KINumjvCohswbQqbxyH2GORRCykSnE859cTjOrRIchTKBIARF7PSeGPUtS7EK0+oDbaw==}
+    cpu: [arm64]
+    os: [openbsd]
+
+  lefthook-openbsd-x64@1.12.2:
+    resolution: {integrity: sha512-2jDOkCHNnc/oK/vR62hAf3vZb1EQ6Md2GjIlgZ/V7A3ztOsM8QZ5IxwYN3D1UOIR5ZnwMBy7PtmTJC/HJrig5w==}
+    cpu: [x64]
+    os: [openbsd]
+
+  lefthook-windows-arm64@1.12.2:
+    resolution: {integrity: sha512-ZMH/q6UNSidhHEG/1QoqIl1n4yPTBWuVmKx5bONtKHicoz4QCQ+QEiNjKsG5OO4C62nfyHGThmweCzZVUQECJw==}
+    cpu: [arm64]
+    os: [win32]
+
+  lefthook-windows-x64@1.12.2:
+    resolution: {integrity: sha512-TqT2jIPcTQ9uwaw+v+DTmvnUHM/p7bbsSrPoPX+fRXSGLzFjyiY+12C9dObSwfCQq6rT70xqQJ9AmftJQsa5/Q==}
+    cpu: [x64]
+    os: [win32]
+
+  lefthook@1.12.2:
+    resolution: {integrity: sha512-2CeTu5NcmoT9YnqsHTq/TF36MlqlzHzhivGx3DrXHwcff4TdvrkIwUTA56huM3Nlo5ODAF/0hlPzaKLmNHCBnQ==}
+    hasBin: true
+
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
@@ -2162,6 +2225,20 @@ snapshots:
       '@commitlint/types': 19.8.1
       ajv: 8.17.1
 
+  '@commitlint/cz-commitlint@19.8.1(@types/node@24.2.0)(commitizen@4.3.1(@types/node@24.2.0)(typescript@5.6.3))(inquirer@9.3.7)(typescript@5.6.3)':
+    dependencies:
+      '@commitlint/ensure': 19.8.1
+      '@commitlint/load': 19.8.1(@types/node@24.2.0)(typescript@5.6.3)
+      '@commitlint/types': 19.8.1
+      chalk: 5.5.0
+      commitizen: 4.3.1(@types/node@24.2.0)(typescript@5.6.3)
+      inquirer: 9.3.7
+      lodash.isplainobject: 4.0.6
+      word-wrap: 1.2.5
+    transitivePeerDependencies:
+      - '@types/node'
+      - typescript
+
   '@commitlint/ensure@19.8.1':
     dependencies:
       '@commitlint/types': 19.8.1
@@ -2213,17 +2290,6 @@ snapshots:
       '@commitlint/types': 19.8.1
       conventional-changelog-angular: 7.0.0
       conventional-commits-parser: 5.0.0
-
-  '@commitlint/prompt@19.8.1(@types/node@24.2.0)(typescript@5.6.3)':
-    dependencies:
-      '@commitlint/ensure': 19.8.1
-      '@commitlint/load': 19.8.1(@types/node@24.2.0)(typescript@5.6.3)
-      '@commitlint/types': 19.8.1
-      chalk: 5.5.0
-      inquirer: 9.3.7
-    transitivePeerDependencies:
-      - '@types/node'
-      - typescript
 
   '@commitlint/read@19.8.1':
     dependencies:
@@ -3140,6 +3206,49 @@ snapshots:
       graceful-fs: 4.2.11
 
   jsonparse@1.3.1: {}
+
+  lefthook-darwin-arm64@1.12.2:
+    optional: true
+
+  lefthook-darwin-x64@1.12.2:
+    optional: true
+
+  lefthook-freebsd-arm64@1.12.2:
+    optional: true
+
+  lefthook-freebsd-x64@1.12.2:
+    optional: true
+
+  lefthook-linux-arm64@1.12.2:
+    optional: true
+
+  lefthook-linux-x64@1.12.2:
+    optional: true
+
+  lefthook-openbsd-arm64@1.12.2:
+    optional: true
+
+  lefthook-openbsd-x64@1.12.2:
+    optional: true
+
+  lefthook-windows-arm64@1.12.2:
+    optional: true
+
+  lefthook-windows-x64@1.12.2:
+    optional: true
+
+  lefthook@1.12.2:
+    optionalDependencies:
+      lefthook-darwin-arm64: 1.12.2
+      lefthook-darwin-x64: 1.12.2
+      lefthook-freebsd-arm64: 1.12.2
+      lefthook-freebsd-x64: 1.12.2
+      lefthook-linux-arm64: 1.12.2
+      lefthook-linux-x64: 1.12.2
+      lefthook-openbsd-arm64: 1.12.2
+      lefthook-openbsd-x64: 1.12.2
+      lefthook-windows-arm64: 1.12.2
+      lefthook-windows-x64: 1.12.2
 
   lines-and-columns@1.2.4: {}
 
