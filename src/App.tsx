@@ -3,31 +3,30 @@ import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { getStore } from "@tauri-apps/plugin-store";
 import { start } from "./command";
+import { useAppStore } from "./store/useAppStore";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [, setName] = useState("");
+  const [accessToken, setAccessToken] = useAppStore((store) => [
+    store.accessToken,
+    store.setAccessToken,
+  ]);
+
   useEffect(() => {
-    Promise.resolve().then(async () => {
-      const store = await getStore("access_token");
-      const token = await store?.get<string>("access_token");
-      setGreetMsg(token ?? "No token found.");
-    });
-  }, []);
+    setGreetMsg(accessToken ?? "No token found.");
+  }, [accessToken]);
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
     // setGreetMsg(await invoke("greet", { name }));
-    await start((url) => {
+    const token = await start((url) => {
       console.log("Opening URL:", url);
       openUrl(url);
     });
-    const store = await getStore("access_token");
-    const token = await store?.get<string>("access_token");
+    setAccessToken(token);
     getCurrentWindow().setFocus();
-    setGreetMsg(token ?? "No token found.");
   }
 
   return (
