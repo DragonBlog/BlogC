@@ -1,6 +1,5 @@
 use std::sync::Arc;
 use tauri::Manager;
-use tauri_plugin_store::StoreExt;
 use tokio::sync::Mutex;
 use tokio_util::sync::CancellationToken;
 mod commands;
@@ -29,7 +28,6 @@ pub fn run() {
             let oauth = oauth::Oauth::new(&client_id, &client_secret, "http://localhost:8080")?;
             app.manage(Arc::new(oauth));
             app.manage(Mutex::new(CancellationToken::new()));
-            app.store("access_token")?;
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![greet, start,])

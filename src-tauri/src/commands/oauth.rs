@@ -1,18 +1,16 @@
 use crate::oauth::{self, server::Params, Oauth};
 use oauth2::{CsrfToken, TokenResponse};
 use std::sync::Arc;
-use tauri::{ipc::Channel, AppHandle, State};
-use tauri_plugin_store::StoreExt;
+use tauri::{ipc::Channel, State};
 use tokio::{net::TcpListener, select, sync::Mutex};
 use tokio_util::sync::CancellationToken;
 
 #[tauri::command]
 pub async fn start(
-    app: AppHandle,
     state: State<'_, Arc<Oauth>>,
     cancellation_token: State<'_, Mutex<CancellationToken>>,
     cb: Channel<String>,
-) -> tauri::Result<()> {
+) -> tauri::Result<String> {
     // 停止之前的任务
     cancellation_token.lock().await.cancel();
 
@@ -52,13 +50,6 @@ pub async fn start(
     });
 
     let token = handler.await??;
-    let store = app
-        .store("access_token")
-        .map_err(|e| anyhow::anyhow!("Failed to store access token: {}", e))?;
-    store.set("access_token", token);
-    store
-        .save()
-        .map_err(|e| anyhow::anyhow!("Failed to save access token: {}", e))?;
 
-    Ok(())
+    Ok(token)
 }
