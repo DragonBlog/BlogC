@@ -17,11 +17,12 @@
   text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-size-adjust: 100%;}
+  text-size-adjust: 100%;
+}
 
 .container {
   margin: 0;
-  padding-top: 10vh;
+  padding-top: 1vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
