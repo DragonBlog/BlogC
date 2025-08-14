@@ -22,6 +22,7 @@ pub fn run() {
     let client_secret = std::env::var("CLIENT_SECRET").expect("CLIENT_SECRET not set");
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .setup(move |app| {

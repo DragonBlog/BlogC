@@ -40,12 +40,12 @@ impl Git {
     }
 
     /// 提交更改
-    /// 
+    ///
     /// # 参数
     /// * `message` - 提交信息
     /// * `author` - 作者名称
     /// * `email` - 作者邮箱
-    /// 
+    ///
     /// # 返回值
     /// 返回提交的Oid对象
     pub fn commit(&self, message: &str, author: &str, email: &str) -> Result<Oid> {
@@ -90,7 +90,7 @@ impl Git {
     }
 
     /// 切换到指定分支
-    /// 
+    ///
     /// # 参数
     /// * `branch_name` - 要切换到的分支名称
     pub fn checkout_branch(&self, branch_name: &str) -> Result<()> {
@@ -107,7 +107,7 @@ impl Git {
     }
 
     /// 创建并切换到新分支
-    /// 
+    ///
     /// # 参数
     /// * `branch_name` - 新分支名称
     pub fn checkout_new_branch(&self, branch_name: &str) -> Result<()> {
@@ -127,7 +127,7 @@ impl Git {
     }
 
     /// 切换到远程分支
-    /// 
+    ///
     /// # 参数
     /// * `local_branch_name` - 本地分支名称
     /// * `remote_name` - 远程仓库名称
@@ -161,7 +161,7 @@ impl Git {
     }
 
     /// 添加远程仓库
-    /// 
+    ///
     /// # 参数
     /// * `name` - 远程仓库名称
     /// * `url` - 远程仓库URL
@@ -172,7 +172,7 @@ impl Git {
     }
 
     /// 获取远程仓库更新
-    /// 
+    ///
     /// # 参数
     /// * `remote_name` - 远程仓库名称
     /// * `on_progress` - 进度回调函数（可选）
@@ -204,7 +204,7 @@ impl Git {
     }
 
     /// 复制指定分支到目标目录
-    /// 
+    ///
     /// # 参数
     /// * `branch_name` - 分支名称
     /// * `target_dir` - 目标目录路径
@@ -231,12 +231,12 @@ impl Git {
     }
 
     /// 检查远程分支是否有更新
-    /// 
+    ///
     /// # 参数
     /// * `remote_name` - 远程仓库名称
     /// * `remote_branch_name` - 远程分支名称
     /// * `local_branch_name` - 本地分支名称
-    /// 
+    ///
     /// # 返回值
     /// 如果远程分支有更新返回true，否则返回false
     pub fn is_remote_branch_updated(
@@ -267,7 +267,7 @@ impl Git {
     }
 
     /// 推送分支到远程仓库
-    /// 
+    ///
     /// # 参数
     /// * `remote_name` - 远程仓库名称
     /// * `branch_name` - 要推送的分支名称
@@ -326,10 +326,10 @@ impl Git {
     }
 
     /// 获取用户信息
-    /// 
+    ///
     /// # 参数
     /// * `repo` - Git仓库对象
-    /// 
+    ///
     /// # 返回值
     /// 返回包含用户名和邮箱的UserInfo结构体
     pub fn get_user_info(repo: &Repository) -> Result<UserInfo> {
@@ -345,7 +345,7 @@ impl Git {
 }
 
 /// 递归复制Git树对象到指定目录
-/// 
+///
 /// # 参数
 /// * `repo` - Git仓库对象
 /// * `tree` - Git树对象

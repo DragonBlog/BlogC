@@ -4,7 +4,6 @@ import reactLogo from "../assets/react.svg";
 import "../App.css";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { start } from "../command";
-import Nav from "../components/Nav";
 import { useAppStore } from "../store/useAppStore";
 
 function Home() {
@@ -30,8 +29,6 @@ function Home() {
 
   return (
     <main className="container">
-      <Nav />
-
       <h1>Welcome to Tauri + React</h1>
 
       <div className="row">
