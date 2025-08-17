@@ -1,3 +1,4 @@
+use crate::error::Result;
 use crate::oauth::{self, server::Params, Oauth};
 use oauth2::{CsrfToken, TokenResponse};
 use std::sync::Arc;
@@ -10,7 +11,7 @@ pub async fn start(
     state: State<'_, Arc<Oauth>>,
     cancellation_token: State<'_, Mutex<CancellationToken>>,
     cb: Channel<String>,
-) -> tauri::Result<String> {
+) -> Result<String> {
     // 停止之前的任务
     cancellation_token.lock().await.cancel();
 

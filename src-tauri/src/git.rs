@@ -1,4 +1,5 @@
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow};
+use crate::error::Result;
 use git2::{
     BranchType, Cred, FetchOptions, IndexAddOption, Oid, Progress, PushOptions, RemoteCallbacks,
     Repository, Signature,

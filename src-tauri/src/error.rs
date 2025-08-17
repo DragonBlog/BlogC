@@ -1,0 +1,41 @@
+use serde::Serialize;
+
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
+    #[error(transparent)]
+    Git(#[from] git2::Error),
+    #[error(transparent)]
+    Tauri(#[from] tauri::Error),
+    #[error(transparent)]
+    Anyhow(#[from] anyhow::Error),
+}
+
+#[derive(Debug, Serialize)]
+#[serde(tag = "kind", content = "message")]
+#[serde(rename_all = "camelCase")]
+enum ErrorKind {
+    Io(String),
+    Git(String),
+    Tauri(String),
+    Anyhow(String),
+}
+
+impl serde::Serialize for Error {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let message = self.to_string();
+        let king = match self {
+            Error::Io(_) => ErrorKind::Io(message),
+            Error::Git(_) => ErrorKind::Git(message),
+            Error::Tauri(_) => ErrorKind::Tauri(message),
+            Error::Anyhow(_) => ErrorKind::Anyhow(message),
+        };
+        king.serialize(serializer)
+    }
+}
+
+pub type Result<T> = std::result::Result<T, Error>;

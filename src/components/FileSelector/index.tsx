@@ -3,6 +3,7 @@ import { homeDir } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useControllableValue } from "ahooks";
 import { App, Button, Input, type InputProps, Space } from "antd";
+import { checkDir } from "../../command";
 
 type FileSelectorProps = InputProps & {
   value?: string;
@@ -30,6 +31,8 @@ export const FileSelector = (props: FileSelectorProps) => {
               directory: true,
               defaultPath: await homeDir(),
             });
+            const check = await checkDir(selected as string);
+            console.log("Directory check result:", check);
             if (selected) {
               setValue(selected as string);
             }
