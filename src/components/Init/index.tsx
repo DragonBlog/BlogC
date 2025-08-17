@@ -4,14 +4,13 @@ import {
   ProForm,
   ProFormCheckbox,
   ProFormDatePicker,
-  ProFormDateRangePicker,
   ProFormSelect,
   ProFormText,
-  ProFormTextArea,
   StepsForm,
 } from "@ant-design/pro-components";
 import { Form, message } from "antd";
 import { useRef } from "react";
+import { FilePathSelector } from "../FilePathSelector";
 import { FileSelector } from "../FileSelector";
 
 const waitTime = (time: number = 100) => {
@@ -64,7 +63,8 @@ export default () => {
               },
             ]}
           >
-            <FileSelector placeholder="请选择文件夹" />
+            <FilePathSelector placeholder="请选择文件夹" />
+            <FileSelector />
           </Form.Item>
         </StepsForm.StepForm>
         <StepsForm.StepForm<{

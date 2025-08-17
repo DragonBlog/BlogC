@@ -1,0 +1,8 @@
+{
+  "scopes": {
+    "plugin:fs:allow-all": {
+      "description": "允许访问所有文件路径",
+      "allow": ["**"]
+    }
+  }
+}
