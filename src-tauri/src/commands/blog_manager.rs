@@ -48,8 +48,11 @@ pub async fn init_blog(path: &str, on_progress: OnProgress) -> Result<()> {
 
     if check_directory_is_empty(path) {
         let git = Git::init(path)?;
-        git.add_remote("template", "https://github.com/DragonBlog/DragonBlog.git")?;
-        tokio::fs::create_dir_all(path.join("blogs")).await?;
+        git.add_remote(
+            "template",
+            "https://github.com/yexiyue/ratatui-kit-website.git",
+        )?;
+        tokio::fs::create_dir_all(path.join(".github/workflows")).await?;
         git.add_all()?;
         let user_info = git.get_user_info()?;
         git.commit("init", user_info)?;

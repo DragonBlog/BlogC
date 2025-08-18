@@ -1,6 +1,7 @@
 use std::sync::Arc;
-use tauri::Manager;
-use tokio::sync::Mutex;
+
+use oauth::Oauth;
+use tauri::{async_runtime::Mutex, Manager};
 use tokio_util::sync::CancellationToken;
 mod commands;
 mod config;
@@ -9,17 +10,14 @@ mod git;
 mod oauth;
 mod utils;
 
-pub use commands::*;
-
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     dotenv::dotenv().unwrap();
-    tracing_subscriber::fmt::init();
+
+    #[cfg(dev)]
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::level_filters::LevelFilter::DEBUG)
+        .init();
 
     let client_id = std::env::var("CLIENT_ID").expect("CLIENT_ID not set");
     let client_secret = std::env::var("CLIENT_SECRET").expect("CLIENT_SECRET not set");
@@ -34,7 +32,14 @@ pub fn run() {
             app.manage(Mutex::new(CancellationToken::new()));
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet, start, check_dir, init_blog])
+        .invoke_handler(tauri::generate_handler![
+            commands::start,
+            commands::check_dir,
+            commands::init_blog,
+            commands::check_command_exists,
+            commands::execute_command,
+            commands::kill_process
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
