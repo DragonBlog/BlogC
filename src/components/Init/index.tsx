@@ -4,14 +4,13 @@ import {
   ProForm,
   ProFormCheckbox,
   ProFormDatePicker,
-  ProFormDateRangePicker,
   ProFormSelect,
   ProFormText,
-  ProFormTextArea,
   StepsForm,
 } from "@ant-design/pro-components";
 import { Form, message } from "antd";
 import { useRef } from "react";
+import { initBlog } from "../../command";
 import { FileSelector } from "../FileSelector";
 
 const waitTime = (time: number = 100) => {
@@ -50,9 +49,21 @@ export default () => {
             description: "这里填入的都是基本信息",
           }}
           onFinish={async () => {
-            console.log(formRef.current?.getFieldsValue());
-            await waitTime(2000);
-            return true;
+            const path = formRef.current?.getFieldsValue();
+            if (path?.projectPath) {
+              try {
+                await initBlog(path.projectPath, (progress) => {
+                  console.log(progress);
+                });
+              } catch (error) {
+                message.error("初始化博客失败，请检查路径或网络连接");
+                console.error("初始化博客失败:", error);
+              }
+              return true;
+            } else {
+              message.error("请选择项目路径");
+            }
+            return false;
           }}
         >
           <Form.Item

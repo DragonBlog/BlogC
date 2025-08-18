@@ -3,6 +3,7 @@ use tauri::Manager;
 use tokio::sync::Mutex;
 use tokio_util::sync::CancellationToken;
 mod commands;
+mod config;
 mod error;
 mod git;
 mod oauth;
@@ -33,7 +34,7 @@ pub fn run() {
             app.manage(Mutex::new(CancellationToken::new()));
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet, start, check_dir])
+        .invoke_handler(tauri::generate_handler![greet, start, check_dir, init_blog])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

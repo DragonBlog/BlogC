@@ -42,3 +42,20 @@ export async function checkDir(dir: string) {
     isEmpty: boolean;
   }>("check_dir", { path: dir });
 }
+
+type Progress =
+  | {
+      type: "receiving";
+      data: [number, number]; // [percent, bytes]
+    }
+  | {
+      type: "processing";
+      data: number;
+    }
+  | {
+      type: "finished";
+    };
+
+export async function initBlog(path: string, cb: (progress: Progress) => void) {
+  return await invoke("init_blog", { path, onProgress: new Channel(cb) });
+}
