@@ -1,8 +1,8 @@
-use anyhow::{anyhow};
 use crate::error::Result;
+use anyhow::anyhow;
 use git2::{
-    BranchType, Cred, FetchOptions, IndexAddOption, Oid, Progress, PushOptions, RemoteCallbacks,
-    Repository, Signature,
+    build::RepoBuilder, BranchType, Cred, FetchOptions, IndexAddOption, Oid, Progress, PushOptions,
+    RemoteCallbacks, Repository, Signature,
 };
 use std::{
     fs,
@@ -22,13 +22,56 @@ pub struct UserInfo {
 pub struct Git {
     /// Git仓库对象
     pub repo: Repository,
-    /// OAuth令牌（可选）
-    pub token: Option<String>,
-    /// SSH密钥路径（可选）
-    pub ssh_key: Option<PathBuf>,
 }
 
 impl Git {
+    pub fn new<T: AsRef<Path>>(repo_path: T) -> Result<Self> {
+        // 创建Git仓库对象
+        let repo = Repository::open(repo_path)?;
+        Ok(Self { repo })
+    }
+
+    pub fn init<T: AsRef<Path>>(path: T) -> Result<Self> {
+        // 创建初始化选项并设置初始分支为 main
+        let mut options = git2::RepositoryInitOptions::new();
+        options.initial_head("main");
+        // 创建Git仓库对象
+        let repo = Repository::init_opts(path, &options)?;
+        println!("Git repository initialized at: {}", repo.path().display());
+        Ok(Self { repo })
+    }
+
+    pub fn clone<T: AsRef<Path>, F: Fn(&Progress)>(
+        url: &str,
+        path: T,
+        on_progress: Option<F>,
+    ) -> Result<Self> {
+        // 创建远程回调对象，用于处理克隆过程中的各种事件
+        let mut callbacks = RemoteCallbacks::new();
+
+        // 如果提供了进度回调函数，则设置传输进度回调
+        if let Some(on_progress) = on_progress {
+            callbacks.transfer_progress(move |progress| {
+                // 调用用户提供的进度回调函数
+                on_progress(&progress);
+                // 返回 true 表示继续克隆过程
+                true
+            });
+        }
+
+        // 创建获取选项并设置回调函数
+        let mut fetch_options = FetchOptions::new();
+        fetch_options.remote_callbacks(callbacks);
+
+        // 创建仓库构建器并设置获取选项
+        let mut builder = RepoBuilder::new();
+        builder.fetch_options(fetch_options);
+
+        // 执行克隆操作
+        let repo = builder.clone(url, path.as_ref())?;
+        Ok(Self { repo })
+    }
+
     /// 将所有更改添加到索引中
     pub fn add_all(&self) -> Result<()> {
         // 获取仓库的索引
@@ -49,9 +92,9 @@ impl Git {
     ///
     /// # 返回值
     /// 返回提交的Oid对象
-    pub fn commit(&self, message: &str, author: &str, email: &str) -> Result<Oid> {
+    pub fn commit(&self, message: &str, user_info: UserInfo) -> Result<Oid> {
         // 创建提交签名（包括作者信息和当前时间戳）
-        let signature = Signature::now(author, email)?;
+        let signature = Signature::now(&user_info.name, &user_info.email)?;
         // 获取仓库索引
         let mut index = self.repo.index()?;
         // 将索引写入树对象并获取树的 ID
@@ -178,7 +221,7 @@ impl Git {
     /// * `remote_name` - 远程仓库名称
     /// * `on_progress` - 进度回调函数（可选）
     pub fn fetch_remote<F: Fn(&Progress)>(
-        self,
+        &self,
         remote_name: &str,
         on_progress: Option<F>,
     ) -> Result<()> {
@@ -280,8 +323,9 @@ impl Git {
         branch_name: &str,
         force: bool,
         on_progress: Option<F>,
+        token: Option<String>,
+        ssh_key: Option<PathBuf>,
     ) -> Result<()> {
-        // todo 重构，默认使用 oauth 认证，如果用户配置了 SSH 密钥则使用 SSH 认证
         // 查找远程仓库
         let mut remote = self.repo.find_remote(remote_name)?;
 
@@ -297,14 +341,14 @@ impl Git {
             // 使用 SSH 密钥进行认证
             if let Some(username) = username_from_url {
                 // 尝试使用默认SSH密钥
-                if let Some(key_path) = &self.ssh_key {
+                if let Some(key_path) = &ssh_key {
                     if key_path.exists() {
                         return Cred::ssh_key(username, None, &key_path, None);
                     }
                 }
             }
 
-            if let Some(token) = &self.token {
+            if let Some(token) = &token {
                 return Cred::userpass_plaintext(token, "");
             }
             Cred::default()
@@ -333,8 +377,8 @@ impl Git {
     ///
     /// # 返回值
     /// 返回包含用户名和邮箱的UserInfo结构体
-    pub fn get_user_info(repo: &Repository) -> Result<UserInfo> {
-        let config = repo.config()?;
+    pub fn get_user_info(&self) -> Result<UserInfo> {
+        let config = self.repo.config()?;
         let user_name = config.get_string("user.name")?;
         let user_email = config.get_string("user.email")?;
 
