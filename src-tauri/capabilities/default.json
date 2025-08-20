@@ -22,11 +22,6 @@
           "name": "binaries/fnm"
         },
         {
-          "cmd": "which",
-          "args": true,
-          "name": "which"
-        },
-        {
           "cmd": "node",
           "args": true,
           "name": "node"
@@ -38,10 +33,6 @@
         }
       ]
     },
-    "fs:default",
-    {
-      "identifier": "fs:scope",
-      "allow": ["*"]
-    }
+    "fs:default"
   ]
 }
