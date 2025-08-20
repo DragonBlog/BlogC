@@ -1,30 +1,54 @@
-import { openUrl } from "@tauri-apps/plugin-opener";
 import { useEffect, useState } from "react";
-import reactLogo from "../assets/react.svg";
 import "../App.css";
-import { getCurrentWindow } from "@tauri-apps/api/window";
-import { start } from "../command";
+import reactLogo from "../assets/react.svg";
+import { kill } from "../command";
 import { useAppStore } from "../store/useAppStore";
+import { checkAndInstallDependencies } from "../utils";
+
+// import { checkAndInstallDependencies } from "../utils";
 
 function Home() {
   const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-  const [accessToken, setAccessToken] = useAppStore((store) => [
+  const [, setName] = useState("");
+  const [accessToken] = useAppStore((store) => [
     store.accessToken,
     store.setAccessToken,
   ]);
-
+  const [pid, setPid] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [version, setVersion] = useState("");
   useEffect(() => {
     setGreetMsg(accessToken ?? "No token found.");
   }, [accessToken]);
 
   async function greet() {
-    const token = await start((url) => {
-      console.log("Opening URL:", url);
-      openUrl(url);
-    });
-    setAccessToken(token);
-    getCurrentWindow().setFocus();
+    // oauth 流程
+    // const token = await start((url) => {
+    //   console.log("Opening URL:", url);
+    //   openUrl(url);
+    // });
+    // setAccessToken(token);
+    // getCurrentWindow().setFocus();
+
+    try {
+      // 检查并安装依赖流程
+      await checkAndInstallDependencies(
+        (output) => {
+          console.log(output);
+          if (output.log.includes("v")) {
+            setVersion((prev) => `${prev} ${output.log}`);
+          }
+        },
+        (pid) => {
+          setPid(pid);
+        },
+      );
+    } catch (error) {
+      console.error(error);
+      setError(JSON.stringify(error));
+    } finally {
+      setPid(null);
+    }
   }
 
   return (
@@ -43,7 +67,14 @@ function Home() {
         </a>
       </div>
       <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
+      <p>{version}</p>
+      <p
+        style={{
+          color: "red",
+        }}
+      >
+        {error}
+      </p>
       <form
         className="row"
         onSubmit={(e) => {
@@ -58,6 +89,20 @@ function Home() {
         />
         <button type="submit">Greet</button>
       </form>
+      <button
+        type="button"
+        onClick={async () => {
+          try {
+            if (pid) {
+              await kill(pid);
+            }
+          } catch (error) {
+            console.error("Failed to kill process:", error);
+          }
+        }}
+      >
+        kill {pid}
+      </button>
       <p>{greetMsg}</p>
     </main>
   );
