@@ -1,15 +1,6 @@
-import {
-  ChromeFilled,
-  CrownFilled,
-  SmileFilled,
-  TabletFilled,
-} from "@ant-design/icons";
+import { CrownFilled, SmileFilled } from "@ant-design/icons";
 import type { ProSettings } from "@ant-design/pro-components";
-import {
-  PageContainer,
-  ProLayout,
-  SettingDrawer,
-} from "@ant-design/pro-components";
+import { ProLayout, SettingDrawer } from "@ant-design/pro-components";
 import { App, Avatar, ConfigProvider } from "antd";
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";

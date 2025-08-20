@@ -59,3 +59,45 @@ type Progress =
 export async function initBlog(path: string, cb: (progress: Progress) => void) {
   return await invoke("init_blog", { path, onProgress: new Channel(cb) });
 }
+
+export async function checkCommand(command: string): Promise<boolean> {
+  return await invoke("check_command_exists", { command });
+}
+
+export type CommandStdout = {
+  log: string;
+  isError: boolean;
+};
+
+export async function executeCommand(
+  command: string,
+  args: string[],
+  options: {
+    onOutput?: (output: CommandStdout) => void;
+    onStart?: (pid: number) => void;
+    currentDir?: string;
+  },
+): Promise<void> {
+  const { onOutput, onStart, currentDir } = options;
+  return await invoke("execute_command", {
+    command,
+    args,
+    currentDir,
+    onOutput: new Channel(onOutput),
+    onStart: new Channel(onStart),
+  });
+}
+
+export async function kill(pid: number): Promise<void> {
+  return await invoke("kill_process", { pid });
+}
+
+export async function installNode(
+  onOutput?: (output: CommandStdout) => void,
+  onStart?: (pid: number) => void,
+): Promise<void> {
+  return await invoke("install_node", {
+    onOutput: new Channel(onOutput),
+    onStart: new Channel(onStart),
+  });
+}

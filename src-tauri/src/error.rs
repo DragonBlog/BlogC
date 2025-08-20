@@ -10,6 +10,12 @@ pub enum Error {
     Tauri(#[from] tauri::Error),
     #[error(transparent)]
     Anyhow(#[from] anyhow::Error),
+    #[error(transparent)]
+    Shell(#[from] tauri_plugin_shell::Error),
+    #[error(transparent)]
+    SerdeJson(#[from] serde_json::Error),
+    #[error(transparent)]
+    Which(#[from] which::Error),
 }
 
 #[derive(Debug, Serialize)]
@@ -20,6 +26,9 @@ enum ErrorKind {
     Git(String),
     Tauri(String),
     Anyhow(String),
+    Shell(String),
+    SerdeJson(String),
+    Which(String),
 }
 
 impl serde::Serialize for Error {
@@ -33,6 +42,9 @@ impl serde::Serialize for Error {
             Error::Git(_) => ErrorKind::Git(message),
             Error::Tauri(_) => ErrorKind::Tauri(message),
             Error::Anyhow(_) => ErrorKind::Anyhow(message),
+            Error::Shell(_) => ErrorKind::Shell(message),
+            Error::SerdeJson(_) => ErrorKind::SerdeJson(message),
+            Error::Which(_) => ErrorKind::Which(message),
         };
         king.serialize(serializer)
     }

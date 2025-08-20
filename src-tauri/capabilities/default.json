@@ -2,14 +2,46 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Capability for the main window",
-  "windows": [
-    "main"
-  ],
+  "windows": ["main"],
   "permissions": [
     "core:default",
     "opener:default",
     "store:default",
     "core:window:allow-set-focus",
-    "dialog:default"
+    "dialog:default",
+    "shell:default",
+    "shell:allow-spawn",
+    "shell:allow-stdin-write",
+    "shell:allow-kill",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "sidecar": true,
+          "args": true,
+          "name": "binaries/fnm"
+        },
+        {
+          "cmd": "which",
+          "args": true,
+          "name": "which"
+        },
+        {
+          "cmd": "node",
+          "args": true,
+          "name": "node"
+        },
+        {
+          "cmd": "pnpm",
+          "args": true,
+          "name": "pnpm"
+        }
+      ]
+    },
+    "fs:default",
+    {
+      "identifier": "fs:scope",
+      "allow": ["*"]
+    }
   ]
 }
