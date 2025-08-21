@@ -6,7 +6,7 @@ use tauri::{ipc::Channel, Runtime};
 use tauri_plugin_shell::process::CommandEvent;
 use tauri_plugin_shell::Shell;
 use tokio::process::Command;
-use tracing::{debug, error};
+use tracing::{debug, error, trace};
 use which::which_global;
 
 #[derive(Debug, Clone, Serialize)]
@@ -64,7 +64,7 @@ where
         match output {
             CommandEvent::Stdout(buf) => {
                 let log = String::from_utf8_lossy(&buf).to_string();
-                debug!("stdout: {}", log);
+                trace!("stdout: {}", log);
                 on_output.send(CommandStdout {
                     log,
                     is_error: false,
@@ -72,18 +72,18 @@ where
             }
             CommandEvent::Stderr(buf) => {
                 let log = String::from_utf8_lossy(&buf).to_string();
-                debug!("stderr: {}", log);
+                trace!("stderr: {}", log);
                 on_output.send(CommandStdout {
                     log,
                     is_error: true,
                 })?;
             }
             CommandEvent::Terminated(status) => {
-                debug!("Process exited with: {:?}", status);
+                trace!("Process exited with: {:?}", status);
             }
             CommandEvent::Error(error) => {
                 error!("Error: {}", error);
-                return Err(anyhow!(error).into());
+                return Err(anyhow!("Execute {command} {error}").into());
             }
             _ => {}
         }
@@ -91,86 +91,6 @@ where
 
     Ok(())
 }
-
-// pub async fn execute_command<I, S, P, R: Runtime>(
-//     shell: &Shell<R>,
-//     command: &str,
-//     args: I,
-//     dir: P,
-//     on_output: Channel<CommandStdout>,
-//     on_start: Channel<u32>,
-// ) -> Result<()>
-// where
-//     I: IntoIterator<Item = S>,
-//     S: AsRef<OsStr>,
-//     P: AsRef<Path>,
-// {
-//     let mut child = Command::new("node")
-//         .current_dir(dir)
-//         .args(args)
-//         .stdout(Stdio::piped())
-//         .stderr(Stdio::piped())
-//         .spawn()?;
-
-//     let pid = child
-//         .id()
-//         .ok_or(anyhow!("Failed to get child process ID"))?;
-
-//     on_start.send(pid)?;
-
-//     // 处理 stdout
-//     let stdout = child.stdout.take().ok_or(anyhow!("Failed to get stdout"))?;
-//     let stdout_reader = BufReader::new(stdout);
-//     let mut stdout_lines = stdout_reader.lines();
-
-//     // 处理 stderr
-//     let stderr = child.stderr.take().ok_or(anyhow!("Failed to get stderr"))?;
-//     let stderr_reader = BufReader::new(stderr);
-//     let mut stderr_lines = stderr_reader.lines();
-
-//     // 使用 tokio::select! 同时处理 stdout、stderr 和进程等待事件
-//     // 这样可以确保任何事件发生时都能及时响应，而不会阻塞其他事件的处理
-//     loop {
-//         tokio::select! {
-//             // 处理标准输出行
-//             line_result = stdout_lines.next_line() => {
-//                 match line_result {
-//                     Ok(Some(line)) => {
-//                         debug!("stdout: {}", line);
-//                         // 将标准输出行发送到前端，is_error 设置为 false
-//                         on_output.send(CommandStdout { log: line, is_error: false })?;
-//                     }
-//                     Ok(None) => continue, // stdout 已达文件末尾，继续处理其他流
-//                     Err(e) => {
-//                         return Err(e.into());
-//                     }
-//                 }
-//             }
-//             // 处理错误输出行
-//             line_result = stderr_lines.next_line() => {
-//                 match line_result {
-//                     Ok(Some(line)) => {
-//                         debug!("stderr: {}", line);
-//                         // 将错误输出行发送到前端，is_error 设置为 true
-//                         on_output.send(CommandStdout { log: line, is_error: true })?;
-//                     }
-//                     Ok(None) => continue, // stderr 已达文件末尾，继续处理其他流
-//                     Err(e) => {
-//                         return Err(e.into());
-//                     }
-//                 }
-//             }
-//             // 处理子进程完成事件
-//             status = child.wait()=>{
-//                 let status = status?;
-//                 debug!("Process exited with: {}", status);
-//                 break;
-//             }
-//         }
-//     }
-
-//     Ok(())
-// }
 
 /// 终止指定ID的进程
 ///

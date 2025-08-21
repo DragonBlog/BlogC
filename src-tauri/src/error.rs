@@ -16,6 +16,8 @@ pub enum Error {
     SerdeJson(#[from] serde_json::Error),
     #[error(transparent)]
     Which(#[from] which::Error),
+    #[error(transparent)]
+    Pattern(#[from] glob::PatternError),
 }
 
 #[derive(Debug, Serialize)]
@@ -29,6 +31,7 @@ enum ErrorKind {
     Shell(String),
     SerdeJson(String),
     Which(String),
+    Pattern(String),
 }
 
 impl serde::Serialize for Error {
@@ -45,6 +48,7 @@ impl serde::Serialize for Error {
             Error::Shell(_) => ErrorKind::Shell(message),
             Error::SerdeJson(_) => ErrorKind::SerdeJson(message),
             Error::Which(_) => ErrorKind::Which(message),
+            Error::Pattern(_) => ErrorKind::Pattern(message),
         };
         king.serialize(serializer)
     }

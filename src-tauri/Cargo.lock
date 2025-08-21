@@ -405,6 +405,7 @@ dependencies = [
  "dotenv",
  "futures",
  "git2",
+ "glob",
  "notify",
  "oauth2",
  "serde",

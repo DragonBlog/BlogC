@@ -65,6 +65,8 @@ pub fn run() {
             commands::execute_command,
             commands::kill_process,
             commands::install_node,
+            commands::read_schemas,
+            commands::read_blog_build_config,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

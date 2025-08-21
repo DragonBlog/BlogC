@@ -1,9 +1,18 @@
-use std::path::Path;
+use std::{collections::HashMap, path::Path};
 
-use crate::{error::Result, git::Git, utils::check_directory_is_empty};
+use crate::{
+    config::BlogBuildConfig,
+    error::Result,
+    git::Git,
+    utils::{self, check_directory_is_empty},
+};
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
+use tokio::fs;
 
 type OnProgress = tauri::ipc::Channel<Progress>;
+
+static TEMPLATE_DIR: &str = "template";
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -64,9 +73,26 @@ pub async fn init_blog(path: &str, on_progress: OnProgress) -> Result<()> {
         )?;
         git.checkout_remote_branch("template-main", "template", "main")?;
         git.checkout_branch("main")?;
-        git.copy_branch_to_dir("template-main", "template")?;
+        git.copy_branch_to_dir("template-main", TEMPLATE_DIR)?;
     } else {
         return Err(anyhow::anyhow!("目录不为空").into());
     }
     Ok(())
+}
+
+#[tauri::command]
+pub async fn read_schemas(project_dir: String) -> Result<HashMap<String, Value>> {
+    let path = Path::new(&project_dir)
+        .join(TEMPLATE_DIR)
+        .join(".astro/collections");
+    utils::read_schema_file(path).await
+}
+
+#[tauri::command]
+pub async fn read_blog_build_config(project_dir: String) -> Result<BlogBuildConfig> {
+    let path = Path::new(&project_dir)
+        .join(TEMPLATE_DIR)
+        .join(".astro/blog_build_config.json");
+    let str = fs::read_to_string(path).await?;
+    Ok(serde_json::from_str(&str)?)
 }
