@@ -10,11 +10,11 @@
     "core:window:allow-set-focus",
     "dialog:default",
     "shell:default",
-    "shell:allow-spawn",
+    "shell:allow-execute",
     "shell:allow-stdin-write",
     "shell:allow-kill",
     {
-      "identifier": "shell:allow-execute",
+      "identifier": "shell:allow-spawn",
       "allow": [
         {
           "sidecar": true,
@@ -30,6 +30,11 @@
           "cmd": "pnpm",
           "args": true,
           "name": "pnpm"
+        },
+        {
+          "cmd": "echo",
+          "args": true,
+          "name": "echo"
         }
       ]
     },

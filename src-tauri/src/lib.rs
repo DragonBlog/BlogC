@@ -1,5 +1,5 @@
 use serde_json::Value;
-use std::sync::Arc;
+use std::{env, sync::Arc};
 use tauri::{async_runtime::Mutex, Manager};
 use tauri_plugin_shell::ShellExt;
 use tokio_util::sync::CancellationToken;
@@ -34,8 +34,14 @@ pub fn run() {
             let oauth = oauth::Oauth::new(&client_id, &client_secret, "http://localhost:8080")?;
             app.manage(Arc::new(oauth));
             app.manage(Mutex::new(CancellationToken::new()));
+
             let command = app.shell().sidecar("fnm")?;
+            let fnm_dir = app.path().app_data_dir()?.join("fnm");
+
             tauri::async_runtime::spawn(async move {
+                env::set_var("FNM_DIR", fnm_dir);
+                env::set_var("FORCE_COLOR", "1");
+
                 let output = command
                     .args(["env", "--json"])
                     .output()
@@ -51,8 +57,8 @@ pub fn run() {
                     let node_path = res["FNM_MULTISHELL_PATH"]
                         .as_str()
                         .expect("FNM_MULTISHELL_PATH not found in fnm output");
-                    let path = std::env::var("PATH").unwrap_or_default();
-                    std::env::set_var("PATH", format!("{node_path}/bin:{path}"));
+                    let path = env::var("PATH").unwrap_or_default();
+                    env::set_var("PATH", format!("{node_path}/bin:{path}"));
                 }
             });
             Ok(())
@@ -62,9 +68,6 @@ pub fn run() {
             commands::check_dir,
             commands::init_blog,
             commands::check_command_exists,
-            commands::execute_command,
-            commands::kill_process,
-            commands::install_node,
             commands::read_schemas,
             commands::read_blog_build_config,
         ])

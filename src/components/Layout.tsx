@@ -13,7 +13,7 @@ export default () => {
   const [pathname, setPathname] = useState("/welcome");
   return (
     <div>
-      <ConfigProvider>
+      <ConfigProvider theme={{ cssVar: true, hashed: false }}>
         <App>
           <ProLayout
             location={{
@@ -27,12 +27,12 @@ export default () => {
                   name: "首页",
                 },
                 {
-                  path: "/welcome",
+                  path: "/terminal",
                   name: "欢迎",
                   icon: <SmileFilled />,
                 },
                 {
-                  path: "/admin",
+                  path: "/",
                   name: "管理页",
                   icon: <CrownFilled />,
                   access: "canAdmin",
@@ -45,6 +45,7 @@ export default () => {
             }}
             menuProps={{
               onClick: (e) => {
+                console.log(e);
                 setPathname(e.key);
                 navigate(e.key);
               },

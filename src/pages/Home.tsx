@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../App.css";
 import reactLogo from "../assets/react.svg";
-import { kill } from "../command";
+import TerminalComponent, { type TerminalRef } from "../components/Terminal";
 import { useAppStore } from "../store/useAppStore";
-import { checkAndInstallDependencies } from "../utils";
+import { exec } from "../utils";
 
 // import { checkAndInstallDependencies } from "../utils";
 
@@ -16,6 +16,7 @@ function Home() {
   ]);
   const [pid, setPid] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const termRef = useRef<TerminalRef>(null);
   const [version, setVersion] = useState("");
   useEffect(() => {
     setGreetMsg(accessToken ?? "No token found.");
@@ -32,20 +33,30 @@ function Home() {
 
     try {
       // 检查并安装依赖流程
-      await checkAndInstallDependencies(
-        (output) => {
-          console.log(output);
-          if (output.log.includes("v")) {
-            setVersion((prev) => `${prev} ${output.log}`);
-          }
+      // await checkAndInstallDependencies(
+      //   (output) => {
+      //     termRef.current?.writeln(output.log);
+      //     console.log(output.log);
+      //   },
+      //   (pid) => {
+      //     setPid(pid);
+      //   }
+      // );
+      exec("pnpm", ["dev"], false, {
+        // encoding: "raw",
+        cwd: "/Users/yexiyue/test2/template",
+        onOutput: (output) => {
+          console.log(output.log);
+          termRef.current?.write(output.log);
         },
-        (pid) => {
-          setPid(pid);
+        onStart: (child) => {
+          console.log("start", child);
         },
-      );
+        env: {
+          FORCE_COLOR: "1",
+        },
+      });
     } catch (error) {
-      console.error(error);
-      setError(JSON.stringify(error));
     } finally {
       setPid(null);
     }
@@ -67,7 +78,7 @@ function Home() {
         </a>
       </div>
       <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-      <p>{version}</p>
+
       <p
         style={{
           color: "red",
@@ -94,7 +105,7 @@ function Home() {
         onClick={async () => {
           try {
             if (pid) {
-              await kill(pid);
+              // await kill(pid);
             }
           } catch (error) {
             console.error("Failed to kill process:", error);
@@ -104,6 +115,14 @@ function Home() {
         kill {pid}
       </button>
       <p>{greetMsg}</p>
+      <div
+        style={{
+          width: "100%",
+          height: "100px",
+        }}
+      >
+        <TerminalComponent ref={termRef} />
+      </div>
     </main>
   );
 }
