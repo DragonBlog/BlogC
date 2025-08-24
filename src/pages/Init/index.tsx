@@ -1,3 +1,4 @@
+import type { Child } from "@tauri-apps/plugin-shell";
 import {
   Button,
   Card,
@@ -8,7 +9,7 @@ import {
   Typography,
   theme,
 } from "antd";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { match } from "ts-pattern";
 import { checkDir, initBlog } from "../../command";
@@ -28,6 +29,14 @@ export const Init = () => {
   const [bytes, setBytes] = useState(0);
   const terminalRef = useRef<TerminalRef>(null);
   const navigate = useNavigate();
+  const [child, setChild] = useState<Child>();
+
+  // todo: 组件卸载时杀掉子进程
+  useEffect(() => {
+    return () => {
+      child?.kill();
+    };
+  }, [child]);
 
   const { token } = theme.useToken();
 
@@ -86,7 +95,7 @@ export const Init = () => {
                   type: "receiving",
                 },
                 ({ data }) => {
-                  setPercent(data[0]);
+                  setPercent(Math.floor(data[0]));
                   setBytes(data[1]);
                 },
               )
@@ -117,10 +126,9 @@ export const Init = () => {
         await installDependencies({
           cwd: `${projectDir}/template`,
           onStart: (child) => {
-            console.log("start", child);
+            setChild(child);
           },
           onOutput: (output) => {
-            console.log("output", output);
             terminalRef.current?.write(output.log);
           },
         });
