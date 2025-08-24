@@ -74,6 +74,21 @@ pub async fn init_blog(path: &str, on_progress: OnProgress) -> Result<()> {
         git.checkout_remote_branch("template-main", "template", "main")?;
         git.checkout_branch("main")?;
         git.copy_branch_to_dir("template-main", TEMPLATE_DIR)?;
+        let blog_build_config_path = path.join(TEMPLATE_DIR).join("dragon.json");
+        let str = fs::read_to_string(&blog_build_config_path).await?;
+        let mut build_config = serde_json::from_str::<BlogBuildConfig>(&str)?;
+
+        for (name, item) in build_config.entries.iter_mut() {
+            item.entry_base = format!("../{name}");
+            fs::create_dir(path.join(&name)).await?;
+        }
+
+        // 覆盖写入配置文件
+        fs::write(
+            &blog_build_config_path,
+            serde_json::to_string_pretty(&build_config)?,
+        )
+        .await?;
     } else {
         return Err(anyhow::anyhow!("目录不为空").into());
     }
@@ -94,7 +109,7 @@ pub async fn read_schemas(project_dir: String) -> Result<HashMap<String, Value>>
 pub async fn read_blog_build_config(project_dir: String) -> Result<BlogBuildConfig> {
     let path = Path::new(&project_dir)
         .join(TEMPLATE_DIR)
-        .join(".astro/blog_build_config.json");
+        .join("dragon.json");
     let str = fs::read_to_string(path).await?;
     Ok(serde_json::from_str(&str)?)
 }
