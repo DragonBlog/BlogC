@@ -58,14 +58,24 @@ export async function installDependencies(options: {
   onStart?: (child: Child) => void;
   onOutput?: (output: CommandStdout) => void;
   cwd: string;
+  onStatus?: (status: string) => void;
 }) {
+  const { onStatus } = options;
   const hasNode = await checkCommand("node");
+
   if (!hasNode) {
+    onStatus?.("正在下载并安装 Node.js...");
     await exec("binaries/fnm", ["install", "24"], true, options);
   }
   const hasPnpm = await checkCommand("pnpm");
   if (!hasPnpm) {
+    onStatus?.("正在下载并安装 npm...");
+
     await exec("npm", ["install", "-g", "pnpm"], false, options);
   }
+  onStatus?.("正在下载并安装依赖...");
+
   await exec("pnpm", ["install"], false, options);
+
+  onStatus?.("依赖安装完成");
 }

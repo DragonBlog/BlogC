@@ -1,5 +1,6 @@
 import type { Child } from "@tauri-apps/plugin-shell";
 import {
+  App,
   Button,
   Card,
   Flex,
@@ -14,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { match } from "ts-pattern";
 import { checkDir, initBlog } from "../../command";
 import { FilePathSelector } from "../../components/FilePathSelector";
+import SchemaForm from "../../components/SchemaForm";
 import TerminalComponent, { type TerminalRef } from "../../components/Terminal";
 import { useAppStore } from "../../store/useAppStore";
 import { formatBytes, installDependencies } from "../../utils";
@@ -23,15 +25,17 @@ export const Init = () => {
     store.projectDir,
     store.setProjectDir,
   ]);
+  const { message } = App.useApp();
   const [step, setStep] = useState(0);
   const [form] = Form.useForm();
   const [percent, setPercent] = useState(0);
   const [bytes, setBytes] = useState(0);
   const terminalRef = useRef<TerminalRef>(null);
   const navigate = useNavigate();
+  const [installStatus, setInstallStatus] = useState("");
   const [child, setChild] = useState<Child>();
+  const [isNextDisabled, setIsNextDisabled] = useState(false);
 
-  // todo: 组件卸载时杀掉子进程
   useEffect(() => {
     return () => {
       child?.kill();
@@ -58,7 +62,6 @@ export const Init = () => {
                 required: true,
                 validator: async (_, value) => {
                   const res = await checkDir(value ?? "");
-
                   if (!res.exists) {
                     return Promise.reject(
                       new Error("目录不存在，请选择一个有效目录"),
@@ -69,7 +72,6 @@ export const Init = () => {
                       new Error("目录不为空，请选择一个空目录"),
                     );
                   }
-
                   return Promise.resolve();
                 },
               },
@@ -79,7 +81,6 @@ export const Init = () => {
           </Form.Item>
         </Form>
       ),
-
       onNext: async () => {
         try {
           const values = await form.validateFields();
@@ -90,15 +91,10 @@ export const Init = () => {
 
           await initBlog(values.projectDir, (progress) => {
             match(progress)
-              .with(
-                {
-                  type: "receiving",
-                },
-                ({ data }) => {
-                  setPercent(Math.floor(data[0]));
-                  setBytes(data[1]);
-                },
-              )
+              .with({ type: "receiving" }, ({ data }) => {
+                setPercent(Math.floor(data[0]));
+                setBytes(data[1]);
+              })
               .with({ type: "processing" }, ({ data }) => {
                 setPercent(data);
               })
@@ -107,7 +103,10 @@ export const Init = () => {
               })
               .exhaustive();
           });
-        } catch (_error) {}
+        } catch (_error) {
+          console.log(_error);
+          message.error("初始化博客失败，请检查路径或网络连接");
+        }
       },
     },
     {
@@ -123,6 +122,8 @@ export const Init = () => {
       ),
       onNext: async () => {
         setStep(2);
+        setIsNextDisabled(true);
+
         await installDependencies({
           cwd: `${projectDir}/template`,
           onStart: (child) => {
@@ -131,6 +132,12 @@ export const Init = () => {
           onOutput: (output) => {
             terminalRef.current?.write(output.log);
           },
+          onStatus: (installStatus) => {
+            setInstallStatus(installStatus);
+            if (installStatus === "依赖安装完成") {
+              setIsNextDisabled(false);
+            }
+          },
         });
       },
     },
@@ -138,29 +145,30 @@ export const Init = () => {
       title: "下载依赖",
       content: (
         <Flex className="w-full overflow-hidden" vertical gap="middle">
-          依赖下载中，请耐心等待...
+          {installStatus || "依赖下载中，请耐心等待..."}
           <div
             className="border rounded"
-            style={{
-              borderColor: token.colorBorder,
-            }}
+            style={{ borderColor: token.colorBorder }}
           >
             <TerminalComponent cols={10} rows={12} ref={terminalRef} />
           </div>
         </Flex>
       ),
       onNext: () => {
+        if (installStatus !== "依赖安装完成") {
+          message.warning("依赖还没安装完成，请耐心等待...");
+          return;
+        }
+        setInstallStatus("");
+
         setStep(3);
       },
     },
     {
       title: "完成",
       content: <div>完成内容</div>,
-      onPrev: () => {
-        setStep(0);
-      },
+      onPrev: () => setStep(0),
       onNext: async () => {
-        // 完成后续操作，例如跳转到主页面
         navigate("/content-manager");
       },
     },
@@ -176,20 +184,13 @@ export const Init = () => {
           </Flex>
           <Flex justify="center" gap="middle">
             {steps[step].onPrev && (
-              <Button
-                onClick={() => {
-                  steps[step].onPrev?.();
-                }}
-              >
-                上一步
-              </Button>
+              <Button onClick={() => steps[step].onPrev?.()}>上一步</Button>
             )}
             {steps[step].onNext && (
               <Button
                 type="primary"
-                onClick={() => {
-                  steps[step].onNext?.();
-                }}
+                disabled={isNextDisabled} // 🚀 核心：未完成禁止点击
+                onClick={() => steps[step].onNext?.()}
               >
                 {step === 3 ? "完成" : "下一步"}
               </Button>
