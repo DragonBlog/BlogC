@@ -1,6 +1,6 @@
 import { FitAddon } from "@xterm/addon-fit";
 import { WebLinksAddon } from "@xterm/addon-web-links";
-import { Terminal } from "@xterm/xterm";
+import { type ITerminalInitOnlyOptions, Terminal } from "@xterm/xterm";
 import { theme } from "antd";
 import {
   type ForwardedRef,
@@ -16,7 +16,7 @@ export type TerminalRef = {
 };
 
 const TerminalComponent = forwardRef(
-  (_props, ref: ForwardedRef<TerminalRef>) => {
+  (props: ITerminalInitOnlyOptions, ref: ForwardedRef<TerminalRef>) => {
     const terminalRef = useRef<HTMLDivElement>(null);
     const xtermRef = useRef<Terminal | null>(null); // 保存 terminal 实例
     const fitAddonRef = useRef<FitAddon | null>(null);
@@ -30,6 +30,7 @@ const TerminalComponent = forwardRef(
         disableStdin: true,
         rows: 15,
         cols: 30,
+        ...props,
         fontSize: 13,
         theme: {
           background: token.colorBgContainer,
@@ -51,7 +52,7 @@ const TerminalComponent = forwardRef(
       return () => {
         terminal.dispose();
       };
-    }, [token]);
+    }, [token, props]);
 
     useEffect(() => {
       const handleResize = () => {
@@ -91,8 +92,6 @@ const TerminalComponent = forwardRef(
           padding: token.paddingXS,
           overflow: "hidden",
           userSelect: "none",
-          border: `1px solid ${token.colorBorder}`,
-          boxShadow: token.boxShadow,
         }}
       >
         <div ref={terminalRef}></div>

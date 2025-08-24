@@ -25,15 +25,13 @@ export const useAppStore = createWithEqualityFn(
       {
         accessToken: "",
         theme: "system" as Theme,
-        blogPath: "",
+        projectDir: "",
         devPid: null as number | null,
-        pnpmPath: "pnpm",
-        npmPath: "npm",
       },
       (set) => ({
         setAccessToken: (token: string) => set({ accessToken: token }),
         setTheme: (theme: Theme) => set({ theme }),
-        setBlogPath: (path: string) => set({ blogPath: path }),
+        setProjectDir: (path: string) => set({ projectDir: path }),
         setDevPid: (pid: number | null) => set({ devPid: pid }),
       }),
     ),
@@ -43,7 +41,7 @@ export const useAppStore = createWithEqualityFn(
       partialize: (state) => ({
         accessToken: state.accessToken,
         theme: state.theme,
-        blogPath: state.blogPath,
+        blogPath: state.projectDir,
       }),
     },
   ),

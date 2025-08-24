@@ -4,6 +4,7 @@ import {
   type SpawnOptions,
   type TerminatedPayload,
 } from "@tauri-apps/plugin-shell";
+import { checkCommand } from "../command";
 
 type CommandStdout = {
   log: string | Uint8Array;
@@ -42,4 +43,29 @@ export async function exec(
       onOutput?.({ log: data, isError: true });
     });
   });
+}
+
+export function formatBytes(bytes: number) {
+  if (bytes === 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / k ** i).toFixed(2))}${sizes[i]}`;
+}
+
+export async function installDependencies(options: {
+  onStart?: (child: Child) => void;
+  onOutput?: (output: CommandStdout) => void;
+  cwd: string;
+}) {
+  const hasNode = await checkCommand("node");
+  if (!hasNode) {
+    await exec("binaries/fnm", ["install", "24"], true, options);
+  }
+  const hasPnpm = await checkCommand("pnpm");
+  if (!hasPnpm) {
+    await exec("npm", ["install", "-g", "pnpm"], false, options);
+  }
+  await exec("pnpm", ["install"], false, options);
 }

@@ -57,7 +57,7 @@ export async function checkDir(dir: string) {
  *                  "processing"(处理中) - data包含处理进度数值
  *                  "finished"(已完成) - 无附加数据
  */
-type Progress =
+export type Progress =
   | {
       type: "receiving";
       data: [number, number]; // [percent, bytes]

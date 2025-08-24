@@ -77,6 +77,8 @@ pub async fn init_blog(path: &str, on_progress: OnProgress) -> Result<()> {
     } else {
         return Err(anyhow::anyhow!("目录不为空").into());
     }
+
+    on_progress.send(Progress::Finished)?;
     Ok(())
 }
 

@@ -1,4 +1,3 @@
-import { CrownFilled, SmileFilled } from "@ant-design/icons";
 import type { ProSettings } from "@ant-design/pro-components";
 import { ProLayout, SettingDrawer } from "@ant-design/pro-components";
 import { App, Avatar, ConfigProvider } from "antd";
@@ -10,7 +9,8 @@ export default () => {
   const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
     fixSiderbar: true,
   });
-  const [pathname, setPathname] = useState("/welcome");
+  const [pathname, setPathname] = useState("/");
+
   return (
     <div>
       <ConfigProvider theme={{ cssVar: true, hashed: false }}>
@@ -20,22 +20,19 @@ export default () => {
               pathname,
             }}
             route={{
-              path: "/",
               routes: [
                 {
                   path: "/",
+                  key: "/",
                   name: "首页",
                 },
                 {
-                  path: "/terminal",
-                  name: "欢迎",
-                  icon: <SmileFilled />,
+                  path: "/content-manager",
+                  name: "内容管理",
                 },
                 {
-                  path: "/",
-                  name: "管理页",
-                  icon: <CrownFilled />,
-                  access: "canAdmin",
+                  path: "/config",
+                  name: "配置管理",
                 },
                 {
                   path: "/init",

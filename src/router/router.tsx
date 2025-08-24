@@ -1,8 +1,9 @@
-import { createBrowserRouter } from "react-router-dom";
-import Init from "../components/Init";
+import { createBrowserRouter, Link } from "react-router-dom";
 import Layout from "../components/Layout";
-import Terminal from "../components/Terminal";
-import Home from "../pages/Home";
+import { Config } from "../pages/Config";
+import { ContentManager } from "../pages/ContentManager";
+import { Home } from "../pages/Home";
+import { Init } from "../pages/Init";
 
 const router = createBrowserRouter([
   {
@@ -14,14 +15,27 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/init",
-        element: <Init />,
+        path: "/content-manager",
+        element: <ContentManager />,
       },
       {
-        path: "/terminal",
-        element: <Terminal />,
+        path: "/config",
+        element: <Config />,
       },
     ],
+  },
+  {
+    path: "/init",
+    element: <Init />,
+  },
+  {
+    path: "*",
+    element: (
+      <div>
+        404
+        <Link to="/">返回首页</Link>
+      </div>
+    ),
   },
 ]);
 
