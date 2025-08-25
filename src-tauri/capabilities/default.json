@@ -35,6 +35,11 @@
           "cmd": "npm",
           "args": true,
           "name": "npm"
+        },
+        {
+          "cmd": "nrm",
+          "args": true,
+          "name": "nrm"
         }
       ]
     },

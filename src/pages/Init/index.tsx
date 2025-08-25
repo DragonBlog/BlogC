@@ -143,6 +143,9 @@ export const Init = () => {
             .with("installing_node", () => (
               <Typography.Text>正在安装 Node.js</Typography.Text>
             ))
+            .with("installing_nrm", () => (
+              <Typography.Text>正在安装 nrm</Typography.Text>
+            ))
             .with("installing_pnpm", () => (
               <Typography.Text>正在安装 pnpm</Typography.Text>
             ))

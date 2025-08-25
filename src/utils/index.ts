@@ -56,6 +56,7 @@ export function formatBytes(bytes: number) {
 
 export type InstallStatus =
   | "installing_node"
+  | "installing_nrm"
   | "installing_pnpm"
   | "installing_dependencies"
   | "completed";
@@ -74,6 +75,12 @@ export async function installDependencies(options: {
     await exec("binaries/fnm", ["install", "24"], true, options);
   }
   const hasPnpm = await checkCommand("pnpm");
+
+  onStatus?.("installing_nrm");
+  await exec("npm", ["install", "-g", "nrm"], false, options);
+  await exec("nrm", ["use", "taobao"], false, options);
+  await exec("nrm", ["ls"], false, options);
+
   if (!hasPnpm) {
     onStatus?.("installing_pnpm");
 
