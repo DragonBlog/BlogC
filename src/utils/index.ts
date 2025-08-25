@@ -77,6 +77,16 @@ export async function installDependencies(options: {
   const hasPnpm = await checkCommand("pnpm");
 
   onStatus?.("installing_nrm");
+
+  // 配置npm 镜像 为https://registry.npmmirror.com/
+  await exec(
+    "npm",
+    ["config", "set", "registry", "https://registry.npmmirror.com/"],
+    false,
+    options,
+  );
+
+  // 安装 nrm 并使用 taobao 镜像（可选）
   await exec("npm", ["install", "-g", "nrm"], false, options);
   await exec("nrm", ["use", "taobao"], false, options);
   await exec("nrm", ["ls"], false, options);
