@@ -32,9 +32,9 @@
           "name": "pnpm"
         },
         {
-          "cmd": "echo",
+          "cmd": "npm",
           "args": true,
-          "name": "echo"
+          "name": "npm"
         }
       ]
     },

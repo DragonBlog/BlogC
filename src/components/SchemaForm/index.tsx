@@ -4,7 +4,6 @@ import Form from "@rjsf/antd"; // ✅ 改为 @rjsf/antd
 import type { IChangeEvent } from "@rjsf/core"; // ✅ 从 @rjsf/core 导入 IChangeEvent
 import validator from "@rjsf/validator-ajv8";
 import { Button, Divider } from "antd"; // ✅ 用 antd 按钮
-import React from "react";
 import "antd/dist/reset.css"; // Ant Design 5 样式
 
 // 文档配置 Schema
@@ -80,41 +79,41 @@ const uiSchema = {
     "ui:widget": "hidden",
   },
 };
-const principle_schema = {
-  $ref: "#/definitions/principle",
-  definitions: {
-    principle: {
-      type: "object",
-      properties: {
-        title: {
-          type: "string",
-        },
-        pubDate: {
-          anyOf: [
-            {
-              type: "string",
-              format: "date-time",
-            },
-            {
-              type: "string",
-              format: "date",
-            },
-            {
-              type: "integer",
-              format: "unix-time",
-            },
-          ],
-        },
-        $schema: {
-          type: "string",
-        },
-      },
-      required: ["title", "pubDate"],
-      additionalProperties: false,
-    },
-  },
-  $schema: "http://json-schema.org/draft-07/schema#",
-};
+// const principle_schema = {
+//   $ref: "#/definitions/principle",
+//   definitions: {
+//     principle: {
+//       type: "object",
+//       properties: {
+//         title: {
+//           type: "string",
+//         },
+//         pubDate: {
+//           anyOf: [
+//             {
+//               type: "string",
+//               format: "date-time",
+//             },
+//             {
+//               type: "string",
+//               format: "date",
+//             },
+//             {
+//               type: "integer",
+//               format: "unix-time",
+//             },
+//           ],
+//         },
+//         $schema: {
+//           type: "string",
+//         },
+//       },
+//       required: ["title", "pubDate"],
+//       additionalProperties: false,
+//     },
+//   },
+//   $schema: "http://json-schema.org/draft-07/schema#",
+// };
 const SchemaForm = () => {
   const onSubmit = (e: IChangeEvent<any>) => {
     console.log("表单提交数据:", e.formData);

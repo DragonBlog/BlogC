@@ -1,2 +1,9 @@
 /* stylelint-disable-next-line import-notation */
 @import "tailwindcss";
+
+.terminal.xterm {
+  /* 不要滚动条 */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}

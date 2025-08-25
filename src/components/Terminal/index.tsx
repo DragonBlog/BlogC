@@ -1,6 +1,7 @@
 import { FitAddon } from "@xterm/addon-fit";
 import { WebLinksAddon } from "@xterm/addon-web-links";
 import { type ITerminalInitOnlyOptions, Terminal } from "@xterm/xterm";
+import { useDeepCompareEffect } from "ahooks";
 import { theme } from "antd";
 import {
   type ForwardedRef,
@@ -21,7 +22,8 @@ const TerminalComponent = forwardRef(
     const xtermRef = useRef<Terminal | null>(null); // 保存 terminal 实例
     const fitAddonRef = useRef<FitAddon | null>(null);
     const { token } = theme.useToken();
-    useEffect(() => {
+
+    useDeepCompareEffect(() => {
       if (!terminalRef.current) return;
 
       const terminal = new Terminal({
@@ -89,12 +91,17 @@ const TerminalComponent = forwardRef(
         style={{
           borderRadius: token.borderRadiusLG,
           background: token.colorBgContainer,
-          padding: token.paddingXS,
+          paddingLeft: token.paddingXS,
           overflow: "hidden",
           userSelect: "none",
         }}
       >
-        <div ref={terminalRef}></div>
+        <div
+          style={{
+            paddingBlock: token.paddingXS,
+          }}
+          ref={terminalRef}
+        ></div>
       </div>
     );
   },

@@ -36,12 +36,9 @@ pub fn run() {
             app.manage(Mutex::new(CancellationToken::new()));
 
             let command = app.shell().sidecar("fnm")?;
-            let fnm_dir = app.path().app_data_dir()?.join("fnm");
 
             tauri::async_runtime::spawn(async move {
-                env::set_var("FNM_DIR", fnm_dir);
                 env::set_var("FORCE_COLOR", "1");
-
                 let output = command
                     .args(["env", "--json"])
                     .output()

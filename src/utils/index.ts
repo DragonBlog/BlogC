@@ -54,28 +54,34 @@ export function formatBytes(bytes: number) {
   return `${parseFloat((bytes / k ** i).toFixed(2))}${sizes[i]}`;
 }
 
+export type InstallStatus =
+  | "installing_node"
+  | "installing_pnpm"
+  | "installing_dependencies"
+  | "completed";
+
 export async function installDependencies(options: {
   onStart?: (child: Child) => void;
   onOutput?: (output: CommandStdout) => void;
   cwd: string;
-  onStatus?: (status: string) => void;
+  onStatus?: (status: InstallStatus) => void;
 }) {
   const { onStatus } = options;
   const hasNode = await checkCommand("node");
 
   if (!hasNode) {
-    onStatus?.("正在下载并安装 Node.js...");
+    onStatus?.("installing_node");
     await exec("binaries/fnm", ["install", "24"], true, options);
   }
   const hasPnpm = await checkCommand("pnpm");
   if (!hasPnpm) {
-    onStatus?.("正在下载并安装 npm...");
+    onStatus?.("installing_pnpm");
 
     await exec("npm", ["install", "-g", "pnpm"], false, options);
   }
-  onStatus?.("正在下载并安装依赖...");
+  onStatus?.("installing_dependencies");
 
   await exec("pnpm", ["install"], false, options);
 
-  onStatus?.("依赖安装完成");
+  onStatus?.("completed");
 }

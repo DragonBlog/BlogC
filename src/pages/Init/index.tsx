@@ -1,4 +1,3 @@
-import type { Child } from "@tauri-apps/plugin-shell";
 import {
   App,
   Button,
@@ -10,15 +9,18 @@ import {
   Typography,
   theme,
 } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { match } from "ts-pattern";
 import { checkDir, initBlog } from "../../command";
 import { FilePathSelector } from "../../components/FilePathSelector";
-import SchemaForm from "../../components/SchemaForm";
 import TerminalComponent, { type TerminalRef } from "../../components/Terminal";
 import { useAppStore } from "../../store/useAppStore";
-import { formatBytes, installDependencies } from "../../utils";
+import {
+  formatBytes,
+  type InstallStatus,
+  installDependencies,
+} from "../../utils";
 
 export const Init = () => {
   const [projectDir, setProjectDir] = useAppStore((store) => [
@@ -32,15 +34,8 @@ export const Init = () => {
   const [bytes, setBytes] = useState(0);
   const terminalRef = useRef<TerminalRef>(null);
   const navigate = useNavigate();
-  const [installStatus, setInstallStatus] = useState("");
-  const [child, setChild] = useState<Child>();
+  const [installStatus, setInstallStatus] = useState<InstallStatus>();
   const [isNextDisabled, setIsNextDisabled] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      child?.kill();
-    };
-  }, [child]);
 
   const { token } = theme.useToken();
 
@@ -88,6 +83,7 @@ export const Init = () => {
           setStep(1);
           setBytes(0);
           setPercent(0);
+          setIsNextDisabled(true);
 
           await initBlog(values.projectDir, (progress) => {
             match(progress)
@@ -100,6 +96,7 @@ export const Init = () => {
               })
               .with({ type: "finished" }, () => {
                 setPercent(100);
+                setIsNextDisabled(false);
               })
               .exhaustive();
           });
@@ -126,15 +123,12 @@ export const Init = () => {
 
         await installDependencies({
           cwd: `${projectDir}/template`,
-          onStart: (child) => {
-            setChild(child);
-          },
           onOutput: (output) => {
             terminalRef.current?.write(output.log);
           },
           onStatus: (installStatus) => {
             setInstallStatus(installStatus);
-            if (installStatus === "依赖安装完成") {
+            if (installStatus === "completed") {
               setIsNextDisabled(false);
             }
           },
@@ -145,21 +139,41 @@ export const Init = () => {
       title: "下载依赖",
       content: (
         <Flex className="w-full overflow-hidden" vertical gap="middle">
-          {installStatus || "依赖下载中，请耐心等待..."}
+          {match(installStatus)
+            .with("installing_node", () => (
+              <Typography.Text>正在安装 Node.js</Typography.Text>
+            ))
+            .with("installing_pnpm", () => (
+              <Typography.Text>正在安装 pnpm</Typography.Text>
+            ))
+            .with("installing_dependencies", () => (
+              <Typography.Text>正在安装依赖</Typography.Text>
+            ))
+            .with("completed", () => (
+              <Typography.Text>依赖安装完成</Typography.Text>
+            ))
+            .otherwise(() => (
+              <Typography.Text>等待中...</Typography.Text>
+            ))}
           <div
             className="border rounded"
             style={{ borderColor: token.colorBorder }}
           >
-            <TerminalComponent cols={10} rows={12} ref={terminalRef} />
+            <TerminalComponent
+              key={projectDir}
+              cols={10}
+              rows={10}
+              ref={terminalRef}
+            />
           </div>
         </Flex>
       ),
       onNext: () => {
-        if (installStatus !== "依赖安装完成") {
+        if (installStatus !== "completed") {
           message.warning("依赖还没安装完成，请耐心等待...");
           return;
         }
-        setInstallStatus("");
+        setInstallStatus(undefined);
 
         setStep(3);
       },
@@ -177,9 +191,9 @@ export const Init = () => {
   return (
     <Flex className="h-full w-full" align="center" justify="center">
       <Card>
-        <Flex vertical className="h-80 w-2xl" gap="middle">
+        <Flex vertical className="h-80 w-2xl overflow-hidden" gap="middle">
           <Steps size="small" current={step} items={steps} />
-          <Flex flex={1} className="w-full">
+          <Flex flex={1} className="w-full overflow-hidden">
             {steps[step].content}
           </Flex>
           <Flex justify="center" gap="middle">
