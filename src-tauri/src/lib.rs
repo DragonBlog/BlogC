@@ -7,6 +7,7 @@ use tracing::info;
 mod commands;
 mod config;
 mod error;
+mod file_manager;
 mod git;
 mod oauth;
 mod utils;
@@ -67,6 +68,8 @@ pub fn run() {
             commands::check_command_exists,
             commands::read_schemas,
             commands::read_blog_build_config,
+            commands::read_file_tree,
+            commands::read_children,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
