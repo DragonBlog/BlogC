@@ -20,6 +20,8 @@ pub enum Error {
     Pattern(#[from] glob::PatternError),
     #[error(transparent)]
     Ignore(#[from] ignore::Error),
+    #[error(transparent)]
+    FsExtra(#[from] fs_extra::error::Error),
 }
 
 #[derive(Debug, Serialize)]
@@ -35,6 +37,7 @@ enum ErrorKind {
     Which(String),
     Pattern(String),
     Ignore(String),
+    FsExtra(String),
 }
 
 impl serde::Serialize for Error {
@@ -52,8 +55,8 @@ impl serde::Serialize for Error {
             Error::SerdeJson(_) => ErrorKind::SerdeJson(message),
             Error::Which(_) => ErrorKind::Which(message),
             Error::Pattern(_) => ErrorKind::Pattern(message),
-
             Error::Ignore(_) => ErrorKind::Ignore(message),
+            Error::FsExtra(_) => ErrorKind::FsExtra(message),
         };
         king.serialize(serializer)
     }

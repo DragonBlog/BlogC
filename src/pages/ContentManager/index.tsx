@@ -1,3 +1,10 @@
+import { FileTreeSlider } from "../../components/FileTreeSlider";
+
 export const ContentManager = () => {
-  return <div>ContentManager</div>;
+  return (
+    <div>
+      <FileTreeSlider />
+      ContentManager
+    </div>
+  );
 };

@@ -43,6 +43,14 @@
         }
       ]
     },
-    "fs:default"
+    "fs:default",
+    {
+      "identifier": "fs:scope",
+      "allow": ["**"]
+    },
+    "fs:allow-mkdir",
+    "fs:allow-rename",
+    "fs:allow-remove",
+    "fs:allow-read-text-file"
   ]
 }

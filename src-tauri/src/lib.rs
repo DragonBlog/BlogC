@@ -70,6 +70,9 @@ pub fn run() {
             commands::read_blog_build_config,
             commands::read_file_tree,
             commands::read_children,
+            commands::delete_tree_item,
+            commands::rename_tree_item,
+            commands::move_tree_item,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
