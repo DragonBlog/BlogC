@@ -12,66 +12,74 @@ export default () => {
   const [pathname, setPathname] = useState("/");
 
   return (
-    <div>
-      <ConfigProvider theme={{ cssVar: true, hashed: false }}>
-        <App>
-          <ProLayout
-            location={{
-              pathname,
-            }}
-            route={{
-              routes: [
-                {
-                  path: "/",
-                  key: "/",
-                  name: "首页",
-                },
-                {
-                  path: "/content-manager",
-                  name: "内容管理",
-                },
-                {
-                  path: "/config",
-                  name: "配置管理",
-                },
-                {
-                  path: "/init",
-                  name: "初始化",
-                },
-              ],
-            }}
-            menuProps={{
-              onClick: (e) => {
-                console.log(e);
-                setPathname(e.key);
-                navigate(e.key);
+    <ConfigProvider
+      theme={{
+        cssVar: {
+          key: "app",
+        },
+        hashed: false,
+      }}
+    >
+      <App>
+        <ProLayout
+          location={{
+            pathname,
+          }}
+          route={{
+            routes: [
+              {
+                path: "/",
+                key: "/",
+                name: "首页",
               },
-            }}
-            onPageChange={(location) => {
-              setPathname(location?.pathname ?? "");
-            }}
-            avatarProps={{
-              title: "博客管理系统",
-              icon: <Avatar />,
-              style: {
-                margin: "auto",
+              {
+                path: "/content-manager",
+                name: "内容管理",
               },
-            }}
-            {...settings}
-          >
-            <Outlet />
-          </ProLayout>
-          <SettingDrawer
-            pathname={pathname}
-            getContainer={() => document.getElementById("test-pro-layout")}
-            settings={settings}
-            onSettingChange={(changeSetting) => {
-              setSetting(changeSetting);
-            }}
-            disableUrlParams
-          />
-        </App>
-      </ConfigProvider>
-    </div>
+              {
+                path: "/config",
+                name: "配置管理",
+              },
+              {
+                path: "/init",
+                name: "初始化",
+              },
+            ],
+          }}
+          menuProps={{
+            onClick: (e) => {
+              console.log(e);
+              setPathname(e.key);
+              navigate(e.key);
+            },
+          }}
+          onPageChange={(location) => {
+            setPathname(location?.pathname ?? "");
+          }}
+          avatarProps={{
+            title: "博客管理系统",
+            icon: <Avatar />,
+            style: {
+              margin: "auto",
+            },
+          }}
+          {...settings}
+          style={{
+            height: "100vh",
+          }}
+        >
+          <Outlet />
+        </ProLayout>
+        <SettingDrawer
+          pathname={pathname}
+          getContainer={() => document.getElementById("test-pro-layout")}
+          settings={settings}
+          onSettingChange={(changeSetting) => {
+            setSetting(changeSetting);
+          }}
+          disableUrlParams
+        />
+      </App>
+    </ConfigProvider>
   );
 };

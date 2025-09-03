@@ -7,7 +7,7 @@ use fs_extra::{
 };
 use serde::{Deserialize, Serialize};
 use std::{
-    fs,
+    fs::create_dir_all,
     path::{Path, PathBuf},
 };
 
@@ -85,68 +85,6 @@ impl FileTreeItem {
         Ok(())
     }
 
-    /// 重命名文件或目录
-    ///
-    /// # 参数
-    /// * `new_name` - 新的文件名或目录名
-    ///
-    /// # 返回值
-    /// 返回Result<()>，成功时更新name和path字段
-    pub fn rename(&mut self, new_name: &str) -> Result<()> {
-        let new_path = self
-            .path
-            .parent()
-            .ok_or_else(|| anyhow!("Unable to get parent directory for: {:?}", self.path))?
-            .join(new_name);
-
-        fs::rename(&self.path, &new_path)?;
-        self.name = new_name.to_string();
-        self.path = new_path;
-
-        // 重置大小缓存
-        if !self.is_dir {
-            self.size = Some(self.path.metadata()?.len());
-        } else {
-            self.size = None;
-        }
-
-        Ok(())
-    }
-
-    /// 删除文件或目录
-    ///
-    /// # 返回值
-    /// 返回Result<()>，成功时删除磁盘上的文件或目录
-    pub fn delete(self) -> Result<()> {
-        fs_extra::remove_items(&[self.path])?;
-        Ok(())
-    }
-
-    /// 移动文件或目录到新位置
-    ///
-    /// # 参数
-    /// * `new_parent` - 新的父目录路径
-    /// * `progress_handler` - 进度处理回调函数
-    ///
-    /// # 返回值
-    /// 返回Result<FileTreeItem>，包含移动后的新节点
-    pub fn move_to<P, F>(
-        self,
-        new_parent: P,
-        options: CopyOptions,
-        progress_handler: F,
-    ) -> Result<FileTreeItem>
-    where
-        P: AsRef<Path>,
-        F: FnMut(TransitProcess) -> TransitProcessResult,
-    {
-        let new_path = new_parent.as_ref().join(&self.name);
-
-        fs_extra::move_items_with_progress(&[&self.path], &new_path, &options, progress_handler)?;
-
-        Ok(FileTreeItem::new(new_path)?)
-    }
-
     /// 复制文件或目录到新位置
     ///
     /// # 参数
@@ -165,7 +103,11 @@ impl FileTreeItem {
         P: AsRef<Path>,
         F: FnMut(TransitProcess) -> TransitProcessResult,
     {
-        let new_path = new_parent.as_ref().join(&self.name);
+        let new_path = new_parent.as_ref();
+
+        if !new_path.exists() {
+            create_dir_all(new_path)?;
+        }
 
         fs_extra::copy_items_with_progress(&[&self.path], &new_path, &options, progress_handler)?;
 

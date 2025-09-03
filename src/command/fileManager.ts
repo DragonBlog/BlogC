@@ -4,11 +4,9 @@ export type FileTreeItem = {
   path: string;
   name: string;
   isDir: boolean;
-  children?: FileTree;
+  children?: FileTreeItem[];
   size?: number;
 };
-
-export type FileTree = FileTreeItem[];
 
 export type ExistFileProcess = "skip" | "overwrite";
 
@@ -26,29 +24,8 @@ export async function readChildren(path: string) {
   return await invoke<FileTreeItem>("read_children", { path });
 }
 
-export async function readFileTree(path: string) {
-  return await invoke<FileTree>("read_file_tree", { path });
-}
-
-/**
- * 删除指定路径的文件或目录
- *
- * @param path 要删除的文件或目录路径
- * @returns Promise<void>
- */
-export async function deleteTreeItem(path: string) {
-  return await invoke<void>("delete_tree_item", { path });
-}
-
-/**
- * 重命名指定路径的文件或目录
- *
- * @param path 要重命名的文件或目录路径
- * @param newName 新的文件名或目录名
- * @returns Promise<string> 返回新的路径
- */
-export async function renameTreeItem(path: string, newName: string) {
-  return await invoke<string>("rename_tree_item", { path, newName });
+export async function moveFileOrFolder(path: string, newParent: string) {
+  return await invoke<void>("move_file_or_folder", { path, newParent });
 }
 
 /**

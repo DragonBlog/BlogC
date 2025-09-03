@@ -1,10 +1,11 @@
-use crate::{
-    error::Result,
-    file_manager::{FileTree, FileTreeItem},
-};
+use std::path::PathBuf;
+
+use crate::{error::Result, file_manager::FileTreeItem};
+use anyhow::anyhow;
 use fs_extra::dir::{CopyOptions, TransitProcessResult};
 use serde::{Deserialize, Serialize};
 use tauri::ipc::Channel;
+use tracing::info;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -85,18 +86,6 @@ impl From<fs_extra::TransitProcess> for CopyTransitProcess {
     }
 }
 
-/// 读取指定路径的文件树
-///
-/// # 参数
-/// * `path` - 要读取的目录路径
-///
-/// # 返回值
-/// 返回Result<FileTree>，包含该目录下的文件和子目录信息
-#[tauri::command]
-pub async fn read_file_tree(path: String) -> Result<FileTree> {
-    FileTree::read(path)
-}
-
 /// 读取指定路径的子节点
 ///
 /// # 参数
@@ -111,41 +100,35 @@ pub async fn read_children(path: String) -> Result<FileTreeItem> {
     Ok(item)
 }
 
-/// 删除指定路径的文件或目录
-///
-/// # 参数
-/// * `path` - 要删除的文件或目录路径
-///
-/// # 返回值
-/// 返回Result<()>，成功时删除磁盘上的文件或目录
 #[tauri::command]
-pub async fn delete_tree_item(path: String) -> Result<()> {
-    let item = FileTreeItem::new(path)?;
-    item.delete()?;
-    Ok(())
-}
-
-#[tauri::command]
-pub async fn rename_tree_item(path: String, new_name: String) -> Result<FileTreeItem> {
-    let mut item = FileTreeItem::new(path)?;
-    item.rename(&new_name)?;
-
-    Ok(item)
-}
-
-#[tauri::command]
-pub async fn move_tree_item(
+pub async fn copy_tree_item(
     path: String,
     new_parent: String,
     options: ExistFileProcess,
     on_progress: Channel<CopyTransitProcess>,
 ) -> Result<FileTreeItem> {
     let item = FileTreeItem::new(path)?;
+    info!("Move item: {:?} to {:?}", item.path, new_parent);
+    info!("Copy options: {:?}", options);
+    info!("Item exists: {}", item.path.exists());
 
-    item.move_to(&new_parent, options.into(), move |process| {
+    item.copy_to(&new_parent, options.into(), move |process| {
         // 发送进度信息到前端
         on_progress.send(process.into()).ok();
 
-        TransitProcessResult::ContinueOrAbort
+        TransitProcessResult::SkipAll
     })
+}
+
+#[tauri::command]
+pub async fn move_file_or_folder(path: String, new_parent: String) -> Result<String> {
+    let path = PathBuf::from(path);
+    let new_path = PathBuf::from(new_parent).join(path.iter().last().ok_or(anyhow!(
+        "Unable to get file or folder name from path: {:?}",
+        path
+    ))?);
+
+    tokio::fs::rename(path, &new_path).await?;
+
+    Ok(new_path.to_string_lossy().to_string())
 }
