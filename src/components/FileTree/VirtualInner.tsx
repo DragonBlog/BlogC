@@ -6,6 +6,7 @@ import {
   MoreOutlined,
 } from "@ant-design/icons";
 import { TreeInstance } from "@headless-tree/core";
+import { AssistiveTreeDescription } from "@headless-tree/react";
 import { useVirtualizer, Virtualizer } from "@tanstack/react-virtual";
 import { Button, Flex, Spin, Typography } from "antd";
 import clsx from "clsx";
@@ -33,6 +34,7 @@ export const VirtualInner = forwardRef<
 
   return (
     <div ref={parentRef} className="p-2 flex-1 overflow-auto">
+      <AssistiveTreeDescription tree={tree} />
       <div
         {...tree.getContainerProps()}
         style={{
