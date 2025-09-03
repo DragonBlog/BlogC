@@ -10,7 +10,7 @@ export const ContentManager = () => {
       }}
       className=" font-family"
     >
-      <div className="w-64 border rounded border-border p-2 h-full overflow-hidden flex">
+      <div className="w-64 border rounded border-border h-full overflow-hidden flex">
         <FileTree />
       </div>
       ContentManager
