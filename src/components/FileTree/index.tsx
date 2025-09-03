@@ -1,23 +1,19 @@
 import {
-  FileOutlined,
-  FolderOpenOutlined,
-  FolderOutlined,
-  LoadingOutlined,
-  MoreOutlined,
-} from "@ant-design/icons";
-import {
   asyncDataLoaderFeature,
+  buildProxiedInstance,
+  buildStaticInstance,
   createOnDropHandler,
   dragAndDropFeature,
   expandAllFeature,
+  hotkeysCoreFeature,
   keyboardDragAndDropFeature,
   selectionFeature,
 } from "@headless-tree/core";
-import { AssistiveTreeDescription, useTree } from "@headless-tree/react";
+import { useTree } from "@headless-tree/react";
+import { Virtualizer } from "@tanstack/react-virtual";
 // import { create, mkdir, remove, rename } from "@tauri-apps/plugin-fs";
-import { App, Button, Dropdown, Flex, Spin, Typography } from "antd";
-import clsx from "clsx";
-import { useState } from "react";
+import { App, Dropdown } from "antd";
+import { useRef, useState } from "react";
 import { match } from "ts-pattern";
 import {
   FileTreeItem,
@@ -26,11 +22,19 @@ import {
 } from "../../command/fileManager";
 import { useAppStore } from "../../store/useAppStore";
 import { TreeToolbar } from "./Toolbar";
+import { VirtualInner } from "./VirtualInner";
 
-export const FileTree = () => {
+type FileTreeProps = {
+  disableToolbar?: boolean;
+  virtual?: boolean;
+};
+
+export const FileTree = (props: FileTreeProps) => {
+  const { disableToolbar, virtual = true } = props;
   const [projectDir] = useAppStore((store) => [store.projectDir]);
   const { message } = App.useApp();
   const [current, setCurrent] = useState<FileTreeItem>();
+  const virtualizer = useRef<Virtualizer<HTMLDivElement, Element> | null>(null);
 
   const tree = useTree<FileTreeItem>({
     isItemFolder: (item) => item.getItemData().isDir,
@@ -38,12 +42,14 @@ export const FileTree = () => {
     getItemName: (item) => {
       return item.getItemData().name;
     },
+    instanceBuilder: virtual ? buildProxiedInstance : buildStaticInstance,
     canReorder: false,
     features: [
       asyncDataLoaderFeature,
       selectionFeature,
       dragAndDropFeature,
       keyboardDragAndDropFeature,
+      hotkeysCoreFeature,
       expandAllFeature,
     ],
     dataLoader: {
@@ -75,6 +81,11 @@ export const FileTree = () => {
       return false;
     },
     indent: 16,
+    scrollToItem: virtual
+      ? (item) => {
+          virtualizer.current?.scrollToIndex(item.getItemMeta().index);
+        }
+      : undefined,
     onDrop: async (items, target) => {
       if (items.some((i) => i.getParent()?.getId() === target.item.getId())) {
         message.warning("已经在当前目录下，无需移动");
@@ -160,7 +171,7 @@ export const FileTree = () => {
 
   return (
     <div className="flex flex-col h-full w-full">
-      <TreeToolbar tree={tree} />
+      {!disableToolbar && <TreeToolbar tree={tree} />}
       <Dropdown
         menu={{
           items,
@@ -172,7 +183,14 @@ export const FileTree = () => {
         }}
         trigger={["contextMenu"]}
       >
-        <div
+        <VirtualInner tree={tree} setCurrent={setCurrent} ref={virtualizer} />
+      </Dropdown>
+    </div>
+  );
+};
+
+/**
+ * <div
           {...tree.getContainerProps()}
           className="flex flex-col h-full flex-1 overflow-auto gap-1 p-2"
         >
@@ -184,12 +202,13 @@ export const FileTree = () => {
                 key={item.getId()}
                 style={{
                   paddingLeft: `${item.getItemMeta().level * 16}px`,
+                  height: 32,
                 }}
                 className={clsx(
-                  "transition rounded-lg h-8 hover:bg-fill-tertiary cursor-pointer flex overflow-hidden items-center shrink-0",
+                  "transition rounded-lg hover:bg-fill-tertiary cursor-pointer flex overflow-hidden items-center shrink-0",
                   item.isSelected() &&
                     "bg-primary-bg hover:bg-primary-bg text-primary",
-                  item.isDragTarget() && "bg-info-bg-hover",
+                  item.isDragTarget() && "bg-info-bg-hover"
                 )}
                 onContextMenu={() => {
                   setCurrent(item.getItemData());
@@ -240,7 +259,7 @@ export const FileTree = () => {
                           bubbles: true,
                           clientX: e.clientX,
                           clientY: e.clientY,
-                        }),
+                        })
                       );
                     }}
                     icon={<MoreOutlined />}
@@ -252,7 +271,4 @@ export const FileTree = () => {
             );
           })}
         </div>
-      </Dropdown>
-    </div>
-  );
-};
+ */
