@@ -15,12 +15,14 @@ import { Virtualizer } from "@tanstack/react-virtual";
 import { App, Dropdown } from "antd";
 import { useRef, useState } from "react";
 import { match } from "ts-pattern";
+import { CommandError } from "../../command";
 import {
   FileTreeItem,
   moveFileOrFolder,
   readChildren,
 } from "../../command/fileManager";
 import { useAppStore } from "../../store/useAppStore";
+import { AnimateInner } from "./AnimateInner";
 import { TreeToolbar } from "./Toolbar";
 import { VirtualInner } from "./VirtualInner";
 
@@ -30,7 +32,7 @@ type FileTreeProps = {
 };
 
 export const FileTree = (props: FileTreeProps) => {
-  const { disableToolbar, virtual = true } = props;
+  const { disableToolbar, virtual } = props;
   const [projectDir] = useAppStore((store) => [store.projectDir]);
   const { message } = App.useApp();
   const [current, setCurrent] = useState<FileTreeItem>();
@@ -104,8 +106,9 @@ export const FileTree = (props: FileTreeProps) => {
         })(items, target);
 
         message.success("移动成功");
-      } catch (error) {
-        message.error(`移动失败: ${error}`);
+      } catch (e) {
+        let error = e as CommandError;
+        message.error(`移动失败: ${error.message}`);
       }
     },
   });
@@ -183,92 +186,12 @@ export const FileTree = (props: FileTreeProps) => {
         }}
         trigger={["contextMenu"]}
       >
-        <VirtualInner tree={tree} setCurrent={setCurrent} ref={virtualizer} />
+        {virtual ? (
+          <VirtualInner tree={tree} setCurrent={setCurrent} ref={virtualizer} />
+        ) : (
+          <AnimateInner tree={tree} setCurrent={setCurrent} />
+        )}
       </Dropdown>
     </div>
   );
 };
-
-/**
- * <div
-          {...tree.getContainerProps()}
-          className="flex flex-col h-full flex-1 overflow-auto gap-1 p-2"
-        >
-          <AssistiveTreeDescription tree={tree} />
-          {tree.getItems().map((item) => {
-            return (
-              <div
-                {...item.getProps()}
-                key={item.getId()}
-                style={{
-                  paddingLeft: `${item.getItemMeta().level * 16}px`,
-                  height: 32,
-                }}
-                className={clsx(
-                  "transition rounded-lg hover:bg-fill-tertiary cursor-pointer flex overflow-hidden items-center shrink-0",
-                  item.isSelected() &&
-                    "bg-primary-bg hover:bg-primary-bg text-primary",
-                  item.isDragTarget() && "bg-info-bg-hover"
-                )}
-                onContextMenu={() => {
-                  setCurrent(item.getItemData());
-                }}
-              >
-                <div className="px-2 flex gap-1 overflow-hidden flex-1 items-center group">
-                  <Flex
-                    flex={1}
-                    align="center"
-                    className="gap-1 overflow-hidden"
-                  >
-                    <Spin
-                      indicator={<LoadingOutlined />}
-                      size="small"
-                      delay={300}
-                      spinning={item.isLoading()}
-                    >
-                      {item.isFolder() ? (
-                        item.isExpanded() ? (
-                          <FolderOpenOutlined />
-                        ) : (
-                          <FolderOutlined />
-                        )
-                      ) : (
-                        <FileOutlined />
-                      )}
-                    </Spin>
-
-                    <Typography.Text
-                      ellipsis={{
-                        tooltip: true,
-                      }}
-                      style={{
-                        color: "inherit",
-                      }}
-                      className={clsx(item.isSelected() && "text-primary")}
-                    >
-                      {item.getItemName()}
-                    </Typography.Text>
-                  </Flex>
-                  <Button
-                    className="opacity-0 group-hover:opacity-100 transition"
-                    onClick={(e) => {
-                      setCurrent(item.getItemData());
-                      e.stopPropagation();
-                      e.target.dispatchEvent(
-                        new MouseEvent("contextmenu", {
-                          bubbles: true,
-                          clientX: e.clientX,
-                          clientY: e.clientY,
-                        })
-                      );
-                    }}
-                    icon={<MoreOutlined />}
-                    type="text"
-                    size="small"
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
- */
