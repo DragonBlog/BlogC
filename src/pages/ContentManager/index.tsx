@@ -11,7 +11,11 @@ export const ContentManager = () => {
       className=" font-family"
     >
       <div className="w-64 border rounded border-border h-full overflow-hidden flex">
-        <FileTree />
+        <FileTree
+          onClick={(item) => {
+            console.log(item);
+          }}
+        />
       </div>
       ContentManager
     </Flex>

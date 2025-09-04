@@ -13,7 +13,6 @@ type TreeToolbarProps = {
 };
 
 export const TreeToolbar = ({ tree }: TreeToolbarProps) => {
-  console.log(tree.getHotkeyPresets());
   return (
     <div className="flex items-center justify-between border-b border-border w-full px-2 py-1">
       <div>

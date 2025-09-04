@@ -15,9 +15,14 @@ import { FileTreeItem } from "../../command/fileManager";
 type AnimateInnerProps = {
   tree: TreeInstance<FileTreeItem>;
   setCurrent: (item: FileTreeItem) => void;
+  onClick?: (item: FileTreeItem) => void;
 };
 
-export const AnimateInner = ({ tree, setCurrent }: AnimateInnerProps) => {
+export const AnimateInner = ({
+  tree,
+  setCurrent,
+  onClick,
+}: AnimateInnerProps) => {
   return (
     <div
       {...tree.getContainerProps()}
@@ -29,7 +34,12 @@ export const AnimateInner = ({ tree, setCurrent }: AnimateInnerProps) => {
         .getChildren()
         .map((item) => {
           return (
-            <Item key={item.getId()} item={item} setCurrent={setCurrent} />
+            <Item
+              key={item.getId()}
+              onClick={onClick}
+              item={item}
+              setCurrent={setCurrent}
+            />
           );
         })}
     </div>
@@ -39,14 +49,17 @@ export const AnimateInner = ({ tree, setCurrent }: AnimateInnerProps) => {
 const Item = ({
   item,
   setCurrent,
+  onClick,
 }: {
   item: ItemInstance<FileTreeItem>;
   setCurrent: (item: FileTreeItem) => void;
+  onClick?: (item: FileTreeItem) => void;
 }) => {
+  const itemProps = item.getProps();
   return (
     <AnimatePresence>
       <div
-        {...item.getProps()}
+        {...itemProps}
         key={item.getId()}
         style={{
           paddingLeft: `${item.getItemMeta().level * 16}px`,
@@ -58,6 +71,10 @@ const Item = ({
           item.isSelected() && "bg-primary-bg hover:bg-primary-bg text-primary",
           item.isDragTarget() && "bg-info-bg-hover",
         )}
+        onClick={(e) => {
+          itemProps.onClick?.(e);
+          onClick?.(item.getItemData());
+        }}
         onContextMenu={() => {
           setCurrent(item.getItemData());
         }}
@@ -122,7 +139,12 @@ const Item = ({
           }}
         >
           {item.getChildren().map((child) => (
-            <Item key={child.getId()} item={child} setCurrent={setCurrent} />
+            <Item
+              key={child.getId()}
+              onClick={onClick}
+              item={child}
+              setCurrent={setCurrent}
+            />
           ))}
         </motion.div>
       )}

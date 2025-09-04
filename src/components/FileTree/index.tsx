@@ -29,10 +29,11 @@ import { VirtualInner } from "./VirtualInner";
 type FileTreeProps = {
   disableToolbar?: boolean;
   virtual?: boolean;
+  onClick?: (item: FileTreeItem) => void;
 };
 
 export const FileTree = (props: FileTreeProps) => {
-  const { disableToolbar, virtual } = props;
+  const { disableToolbar, virtual, onClick } = props;
   const [projectDir] = useAppStore((store) => [store.projectDir]);
   const { message } = App.useApp();
   const [current, setCurrent] = useState<FileTreeItem>();
@@ -187,9 +188,14 @@ export const FileTree = (props: FileTreeProps) => {
         trigger={["contextMenu"]}
       >
         {virtual ? (
-          <VirtualInner tree={tree} setCurrent={setCurrent} ref={virtualizer} />
+          <VirtualInner
+            onClick={onClick}
+            tree={tree}
+            setCurrent={setCurrent}
+            ref={virtualizer}
+          />
         ) : (
-          <AnimateInner tree={tree} setCurrent={setCurrent} />
+          <AnimateInner onClick={onClick} tree={tree} setCurrent={setCurrent} />
         )}
       </Dropdown>
     </div>

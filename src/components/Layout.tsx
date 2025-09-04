@@ -48,7 +48,6 @@ export default () => {
           }}
           menuProps={{
             onClick: (e) => {
-              console.log(e);
               setPathname(e.key);
               navigate(e.key);
             },
@@ -66,6 +65,9 @@ export default () => {
           {...settings}
           style={{
             height: "100vh",
+          }}
+          contentStyle={{
+            padding: 16,
           }}
         >
           <Outlet />

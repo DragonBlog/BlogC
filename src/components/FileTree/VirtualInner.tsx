@@ -16,12 +16,13 @@ import { FileTreeItem } from "../../command/fileManager";
 type VirtualInnerProps = {
   tree: TreeInstance<FileTreeItem>;
   setCurrent: (item: FileTreeItem) => void;
+  onClick?: (item: FileTreeItem) => void;
 };
 
 export const VirtualInner = forwardRef<
   Virtualizer<HTMLDivElement, Element>,
   VirtualInnerProps
->(({ tree, setCurrent }, ref) => {
+>(({ tree, setCurrent, onClick }, ref) => {
   const parentRef = useRef<HTMLDivElement | null>(null);
 
   const virtualizer = useVirtualizer({
@@ -44,9 +45,10 @@ export const VirtualInner = forwardRef<
       >
         {virtualizer.getVirtualItems().map((virtualItem) => {
           const item = tree.getItems()[virtualItem.index];
+          const itemProps = item.getProps();
           return (
             <div
-              {...item.getProps()}
+              {...itemProps}
               key={item.getId()}
               style={{
                 paddingLeft: `${item.getItemMeta().level * 16}px`,
@@ -62,6 +64,10 @@ export const VirtualInner = forwardRef<
               )}
               onContextMenu={() => {
                 setCurrent(item.getItemData());
+              }}
+              onClick={(e) => {
+                itemProps.onClick?.(e);
+                onClick?.(item.getItemData());
               }}
             >
               <div className="px-2 flex gap-1 overflow-hidden flex-1 items-center group">
