@@ -67,7 +67,7 @@ export default () => {
             height: "100vh",
           }}
           contentStyle={{
-            padding: 16,
+            padding: 0,
           }}
         >
           <Outlet />

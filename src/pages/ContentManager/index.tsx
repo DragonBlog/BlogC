@@ -1,4 +1,5 @@
 import { Flex } from "antd";
+import { PlateEditor } from "@/components/editor/plate-editor";
 import { FileTree } from "../../components/FileTree";
 
 export const ContentManager = () => {
@@ -10,14 +11,16 @@ export const ContentManager = () => {
       }}
       className=" font-family"
     >
-      <div className="w-64 border rounded border-border h-full overflow-hidden flex">
+      <div className="w-64 border-r h-full border-border overflow-hidden flex shrink-0">
         <FileTree
           onClick={(item) => {
             console.log(item);
           }}
         />
       </div>
-      ContentManager
+      <div className="flex-1 h-full w-full overflow-hidden">
+        <PlateEditor />
+      </div>
     </Flex>
   );
 };
