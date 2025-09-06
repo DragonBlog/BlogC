@@ -1,6 +1,5 @@
 "use client";
 
-import { Trans, useLingui } from "@lingui/react/macro";
 import { formatCodeBlock, isLangSupported } from "@platejs/code-block";
 import { BracesIcon, Check, CheckIcon, CopyIcon } from "lucide-react";
 import { NodeApi, type TCodeBlockElement, type TCodeSyntaxLeaf } from "platejs";
@@ -14,6 +13,7 @@ import {
   useReadOnly,
 } from "platejs/react";
 import * as React from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -32,7 +32,6 @@ import { cn } from "@/lib/utils";
 
 export function CodeBlockElement(props: PlateElementProps<TCodeBlockElement>) {
   const { editor, element } = props;
-  const { t } = useLingui();
 
   return (
     <PlateElement
@@ -54,7 +53,7 @@ export function CodeBlockElement(props: PlateElementProps<TCodeBlockElement>) {
               variant="ghost"
               className="size-6 text-xs"
               onClick={() => formatCodeBlock(editor, { element })}
-              title={t`格式化代码`}
+              title="Format code"
             >
               <BracesIcon className="!size-3.5 text-muted-foreground" />
             </Button>
@@ -75,7 +74,6 @@ export function CodeBlockElement(props: PlateElementProps<TCodeBlockElement>) {
 }
 
 function CodeBlockCombobox() {
-  const { t } = useLingui();
   const [open, setOpen] = React.useState(false);
   const readOnly = useReadOnly();
   const editor = useEditorRef();
@@ -105,9 +103,8 @@ function CodeBlockCombobox() {
           aria-expanded={open}
           role="combobox"
         >
-          {languages.find((language) => language.value === value)?.label ?? (
-            <Trans>纯文本</Trans>
-          )}
+          {languages.find((language) => language.value === value)?.label ??
+            "Plain Text"}
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -119,11 +116,9 @@ function CodeBlockCombobox() {
             className="h-9"
             value={searchValue}
             onValueChange={(value) => setSearchValue(value)}
-            placeholder={t`搜索语言...`}
+            placeholder="Search language..."
           />
-          <CommandEmpty>
-            <Trans>未找到该语言。</Trans>
-          </CommandEmpty>
+          <CommandEmpty>No language found.</CommandEmpty>
 
           <CommandList className="h-[344px] overflow-y-auto">
             <CommandGroup>
@@ -182,9 +177,7 @@ function CopyButton({
       }}
       {...props}
     >
-      <span className="sr-only">
-        <Trans>复制</Trans>
-      </span>
+      <span className="sr-only">Copy</span>
       {hasCopied ? (
         <CheckIcon className="!size-3" />
       ) : (

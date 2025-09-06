@@ -1,6 +1,5 @@
 "use client";
 
-import { Trans } from "@lingui/react/macro";
 import type { TResolvedSuggestion } from "@platejs/suggestion";
 import {
   acceptSuggestion,
@@ -45,34 +44,34 @@ export interface ResolvedSuggestion extends TResolvedSuggestion {
 
 const BLOCK_SUGGESTION = "__block__";
 
-const TYPE_TEXT_MAP: Record<string, (node?: TElement) => React.ReactNode> = {
-  [KEYS.audio]: () => <Trans>音频</Trans>,
-  [KEYS.blockquote]: () => <Trans>引用块</Trans>,
-  [KEYS.callout]: () => <Trans>标注</Trans>,
-  [KEYS.codeBlock]: () => <Trans>代码块</Trans>,
-  [KEYS.column]: () => <Trans>列</Trans>,
-  [KEYS.equation]: () => <Trans>公式</Trans>,
-  [KEYS.file]: () => <Trans>文件</Trans>,
-  [KEYS.h1]: () => <Trans>标题 1</Trans>,
-  [KEYS.h2]: () => <Trans>标题 2</Trans>,
-  [KEYS.h3]: () => <Trans>标题 3</Trans>,
-  [KEYS.h4]: () => <Trans>标题 4</Trans>,
-  [KEYS.h5]: () => <Trans>标题 5</Trans>,
-  [KEYS.h6]: () => <Trans>标题 6</Trans>,
-  [KEYS.hr]: () => <Trans>水平线</Trans>,
-  [KEYS.img]: () => <Trans>图片</Trans>,
-  [KEYS.mediaEmbed]: () => <Trans>媒体</Trans>,
+const TYPE_TEXT_MAP: Record<string, (node?: TElement) => string> = {
+  [KEYS.audio]: () => "Audio",
+  [KEYS.blockquote]: () => "Blockquote",
+  [KEYS.callout]: () => "Callout",
+  [KEYS.codeBlock]: () => "Code Block",
+  [KEYS.column]: () => "Column",
+  [KEYS.equation]: () => "Equation",
+  [KEYS.file]: () => "File",
+  [KEYS.h1]: () => `Heading 1`,
+  [KEYS.h2]: () => `Heading 2`,
+  [KEYS.h3]: () => `Heading 3`,
+  [KEYS.h4]: () => `Heading 4`,
+  [KEYS.h5]: () => `Heading 5`,
+  [KEYS.h6]: () => `Heading 6`,
+  [KEYS.hr]: () => "Horizontal Rule",
+  [KEYS.img]: () => "Image",
+  [KEYS.mediaEmbed]: () => "Media",
   [KEYS.p]: (node) => {
-    if (node?.[KEYS.listType] === KEYS.listTodo) return <Trans>待办列表</Trans>;
-    if (node?.[KEYS.listType] === KEYS.ol) return <Trans>有序列表</Trans>;
-    if (node?.[KEYS.listType] === KEYS.ul) return <Trans>列表</Trans>;
+    if (node?.[KEYS.listType] === KEYS.listTodo) return "Todo List";
+    if (node?.[KEYS.listType] === KEYS.ol) return "Ordered List";
+    if (node?.[KEYS.listType] === KEYS.ul) return "List";
 
-    return <Trans>段落</Trans>;
+    return "Paragraph";
   },
-  [KEYS.table]: () => <Trans>表格</Trans>,
-  [KEYS.toc]: () => <Trans>目录</Trans>,
-  [KEYS.toggle]: () => <Trans>切换</Trans>,
-  [KEYS.video]: () => <Trans>视频</Trans>,
+  [KEYS.table]: () => "Table",
+  [KEYS.toc]: () => "Table of Contents",
+  [KEYS.toggle]: () => "Toggle",
+  [KEYS.video]: () => "Video",
 };
 
 export function BlockSuggestion({ element }: { element: TSuggestionElement }) {
@@ -121,7 +120,7 @@ export function BlockSuggestionCard({
   const [hovering, setHovering] = React.useState(false);
 
   const suggestionText2Array = (text: string) => {
-    if (text === BLOCK_SUGGESTION) return [<Trans>换行</Trans>];
+    if (text === BLOCK_SUGGESTION) return ["line breaks"];
 
     return text.split(BLOCK_SUGGESTION).filter(Boolean);
   };
@@ -159,7 +158,7 @@ export function BlockSuggestionCard({
                 {suggestionText2Array(suggestion.text!).map((text, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">
-                      <Trans>删除:</Trans>
+                      Delete:
                     </span>
 
                     <span key={index} className="text-sm">
@@ -176,11 +175,11 @@ export function BlockSuggestionCard({
                   (text, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <span className="text-sm text-muted-foreground">
-                        <Trans>添加:</Trans>
+                        Add:
                       </span>
 
                       <span key={index} className="text-sm">
-                        {text || <Trans>换行</Trans>}
+                        {text || "line breaks"}
                       </span>
                     </div>
                   ),
@@ -197,12 +196,8 @@ export function BlockSuggestionCard({
                         key={index}
                         className="flex items-start gap-2 text-brand/80"
                       >
-                        <span className="text-sm">
-                          <Trans>替换为:</Trans>
-                        </span>
-                        <span className="text-sm">
-                          {text || <Trans>换行</Trans>}
-                        </span>
+                        <span className="text-sm">with:</span>
+                        <span className="text-sm">{text || "line breaks"}</span>
                       </div>
                     </React.Fragment>
                   ),
@@ -212,15 +207,9 @@ export function BlockSuggestionCard({
                   <React.Fragment key={index}>
                     <div key={index} className="flex items-start gap-2">
                       <span className="text-sm text-muted-foreground">
-                        {index === 0 ? (
-                          <Trans>替换:</Trans>
-                        ) : (
-                          <Trans>删除:</Trans>
-                        )}
+                        {index === 0 ? "Replace:" : "Delete:"}
                       </span>
-                      <span className="text-sm">
-                        {text || <Trans>换行</Trans>}
-                      </span>
+                      <span className="text-sm">{text || "line breaks"}</span>
                     </div>
                   </React.Fragment>
                 ))}
@@ -231,9 +220,7 @@ export function BlockSuggestionCard({
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">
                   {Object.keys(suggestion.properties).map((key) => (
-                    <span key={key}>
-                      <Trans>取消{key}</Trans>
-                    </span>
+                    <span key={key}>Un{key}</span>
                   ))}
 
                   {Object.keys(suggestion.newProperties).map((key) => (

@@ -1,6 +1,5 @@
 "use client";
 
-import { Trans } from "@lingui/react/macro";
 import {
   BoldIcon,
   Code2Icon,
@@ -31,47 +30,38 @@ export function FloatingToolbarButtons() {
       {!readOnly && (
         <>
           <ToolbarGroup>
-            <AIToolbarButton tooltip={<Trans>AI 命令</Trans>}>
+            <AIToolbarButton tooltip="AI commands">
               <WandSparklesIcon />
-              <Trans>询问AI</Trans>
+              Ask AI
             </AIToolbarButton>
           </ToolbarGroup>
 
           <ToolbarGroup>
             <TurnIntoToolbarButton />
 
-            <MarkToolbarButton
-              nodeType={KEYS.bold}
-              tooltip={<Trans>粗体 (⌘+B)</Trans>}
-            >
+            <MarkToolbarButton nodeType={KEYS.bold} tooltip="Bold (⌘+B)">
               <BoldIcon />
             </MarkToolbarButton>
 
-            <MarkToolbarButton
-              nodeType={KEYS.italic}
-              tooltip={<Trans>斜体 (⌘+I)</Trans>}
-            >
+            <MarkToolbarButton nodeType={KEYS.italic} tooltip="Italic (⌘+I)">
               <ItalicIcon />
             </MarkToolbarButton>
 
             <MarkToolbarButton
               nodeType={KEYS.underline}
-              tooltip={<Trans>下划线 (⌘+U)</Trans>}
+              tooltip="Underline (⌘+U)"
             >
               <UnderlineIcon />
             </MarkToolbarButton>
 
             <MarkToolbarButton
               nodeType={KEYS.strikethrough}
-              tooltip={<Trans>删除线 (⌘+⇧+M)</Trans>}
+              tooltip="Strikethrough (⌘+⇧+M)"
             >
               <StrikethroughIcon />
             </MarkToolbarButton>
 
-            <MarkToolbarButton
-              nodeType={KEYS.code}
-              tooltip={<Trans>代码 (⌘+E)</Trans>}
-            >
+            <MarkToolbarButton nodeType={KEYS.code} tooltip="Code (⌘+E)">
               <Code2Icon />
             </MarkToolbarButton>
 
