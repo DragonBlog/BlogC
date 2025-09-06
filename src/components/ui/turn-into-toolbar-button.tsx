@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import { DropdownMenuItemIndicator } from "@radix-ui/react-dropdown-menu";
 import {
@@ -37,84 +38,84 @@ export const turnIntoItems = [
   {
     icon: <PilcrowIcon />,
     keywords: ["paragraph"],
-    label: "Text",
+    label: <Trans>文本</Trans>,
     value: KEYS.p,
   },
   {
     icon: <Heading1Icon />,
     keywords: ["title", "h1"],
-    label: "Heading 1",
+    label: <Trans>标题 1</Trans>,
     value: "h1",
   },
   {
     icon: <Heading2Icon />,
     keywords: ["subtitle", "h2"],
-    label: "Heading 2",
+    label: <Trans>标题 2</Trans>,
     value: "h2",
   },
   {
     icon: <Heading3Icon />,
     keywords: ["subtitle", "h3"],
-    label: "Heading 3",
+    label: <Trans>标题 3</Trans>,
     value: "h3",
   },
   {
     icon: <Heading4Icon />,
     keywords: ["subtitle", "h4"],
-    label: "Heading 4",
+    label: <Trans>标题 4</Trans>,
     value: "h4",
   },
   {
     icon: <Heading5Icon />,
     keywords: ["subtitle", "h5"],
-    label: "Heading 5",
+    label: <Trans>标题 5</Trans>,
     value: "h5",
   },
   {
     icon: <Heading6Icon />,
     keywords: ["subtitle", "h6"],
-    label: "Heading 6",
+    label: <Trans>标题 6</Trans>,
     value: "h6",
   },
   {
     icon: <ListIcon />,
     keywords: ["unordered", "ul", "-"],
-    label: "Bulleted list",
+    label: <Trans>项目符号列表</Trans>,
     value: KEYS.ul,
   },
   {
     icon: <ListOrderedIcon />,
     keywords: ["ordered", "ol", "1"],
-    label: "Numbered list",
+    label: <Trans>编号列表</Trans>,
     value: KEYS.ol,
   },
   {
     icon: <SquareIcon />,
     keywords: ["checklist", "task", "checkbox", "[]"],
-    label: "To-do list",
+    label: <Trans>待办列表</Trans>,
     value: KEYS.listTodo,
   },
   {
     icon: <ChevronRightIcon />,
     keywords: ["collapsible", "expandable"],
-    label: "Toggle list",
+    label: <Trans>切换列表</Trans>,
     value: KEYS.toggle,
   },
   {
     icon: <FileCodeIcon />,
     keywords: ["```"],
-    label: "Code",
+    label: <Trans>代码</Trans>,
     value: KEYS.codeBlock,
   },
   {
     icon: <QuoteIcon />,
     keywords: ["citation", "blockquote", ">"],
-    label: "Quote",
+    label: <Trans>引用</Trans>,
     value: KEYS.blockquote,
   },
   {
     icon: <Columns3Icon />,
-    label: "3 columns",
+    label: <Trans>3列</Trans>,
     value: "action_three_columns",
   },
 ];
@@ -140,7 +141,7 @@ export function TurnIntoToolbarButton(props: DropdownMenuProps) {
         <ToolbarButton
           className="min-w-[125px]"
           pressed={open}
-          tooltip="Turn into"
+          tooltip={<Trans>转换为</Trans>}
           isDropdown
         >
           {selectedItem.label}
@@ -160,7 +161,7 @@ export function TurnIntoToolbarButton(props: DropdownMenuProps) {
           onValueChange={(type) => {
             setBlockType(editor, type);
           }}
-          label="Turn into"
+          label={<Trans>转换为</Trans>}
         >
           {turnIntoItems.map(({ icon, label, value: itemValue }) => (
             <DropdownMenuRadioItem
