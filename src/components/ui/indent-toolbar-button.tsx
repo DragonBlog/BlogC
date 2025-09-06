@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { useIndentButton, useOutdentButton } from "@platejs/indent/react";
 import { IndentIcon, OutdentIcon } from "lucide-react";
 import * as React from "react";
@@ -12,7 +13,11 @@ export function IndentToolbarButton(
   const { props: buttonProps } = useIndentButton();
 
   return (
-    <ToolbarButton {...props} {...buttonProps} tooltip="Indent">
+    <ToolbarButton
+      {...props}
+      {...buttonProps}
+      tooltip={<Trans>增加缩进</Trans>}
+    >
       <IndentIcon />
     </ToolbarButton>
   );
@@ -24,7 +29,11 @@ export function OutdentToolbarButton(
   const { props: buttonProps } = useOutdentButton();
 
   return (
-    <ToolbarButton {...props} {...buttonProps} tooltip="Outdent">
+    <ToolbarButton
+      {...props}
+      {...buttonProps}
+      tooltip={<Trans>减少缩进</Trans>}
+    >
       <OutdentIcon />
     </ToolbarButton>
   );

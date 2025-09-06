@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import {
   useToggleToolbarButton,
   useToggleToolbarButtonState,
@@ -16,7 +17,7 @@ export function ToggleToolbarButton(
   const { props: buttonProps } = useToggleToolbarButton(state);
 
   return (
-    <ToolbarButton {...props} {...buttonProps} tooltip="Toggle">
+    <ToolbarButton {...props} {...buttonProps} tooltip={<Trans>切换</Trans>}>
       <ListCollapseIcon />
     </ToolbarButton>
   );

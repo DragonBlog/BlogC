@@ -1,7 +1,7 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { PlaceholderPlugin } from "@platejs/media/react";
-
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import {
   AudioLinesIcon,
@@ -46,33 +46,33 @@ const MEDIA_CONFIG: Record<
   {
     accept: string[];
     icon: React.ReactNode;
-    title: string;
-    tooltip: string;
+    title: React.ReactNode;
+    tooltip: React.ReactNode;
   }
 > = {
   [KEYS.audio]: {
     accept: ["audio/*"],
     icon: <AudioLinesIcon className="size-4" />,
-    title: "Insert Audio",
-    tooltip: "Audio",
+    title: <Trans>插入音频</Trans>,
+    tooltip: <Trans>音频</Trans>,
   },
   [KEYS.file]: {
     accept: ["*"],
     icon: <FileUpIcon className="size-4" />,
-    title: "Insert File",
-    tooltip: "File",
+    title: <Trans>插入文件</Trans>,
+    tooltip: <Trans>文件</Trans>,
   },
   [KEYS.img]: {
     accept: ["image/*"],
     icon: <ImageIcon className="size-4" />,
-    title: "Insert Image",
-    tooltip: "Image",
+    title: <Trans>插入图片</Trans>,
+    tooltip: <Trans>图片</Trans>,
   },
   [KEYS.video]: {
     accept: ["video/*"],
     icon: <FilmIcon className="size-4" />,
-    title: "Insert Video",
-    tooltip: "Video",
+    title: <Trans>插入视频</Trans>,
+    tooltip: <Trans>视频</Trans>,
   },
 };
 
@@ -130,11 +130,11 @@ export function MediaToolbarButton({
             <DropdownMenuGroup>
               <DropdownMenuItem onSelect={() => openFilePicker()}>
                 {currentConfig.icon}
-                Upload from computer
+                <Trans>本地上传</Trans>
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={() => setDialogOpen(true)}>
                 <LinkIcon />
-                Insert via URL
+                <Trans>通过URL插入</Trans>
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
@@ -211,14 +211,16 @@ function MediaUrlDialogContent({
       </AlertDialogDescription>
 
       <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
+        <AlertDialogCancel>
+          <Trans>取消</Trans>
+        </AlertDialogCancel>
         <AlertDialogAction
           onClick={(e) => {
             e.preventDefault();
             embedMedia();
           }}
         >
-          Accept
+          <Trans>确定</Trans>
         </AlertDialogAction>
       </AlertDialogFooter>
     </>

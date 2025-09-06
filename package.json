@@ -33,6 +33,7 @@
     "@faker-js/faker": "^10.0.0",
     "@headless-tree/core": "^1.4.0",
     "@headless-tree/react": "^1.4.0",
+    "@lingui/core": "^5.4.1",
     "@lingui/react": "^5.4.1",
     "@platejs/ai": "^49.2.15",
     "@platejs/autoformat": "^49.0.0",

@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { MessageSquareTextIcon } from "lucide-react";
 import { useEditorRef } from "platejs/react";
 import * as React from "react";
@@ -17,7 +18,7 @@ export function CommentToolbarButton() {
         editor.getTransforms(commentPlugin).comment.setDraft();
       }}
       data-plate-prevent-overlay
-      tooltip="Comment"
+      tooltip={<Trans>评论</Trans>}
     >
       <MessageSquareTextIcon />
     </ToolbarButton>

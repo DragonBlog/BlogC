@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { ListStyleType, someList, toggleList } from "@platejs/list";
 import {
   useIndentTodoToolBarButton,
@@ -68,7 +69,7 @@ export function BulletedListToolbarButton() {
             >
               <div className="flex items-center gap-2">
                 <div className="size-2 rounded-full border border-current bg-current" />
-                Default
+                <Trans>默认</Trans>
               </div>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -80,7 +81,7 @@ export function BulletedListToolbarButton() {
             >
               <div className="flex items-center gap-2">
                 <div className="size-2 rounded-full border border-current" />
-                Circle
+                <Trans>圆形</Trans>
               </div>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -92,7 +93,7 @@ export function BulletedListToolbarButton() {
             >
               <div className="flex items-center gap-2">
                 <div className="size-2 border border-current bg-current" />
-                Square
+                <Trans>方形</Trans>
               </div>
             </DropdownMenuItem>
           </DropdownMenuGroup>
@@ -146,7 +147,7 @@ export function NumberedListToolbarButton() {
                 })
               }
             >
-              Decimal (1, 2, 3)
+              <Trans>数字 (1, 2, 3)</Trans>
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() =>
@@ -155,7 +156,7 @@ export function NumberedListToolbarButton() {
                 })
               }
             >
-              Lower Alpha (a, b, c)
+              <Trans>小写英文字母 (a, b, c)</Trans>
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() =>
@@ -164,7 +165,7 @@ export function NumberedListToolbarButton() {
                 })
               }
             >
-              Upper Alpha (A, B, C)
+              <Trans>大写英文字母 (A, B, C)</Trans>
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() =>
@@ -173,7 +174,7 @@ export function NumberedListToolbarButton() {
                 })
               }
             >
-              Lower Roman (i, ii, iii)
+              <Trans>小写罗马数字 (i, ii, iii)</Trans>
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() =>
@@ -182,7 +183,7 @@ export function NumberedListToolbarButton() {
                 })
               }
             >
-              Upper Roman (I, II, III)
+              <Trans>大写罗马数字 (I, II, III)</Trans>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
@@ -198,7 +199,11 @@ export function TodoListToolbarButton(
   const { props: buttonProps } = useIndentTodoToolBarButton(state);
 
   return (
-    <ToolbarButton {...props} {...buttonProps} tooltip="Todo">
+    <ToolbarButton
+      {...props}
+      {...buttonProps}
+      tooltip={<Trans>待办事项</Trans>}
+    >
       <ListTodoIcon />
     </ToolbarButton>
   );

@@ -1,7 +1,7 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { TablePlugin, useTableMergeState } from "@platejs/table/react";
-
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import {
   ArrowDown,
@@ -46,7 +46,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={open} tooltip="Table" isDropdown>
+        <ToolbarButton pressed={open} tooltip={<Trans>表格</Trans>} isDropdown>
           <Table />
         </ToolbarButton>
       </DropdownMenuTrigger>
@@ -59,7 +59,9 @@ export function TableToolbarButton(props: DropdownMenuProps) {
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="gap-2 data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
               <Grid3x3Icon className="size-4" />
-              <span>Table</span>
+              <span>
+                <Trans>表格</Trans>
+              </span>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent className="m-0 p-0">
               <TablePicker />
@@ -72,7 +74,9 @@ export function TableToolbarButton(props: DropdownMenuProps) {
               disabled={!tableSelected}
             >
               <div className="size-4" />
-              <span>Cell</span>
+              <span>
+                <Trans>单元格</Trans>
+              </span>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <DropdownMenuItem
@@ -84,7 +88,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
                 }}
               >
                 <Combine />
-                Merge cells
+                <Trans>合并单元格</Trans>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="min-w-[180px]"
@@ -95,7 +99,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
                 }}
               >
                 <Ungroup />
-                Split cell
+                <Trans>拆分单元格</Trans>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
@@ -106,7 +110,9 @@ export function TableToolbarButton(props: DropdownMenuProps) {
               disabled={!tableSelected}
             >
               <div className="size-4" />
-              <span>Row</span>
+              <span>
+                <Trans>行</Trans>
+              </span>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <DropdownMenuItem
@@ -118,7 +124,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
                 }}
               >
                 <ArrowUp />
-                Insert row before
+                <Trans>在上方插入行</Trans>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="min-w-[180px]"
@@ -129,7 +135,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
                 }}
               >
                 <ArrowDown />
-                Insert row after
+                <Trans>在下方插入行</Trans>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="min-w-[180px]"
@@ -140,7 +146,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
                 }}
               >
                 <XIcon />
-                Delete row
+                <Trans>删除行</Trans>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
@@ -151,7 +157,9 @@ export function TableToolbarButton(props: DropdownMenuProps) {
               disabled={!tableSelected}
             >
               <div className="size-4" />
-              <span>Column</span>
+              <span>
+                <Trans>列</Trans>
+              </span>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <DropdownMenuItem
@@ -163,7 +171,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
                 }}
               >
                 <ArrowLeft />
-                Insert column before
+                <Trans>在左侧插入列</Trans>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="min-w-[180px]"
@@ -174,7 +182,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
                 }}
               >
                 <ArrowRight />
-                Insert column after
+                <Trans>在右侧插入列</Trans>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="min-w-[180px]"
@@ -185,7 +193,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
                 }}
               >
                 <XIcon />
-                Delete column
+                <Trans>删除列</Trans>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
@@ -199,7 +207,7 @@ export function TableToolbarButton(props: DropdownMenuProps) {
             }}
           >
             <Trash2Icon />
-            Delete table
+            <Trans>删除表格</Trans>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

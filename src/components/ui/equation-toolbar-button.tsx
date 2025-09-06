@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { insertInlineEquation } from "@platejs/math";
 import { RadicalIcon } from "lucide-react";
 import { useEditorRef } from "platejs/react";
@@ -18,7 +19,7 @@ export function InlineEquationToolbarButton(
       onClick={() => {
         insertInlineEquation(editor);
       }}
-      tooltip="Mark as equation"
+      tooltip={<Trans>标记为公式</Trans>}
     >
       <RadicalIcon />
     </ToolbarButton>

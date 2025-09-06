@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import {
   KeyboardIcon,
@@ -28,7 +29,7 @@ export function MoreToolbarButton(props: DropdownMenuProps) {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={open} tooltip="Insert">
+        <ToolbarButton pressed={open} tooltip={<Trans>插入</Trans>}>
           <MoreHorizontalIcon />
         </ToolbarButton>
       </DropdownMenuTrigger>
@@ -46,7 +47,7 @@ export function MoreToolbarButton(props: DropdownMenuProps) {
             }}
           >
             <KeyboardIcon />
-            Keyboard input
+            <Trans>键盘输入</Trans>
           </DropdownMenuItem>
 
           <DropdownMenuItem
@@ -58,7 +59,7 @@ export function MoreToolbarButton(props: DropdownMenuProps) {
             }}
           >
             <SuperscriptIcon />
-            Superscript
+            <Trans>上标</Trans>
             {/* (⌘+,) */}
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -70,7 +71,7 @@ export function MoreToolbarButton(props: DropdownMenuProps) {
             }}
           >
             <SubscriptIcon />
-            Subscript
+            <Trans>下标</Trans>
             {/* (⌘+.) */}
           </DropdownMenuItem>
         </DropdownMenuGroup>

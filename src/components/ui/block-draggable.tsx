@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { DndPlugin, useDraggable, useDropLine } from "@platejs/dnd";
 import { expandListItemsWithChildren } from "@platejs/list";
 import { BlockSelectionPlugin } from "@platejs/selection/react";
@@ -16,7 +17,6 @@ import {
   useSelected,
 } from "platejs/react";
 import * as React from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -327,7 +327,9 @@ const DragHandle = React.memo(function DragHandle({
           <GripVertical className="text-muted-foreground" />
         </div>
       </TooltipTrigger>
-      <TooltipContent>Drag to move</TooltipContent>
+      <TooltipContent>
+        <Trans>拖拽移动</Trans>
+      </TooltipContent>
     </Tooltip>
   );
 });

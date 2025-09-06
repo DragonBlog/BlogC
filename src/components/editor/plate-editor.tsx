@@ -18,7 +18,7 @@ export function PlateEditor() {
         <Editor variant="fullWidth" />
       </EditorContainer>
 
-      <SettingsDialog />
+      {/* <SettingsDialog /> */}
     </Plate>
   );
 }

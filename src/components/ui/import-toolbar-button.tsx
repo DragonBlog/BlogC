@@ -1,7 +1,7 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { MarkdownPlugin } from "@platejs/markdown";
-
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import { ArrowUpToLineIcon } from "lucide-react";
 import { getEditorDOMFromHtmlString } from "platejs";
@@ -69,7 +69,7 @@ export function ImportToolbarButton(props: DropdownMenuProps) {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={open} tooltip="Import" isDropdown>
+        <ToolbarButton pressed={open} tooltip={<Trans>导入</Trans>} isDropdown>
           <ArrowUpToLineIcon className="size-4" />
         </ToolbarButton>
       </DropdownMenuTrigger>
@@ -81,7 +81,7 @@ export function ImportToolbarButton(props: DropdownMenuProps) {
               openHtmlFilePicker();
             }}
           >
-            Import from HTML
+            <Trans>从HTML导入</Trans>
           </DropdownMenuItem>
 
           <DropdownMenuItem
@@ -89,7 +89,7 @@ export function ImportToolbarButton(props: DropdownMenuProps) {
               openMdFilePicker();
             }}
           >
-            Import from Markdown
+            <Trans>从Markdown导入</Trans>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

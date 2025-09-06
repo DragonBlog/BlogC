@@ -1,6 +1,7 @@
 "use client";
 
 import type { Emoji } from "@emoji-mart/data";
+import { Trans } from "@lingui/react/macro";
 import {
   type EmojiCategoryList,
   type EmojiIconList,
@@ -50,7 +51,12 @@ export function EmojiToolbarButton({
   return (
     <EmojiPopover
       control={
-        <ToolbarButton pressed={isOpen} tooltip="Emoji" isDropdown {...props}>
+        <ToolbarButton
+          pressed={isOpen}
+          tooltip={<Trans>表情符号</Trans>}
+          isDropdown
+          {...props}
+        >
           <SmileIcon />
         </ToolbarButton>
       }

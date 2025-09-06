@@ -10,6 +10,7 @@ pre-commit:
       stage_fixed: true
     translations:
       run: pnpm extract
+      stage_fixed: true
 
 commit-msg:
   commands:

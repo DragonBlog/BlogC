@@ -1,7 +1,7 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { LineHeightPlugin } from "@platejs/basic-styles/react";
-
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import { DropdownMenuItemIndicator } from "@radix-ui/react-dropdown-menu";
 import { CheckIcon, WrapText } from "lucide-react";
@@ -33,7 +33,7 @@ export function LineHeightToolbarButton(props: DropdownMenuProps) {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={open} tooltip="Line height" isDropdown>
+        <ToolbarButton pressed={open} tooltip={<Trans>行高</Trans>} isDropdown>
           <WrapText />
         </ToolbarButton>
       </DropdownMenuTrigger>

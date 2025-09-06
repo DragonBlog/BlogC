@@ -53,6 +53,9 @@ importers:
       '@headless-tree/react':
         specifier: ^1.4.0
         version: 1.4.0(@headless-tree/core@1.4.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@lingui/core':
+        specifier: ^5.4.1
+        version: 5.4.1(@lingui/babel-plugin-lingui-macro@5.4.1(typescript@5.6.3))
       '@lingui/react':
         specifier: ^5.4.1
         version: 5.4.1(@lingui/babel-plugin-lingui-macro@5.4.1(typescript@5.6.3))(react@19.1.1)

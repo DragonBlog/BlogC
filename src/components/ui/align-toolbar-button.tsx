@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import type { Alignment } from "@platejs/basic-styles";
 import { TextAlignPlugin } from "@platejs/basic-styles/react";
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
@@ -56,7 +57,7 @@ export function AlignToolbarButton(props: DropdownMenuProps) {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={open} tooltip="Align" isDropdown>
+        <ToolbarButton pressed={open} tooltip={<Trans>对齐</Trans>} isDropdown>
           <IconValue />
         </ToolbarButton>
       </DropdownMenuTrigger>

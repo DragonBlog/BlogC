@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { SuggestionPlugin } from "@platejs/suggestion/react";
 import {
   DropdownMenuItemIndicator,
@@ -32,25 +33,32 @@ export function ModeToolbarButton(props: DropdownMenuProps) {
 
   if (isSuggesting) value = "suggestion";
 
-  const item: Record<string, { icon: React.ReactNode; label: string }> = {
+  const item: Record<
+    string,
+    { icon: React.ReactNode; label: React.ReactNode }
+  > = {
     editing: {
       icon: <PenIcon />,
-      label: "Editing",
+      label: <Trans>编辑</Trans>,
     },
     suggestion: {
       icon: <PencilLineIcon />,
-      label: "Suggestion",
+      label: <Trans>建议</Trans>,
     },
     viewing: {
       icon: <EyeIcon />,
-      label: "Viewing",
+      label: <Trans>预览</Trans>,
     },
   };
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={open} tooltip="Editing mode" isDropdown>
+        <ToolbarButton
+          pressed={open}
+          tooltip={<Trans>编辑模式</Trans>}
+          isDropdown
+        >
           {item[value].icon}
           <span className="hidden lg:inline">{item[value].label}</span>
         </ToolbarButton>

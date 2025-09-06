@@ -1,7 +1,7 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import { MarkdownPlugin } from "@platejs/markdown";
-
 import type { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import { ArrowDownToLineIcon } from "lucide-react";
 import { createSlateEditor, serializeHtml } from "platejs";
@@ -147,7 +147,7 @@ export function ExportToolbarButton(props: DropdownMenuProps) {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={open} tooltip="Export" isDropdown>
+        <ToolbarButton pressed={open} tooltip={<Trans>导出</Trans>} isDropdown>
           <ArrowDownToLineIcon className="size-4" />
         </ToolbarButton>
       </DropdownMenuTrigger>
@@ -155,16 +155,16 @@ export function ExportToolbarButton(props: DropdownMenuProps) {
       <DropdownMenuContent align="start">
         <DropdownMenuGroup>
           <DropdownMenuItem onSelect={exportToHtml}>
-            Export as HTML
+            <Trans>导出为HTML</Trans>
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={exportToPdf}>
-            Export as PDF
+            <Trans>导出为PDF</Trans>
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={exportToImage}>
-            Export as Image
+            <Trans>导出为图片</Trans>
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={exportToMarkdown}>
-            Export as Markdown
+            <Trans>导出为Markdown</Trans>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

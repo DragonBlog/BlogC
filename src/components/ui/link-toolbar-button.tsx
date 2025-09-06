@@ -1,5 +1,6 @@
 "use client";
 
+import { Trans } from "@lingui/react/macro";
 import {
   useLinkToolbarButton,
   useLinkToolbarButtonState,
@@ -16,7 +17,12 @@ export function LinkToolbarButton(
   const { props: buttonProps } = useLinkToolbarButton(state);
 
   return (
-    <ToolbarButton {...props} {...buttonProps} data-plate-focus tooltip="Link">
+    <ToolbarButton
+      {...props}
+      {...buttonProps}
+      data-plate-focus
+      tooltip={<Trans>链接</Trans>}
+    >
       <Link />
     </ToolbarButton>
   );
