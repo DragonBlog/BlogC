@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { ItemInstance, TreeInstance } from "@headless-tree/core";
 import { AssistiveTreeDescription } from "@headless-tree/react";
-import { Button, Flex, Spin, Typography } from "antd";
+import { Button, Dropdown, Flex, Spin, Typography } from "antd";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "motion/react";
 import { FileTreeItem } from "../../command/fileManager";
@@ -16,12 +16,14 @@ type AnimateInnerProps = {
   tree: TreeInstance<FileTreeItem>;
   setCurrent: (item: FileTreeItem) => void;
   onClick?: (item: FileTreeItem) => void;
+  items: any[];
 };
 
 export const AnimateInner = ({
   tree,
   setCurrent,
   onClick,
+  items,
 }: AnimateInnerProps) => {
   return (
     <div
@@ -39,6 +41,7 @@ export const AnimateInner = ({
               onClick={onClick}
               item={item}
               setCurrent={setCurrent}
+              items={items}
             />
           );
         })}
@@ -50,12 +53,15 @@ const Item = ({
   item,
   setCurrent,
   onClick,
+  items,
 }: {
   item: ItemInstance<FileTreeItem>;
   setCurrent: (item: FileTreeItem) => void;
   onClick?: (item: FileTreeItem) => void;
+  items: any[];
 }) => {
   const itemProps = item.getProps();
+
   return (
     <AnimatePresence>
       <div
@@ -99,17 +105,14 @@ const Item = ({
             </Spin>
 
             <Typography.Text
-              ellipsis={{
-                tooltip: true,
-              }}
-              style={{
-                color: "inherit",
-              }}
+              ellipsis={{ tooltip: true }}
+              style={{ color: "inherit" }}
               className={clsx(item.isSelected() && "text-primary")}
             >
               {item.getItemName()}
             </Typography.Text>
           </Flex>
+
           <Button
             className="opacity-0 group-hover:opacity-100 transition"
             onClick={(e) => {
@@ -129,14 +132,13 @@ const Item = ({
           />
         </div>
       </div>
+
       {item.isExpanded() && item.getChildren().length > 0 && (
         <motion.div
           initial={{ height: 0, opacity: 0.5 }}
           animate={{ height: "fit-content", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          transition={{
-            ease: "linear",
-          }}
+          transition={{ ease: "linear" }}
         >
           {item.getChildren().map((child) => (
             <Item
@@ -144,6 +146,7 @@ const Item = ({
               onClick={onClick}
               item={child}
               setCurrent={setCurrent}
+              items={items}
             />
           ))}
         </motion.div>

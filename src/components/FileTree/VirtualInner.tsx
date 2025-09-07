@@ -17,12 +17,13 @@ type VirtualInnerProps = {
   tree: TreeInstance<FileTreeItem>;
   setCurrent: (item: FileTreeItem) => void;
   onClick?: (item: FileTreeItem) => void;
+  items: any[];
 };
 
 export const VirtualInner = forwardRef<
   Virtualizer<HTMLDivElement, Element>,
   VirtualInnerProps
->(({ tree, setCurrent, onClick }, ref) => {
+>(({ tree, setCurrent, onClick, items }, ref) => {
   const parentRef = useRef<HTMLDivElement | null>(null);
 
   const virtualizer = useVirtualizer({
@@ -38,14 +39,13 @@ export const VirtualInner = forwardRef<
       <AssistiveTreeDescription tree={tree} />
       <div
         {...tree.getContainerProps()}
-        style={{
-          height: `${virtualizer.getTotalSize()}px`,
-        }}
+        style={{ height: `${virtualizer.getTotalSize()}px` }}
         className="flex flex-col w-full overflow-hidden gap-1 relative"
       >
         {virtualizer.getVirtualItems().map((virtualItem) => {
           const item = tree.getItems()[virtualItem.index];
           const itemProps = item.getProps();
+
           return (
             <div
               {...itemProps}
@@ -90,17 +90,14 @@ export const VirtualInner = forwardRef<
                   </Spin>
 
                   <Typography.Text
-                    ellipsis={{
-                      tooltip: true,
-                    }}
-                    style={{
-                      color: "inherit",
-                    }}
+                    ellipsis={{ tooltip: true }}
+                    style={{ color: "inherit" }}
                     className={clsx(item.isSelected() && "text-primary")}
                   >
                     {item.getItemName()}
                   </Typography.Text>
                 </Flex>
+
                 <Button
                   className="opacity-0 group-hover:opacity-100 transition"
                   onClick={(e) => {
