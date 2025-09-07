@@ -20,8 +20,8 @@ msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:62
 #: src/components/ui/floating-toolbar-buttons.tsx:34
-msgid "AI 命令"
-msgstr ""
+#~ msgid "AI 命令"
+#~ msgstr ""
 
 #: src/components/ui/more-toolbar-button.tsx:62
 msgid "上标"
@@ -29,8 +29,8 @@ msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:98
 #: src/components/ui/floating-toolbar-buttons.tsx:59
-msgid "下划线 (⌘+U)"
-msgstr ""
+#~ msgid "下划线 (⌘+U)"
+#~ msgstr ""
 
 #: src/components/ui/more-toolbar-button.tsx:74
 msgid "下标"
@@ -51,14 +51,13 @@ msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:112
 #: src/components/ui/floating-toolbar-buttons.tsx:73
-msgid "代码 (⌘+E)"
-msgstr ""
+#~ msgid "代码 (⌘+E)"
+#~ msgstr ""
 
 #: src/components/ui/block-suggestion.tsx:52
-msgid "代码块"
-msgstr ""
+#~ msgid "代码块"
+#~ msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:54
 #: src/components/ui/insert-toolbar-button.tsx:177
 msgid "公式"
 msgstr ""
@@ -73,14 +72,13 @@ msgstr ""
 
 #: src/components/ui/block-context-menu.tsx:179
 #: src/components/ui/indent-toolbar-button.tsx:35
-msgid "减少缩进"
-msgstr ""
+#~ msgid "减少缩进"
+#~ msgstr ""
 
 #: src/components/ui/insert-toolbar-button.tsx:101
 msgid "分隔线"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:74
 #: src/components/ui/toggle-toolbar-button.tsx:20
 msgid "切换"
 msgstr ""
@@ -90,24 +88,22 @@ msgstr ""
 msgid "切换列表"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:53
 #: src/components/ui/table-toolbar-button.tsx:161
 msgid "列"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:68
 #: src/components/ui/insert-toolbar-button.tsx:112
 msgid "列表"
 msgstr ""
 
 #: src/components/ui/block-context-menu.tsx:125
-msgid "删除"
-msgstr ""
+#~ msgid "删除"
+#~ msgstr ""
 
 #: src/components/ui/block-suggestion.tsx:162
 #: src/components/ui/block-suggestion.tsx:218
-msgid "删除:"
-msgstr ""
+#~ msgid "删除:"
+#~ msgstr ""
 
 #: src/components/ui/table-toolbar-button.tsx:196
 msgid "删除列"
@@ -115,8 +111,8 @@ msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:105
 #: src/components/ui/floating-toolbar-buttons.tsx:66
-msgid "删除线 (⌘+⇧+M)"
-msgstr ""
+#~ msgid "删除线 (⌘+⇧+M)"
+#~ msgstr ""
 
 #: src/components/ui/table-toolbar-button.tsx:149
 msgid "删除行"
@@ -124,6 +120,10 @@ msgstr ""
 
 #: src/components/ui/table-toolbar-button.tsx:210
 msgid "删除表格"
+msgstr ""
+
+#: src/components/FileTree/Toolbar.tsx:83
+msgid "刷新"
 msgstr ""
 
 #: src/components/ui/table-toolbar-button.tsx:78
@@ -135,18 +135,17 @@ msgid "取消"
 msgstr ""
 
 #: src/components/ui/block-suggestion.tsx:235
-msgid "取消{key}"
-msgstr ""
+#~ msgid "取消{key}"
+#~ msgstr ""
 
 #: src/components/ui/block-context-menu.tsx:193
-msgid "右对齐"
-msgstr ""
+#~ msgid "右对齐"
+#~ msgstr ""
 
 #: src/components/ui/table-toolbar-button.tsx:91
 msgid "合并单元格"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:63
 #: src/components/ui/insert-toolbar-button.tsx:146
 #: src/components/ui/media-toolbar-button.tsx:69
 msgid "图片"
@@ -178,13 +177,13 @@ msgstr ""
 
 #: src/components/ui/block-context-menu.tsx:170
 #: src/components/ui/indent-toolbar-button.tsx:19
-msgid "增加缩进"
-msgstr ""
+#~ msgid "增加缩进"
+#~ msgstr ""
 
 #: src/components/ui/block-context-menu.tsx:134
 #: src/components/ui/code-block-node.tsx:186
-msgid "复制"
-msgstr ""
+#~ msgid "复制"
+#~ msgstr ""
 
 #: src/components/ui/list-toolbar-button.tsx:186
 msgid "大写罗马数字 (I, II, III)"
@@ -194,13 +193,11 @@ msgstr ""
 msgid "大写英文字母 (A, B, C)"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:64
 #: src/components/ui/insert-toolbar-button.tsx:142
 msgid "媒体"
 msgstr ""
 
 #: src/components/ui/align-toolbar-button.tsx:60
-#: src/components/ui/block-context-menu.tsx:183
 msgid "对齐"
 msgstr ""
 
@@ -237,12 +234,12 @@ msgid "小写英文字母 (a, b, c)"
 msgstr ""
 
 #: src/components/ui/block-context-menu.tsx:190
-msgid "居中"
-msgstr ""
+#~ msgid "居中"
+#~ msgstr ""
 
 #: src/components/ui/block-context-menu.tsx:187
-msgid "左对齐"
-msgstr ""
+#~ msgid "左对齐"
+#~ msgstr ""
 
 #: src/components/ui/mode-toolbar-button.tsx:46
 msgid "建议"
@@ -259,14 +256,13 @@ msgstr ""
 
 #: src/components/ui/block-context-menu.tsx:156
 #: src/components/ui/block-suggestion.tsx:50
-msgid "引用块"
-msgstr ""
+#~ msgid "引用块"
+#~ msgstr ""
 
 #: src/components/ui/list-toolbar-button.tsx:205
 msgid "待办事项"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:66
 #: src/components/ui/insert-toolbar-button.tsx:126
 #: src/components/ui/turn-into-toolbar-button.tsx:95
 msgid "待办列表"
@@ -284,8 +280,8 @@ msgstr ""
 #: src/components/ui/block-suggestion.tsx:183
 #: src/components/ui/block-suggestion.tsx:204
 #: src/components/ui/block-suggestion.tsx:222
-msgid "换行"
-msgstr ""
+#~ msgid "换行"
+#~ msgstr ""
 
 #: src/components/ui/insert-toolbar-button.tsx:219
 #: src/components/ui/more-toolbar-button.tsx:32
@@ -309,25 +305,24 @@ msgid "插入音频"
 msgstr ""
 
 #: src/components/ui/code-block-node.tsx:122
-msgid "搜索语言..."
-msgstr ""
+#~ msgid "搜索语言..."
+#~ msgstr ""
 
 #: src/components/ui/history-toolbar-button.tsx:47
-msgid "撤销"
-msgstr ""
+#~ msgid "撤销"
+#~ msgstr ""
 
 #: src/components/ui/list-toolbar-button.tsx:150
 msgid "数字 (1, 2, 3)"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:55
 #: src/components/ui/media-toolbar-button.tsx:63
 msgid "文件"
 msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:117
-msgid "文字颜色"
-msgstr ""
+#~ msgid "文字颜色"
+#~ msgstr ""
 
 #: src/components/ui/turn-into-toolbar-button.tsx:41
 msgid "文本"
@@ -335,7 +330,15 @@ msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:91
 #: src/components/ui/floating-toolbar-buttons.tsx:52
-msgid "斜体 (⌘+I)"
+#~ msgid "斜体 (⌘+I)"
+#~ msgstr ""
+
+#: src/components/FileTree/Toolbar.tsx:38
+msgid "新建文件"
+msgstr ""
+
+#: src/components/FileTree/Toolbar.tsx:62
+msgid "新建文件夹"
 msgstr ""
 
 #: src/components/ui/list-toolbar-button.tsx:96
@@ -347,88 +350,76 @@ msgid "日期"
 msgstr ""
 
 #: src/components/ui/block-suggestion.tsx:216
-msgid "替换:"
-msgstr ""
+#~ msgid "替换:"
+#~ msgstr ""
 
 #: src/components/ui/block-suggestion.tsx:201
-msgid "替换为:"
-msgstr ""
+#~ msgid "替换为:"
+#~ msgstr ""
 
 #: src/components/ui/block-suggestion.tsx:67
-msgid "有序列表"
-msgstr ""
+#~ msgid "有序列表"
+#~ msgstr ""
 
 #: src/components/ui/code-block-node.tsx:125
-msgid "未找到该语言。"
-msgstr ""
+#~ msgid "未找到该语言。"
+#~ msgstr ""
 
 #: src/components/ui/media-toolbar-button.tsx:133
 msgid "本地上传"
 msgstr ""
 
 #: src/components/ui/block-suggestion.tsx:51
-msgid "标注"
-msgstr ""
+#~ msgid "标注"
+#~ msgstr ""
 
 #: src/components/ui/equation-toolbar-button.tsx:22
 msgid "标记为公式"
 msgstr ""
 
-#: src/components/ui/block-context-menu.tsx:147
-#: src/components/ui/block-suggestion.tsx:56
 #: src/components/ui/insert-toolbar-button.tsx:71
 #: src/components/ui/turn-into-toolbar-button.tsx:47
 msgid "标题 1"
 msgstr ""
 
-#: src/components/ui/block-context-menu.tsx:150
-#: src/components/ui/block-suggestion.tsx:57
 #: src/components/ui/insert-toolbar-button.tsx:76
 #: src/components/ui/turn-into-toolbar-button.tsx:53
 msgid "标题 2"
 msgstr ""
 
-#: src/components/ui/block-context-menu.tsx:153
-#: src/components/ui/block-suggestion.tsx:58
 #: src/components/ui/insert-toolbar-button.tsx:81
 #: src/components/ui/turn-into-toolbar-button.tsx:59
 msgid "标题 3"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:59
 #: src/components/ui/turn-into-toolbar-button.tsx:65
 msgid "标题 4"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:60
 #: src/components/ui/turn-into-toolbar-button.tsx:71
 msgid "标题 5"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:61
 #: src/components/ui/turn-into-toolbar-button.tsx:77
 msgid "标题 6"
 msgstr ""
 
 #: src/components/ui/code-block-node.tsx:57
-msgid "格式化代码"
-msgstr ""
+#~ msgid "格式化代码"
+#~ msgstr ""
 
-#: src/components/ui/block-context-menu.tsx:143
-#: src/components/ui/block-suggestion.tsx:70
 #: src/components/ui/insert-toolbar-button.tsx:66
 msgid "段落"
 msgstr ""
 
 #: src/components/ui/block-suggestion.tsx:62
-msgid "水平线"
-msgstr ""
+#~ msgid "水平线"
+#~ msgstr ""
 
 #: src/components/ui/block-suggestion.tsx:179
-msgid "添加:"
-msgstr ""
+#~ msgid "添加:"
+#~ msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:73
 #: src/components/ui/insert-toolbar-button.tsx:166
 msgid "目录"
 msgstr ""
@@ -437,7 +428,6 @@ msgstr ""
 msgid "确定"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:75
 #: src/components/ui/insert-toolbar-button.tsx:151
 #: src/components/ui/media-toolbar-button.tsx:75
 msgid "视频"
@@ -445,12 +435,12 @@ msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:84
 #: src/components/ui/floating-toolbar-buttons.tsx:45
-msgid "粗体 (⌘+B)"
-msgstr ""
+#~ msgid "粗体 (⌘+B)"
+#~ msgstr ""
 
 #: src/components/ui/code-block-node.tsx:109
-msgid "纯文本"
-msgstr ""
+#~ msgid "纯文本"
+#~ msgstr ""
 
 #: src/components/ui/insert-toolbar-button.tsx:121
 #: src/components/ui/turn-into-toolbar-button.tsx:89
@@ -466,8 +456,8 @@ msgid "编辑模式"
 msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:123
-msgid "背景颜色"
-msgstr ""
+#~ msgid "背景颜色"
+#~ msgstr ""
 
 #: src/components/ui/table-toolbar-button.tsx:114
 msgid "行"
@@ -478,14 +468,13 @@ msgid "行内公式"
 msgstr ""
 
 #: src/components/ui/line-height-toolbar-button.tsx:36
-msgid "行高"
-msgstr ""
+#~ msgid "行高"
+#~ msgstr ""
 
 #: src/components/ui/emoji-toolbar-button.tsx:56
 msgid "表情符号"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:72
 #: src/components/ui/insert-toolbar-button.tsx:86
 #: src/components/ui/table-toolbar-button.tsx:49
 #: src/components/ui/table-toolbar-button.tsx:63
@@ -498,10 +487,9 @@ msgstr ""
 
 #: src/components/ui/block-context-menu.tsx:115
 #: src/components/ui/floating-toolbar-buttons.tsx:36
-msgid "询问AI"
-msgstr ""
+#~ msgid "询问AI"
+#~ msgstr ""
 
-#: src/components/ui/block-context-menu.tsx:139
 #: src/components/ui/turn-into-toolbar-button.tsx:144
 #: src/components/ui/turn-into-toolbar-button.tsx:164
 msgid "转换为"
@@ -512,8 +500,8 @@ msgid "通过URL插入"
 msgstr ""
 
 #: src/components/ui/history-toolbar-button.tsx:25
-msgid "重做"
-msgstr ""
+#~ msgid "重做"
+#~ msgstr ""
 
 #: src/components/ui/insert-toolbar-button.tsx:192
 #: src/components/ui/link-toolbar-button.tsx:24
@@ -524,7 +512,6 @@ msgstr ""
 msgid "键盘输入"
 msgstr ""
 
-#: src/components/ui/block-suggestion.tsx:49
 #: src/components/ui/media-toolbar-button.tsx:57
 msgid "音频"
 msgstr ""
@@ -539,8 +526,8 @@ msgid "预览"
 msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:168
-msgid "高亮"
-msgstr ""
+#~ msgid "高亮"
+#~ msgstr ""
 
 #: src/components/ui/insert-toolbar-button.tsx:162
 msgid "高级"
