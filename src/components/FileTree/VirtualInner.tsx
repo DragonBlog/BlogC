@@ -23,7 +23,7 @@ type VirtualInnerProps = {
 export const VirtualInner = forwardRef<
   Virtualizer<HTMLDivElement, Element>,
   VirtualInnerProps
->(({ tree, setCurrent, onClick, items }, ref) => {
+>(({ tree, setCurrent, onClick }, ref) => {
   const parentRef = useRef<HTMLDivElement | null>(null);
 
   const virtualizer = useVirtualizer({

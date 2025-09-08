@@ -1,4 +1,7 @@
+//@ts-ignore
+
 import { Channel, invoke } from "@tauri-apps/api/core";
+import PathBrowserify from "path-browserify";
 
 export type FileTreeItem = {
   path: string;
@@ -48,4 +51,22 @@ export async function moveTreeItem(
     options,
     onProgress: new Channel(onProgress),
   });
+}
+
+/**
+ * windows生成重命名后的新路径
+ * @param path 原始路径
+ * @param newName 新的文件名或文件夹名
+ * @returns 新路径
+ */
+export function getNewPath(path: string, newName: string): string {
+  const normalizedPath = path.replace(/\\/g, "/");
+
+  let parentDir = PathBrowserify.dirname(normalizedPath);
+
+  if (/^[A-Za-z]:$/.test(parentDir)) {
+    parentDir += "/";
+  }
+
+  return `${parentDir}/${newName}`;
 }

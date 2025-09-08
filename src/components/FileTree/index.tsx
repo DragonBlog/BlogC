@@ -13,13 +13,13 @@ import { useTree } from "@headless-tree/react";
 import { Virtualizer } from "@tanstack/react-virtual";
 import { create, mkdir, remove, rename } from "@tauri-apps/plugin-fs";
 import { App, Dropdown } from "antd";
-// @ts-ignore
-import PathBrowerify from "path-browserify";
+
 import { useRef, useState } from "react";
 import { match } from "ts-pattern";
 import { CommandError } from "../../command";
 import {
   FileTreeItem,
+  getNewPath,
   moveFileOrFolder,
   readChildren,
 } from "../../command/fileManager";
@@ -71,7 +71,7 @@ export const FileTree = (props: FileTreeProps) => {
 
   const tree = useTree<FileTreeItem>({
     isItemFolder: (item) => item.getItemData().isDir,
-    rootItemId: projectDir || "E:/test",
+    rootItemId: projectDir || "D:/test",
     getItemName: (item) => {
       return item.getItemData().name;
     },
@@ -155,9 +155,8 @@ export const FileTree = (props: FileTreeProps) => {
               "重命名文件夹",
               current?.name,
               async (newName) => {
-                const parentDir = PathBrowerify.dirname(path);
-                const newPath = PathBrowerify.join(parentDir, newName);
-                await rename(parentDir, newPath);
+                const newPath = getNewPath(path, newName);
+                await rename(path, newPath);
                 tree
                   .getItemInstance(path)
                   ?.getParent()
@@ -234,7 +233,8 @@ export const FileTree = (props: FileTreeProps) => {
               "重命名文件",
               current?.name,
               async (newName) => {
-                await rename(path, `${path}/../${newName}`);
+                const newPath = getNewPath(path, newName);
+                await rename(path, newPath);
                 tree
                   .getItemInstance(path)
                   ?.getParent()
@@ -278,11 +278,7 @@ export const FileTree = (props: FileTreeProps) => {
   return (
     <div className="flex flex-col h-full w-full">
       {!disableToolbar && (
-        <TreeToolbar
-          tree={tree}
-          openDialog={openDialog}
-          projectDir={projectDir}
-        />
+        <TreeToolbar tree={tree} openDialog={openDialog} parent={current} />
       )}
       <Dropdown
         menu={{
@@ -295,7 +291,7 @@ export const FileTree = (props: FileTreeProps) => {
         }}
         trigger={["contextMenu"]}
       >
-        <div>
+        <div className=" overflow-hidden flex-1">
           {virtual ? (
             <VirtualInner
               onClick={onClick}
