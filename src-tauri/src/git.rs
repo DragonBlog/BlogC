@@ -387,6 +387,18 @@ impl Git {
             email: user_email,
         })
     }
+
+    pub fn get_remote_default_branch(&self, remote_name: &str) -> Result<String> {
+        let mut remote = self.repo.find_remote(remote_name)?;
+
+        remote.connect(git2::Direction::Fetch)?;
+
+        Ok(remote
+            .default_branch()?
+            .as_str()
+            .unwrap_or("main")
+            .to_string())
+    }
 }
 
 /// 递归复制Git树对象到指定目录

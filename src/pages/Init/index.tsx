@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import {
   App,
   Button,
@@ -5,6 +6,7 @@ import {
   Flex,
   Form,
   Progress,
+  Result,
   Steps,
   Typography,
   theme,
@@ -12,7 +14,8 @@ import {
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { match } from "ts-pattern";
-import { checkDir, initBlog } from "../../command";
+import { initOrOpenBlog, installTemplate } from "@/command/blogManager";
+import { checkDir } from "../../command";
 import { FilePathSelector } from "../../components/FilePathSelector";
 import TerminalComponent, { type TerminalRef } from "../../components/Terminal";
 import { useAppStore } from "../../store/useAppStore";
@@ -62,11 +65,7 @@ export const Init = () => {
                       new Error("目录不存在，请选择一个有效目录"),
                     );
                   }
-                  if (!res.isEmpty) {
-                    return Promise.reject(
-                      new Error("目录不为空，请选择一个空目录"),
-                    );
-                  }
+
                   return Promise.resolve();
                 },
               },
@@ -80,26 +79,45 @@ export const Init = () => {
         try {
           const values = await form.validateFields();
           setProjectDir(values.projectDir);
-          setStep(1);
-          setBytes(0);
-          setPercent(0);
-          setIsNextDisabled(true);
 
-          await initBlog(values.projectDir, (progress) => {
-            match(progress)
-              .with({ type: "receiving" }, ({ data }) => {
-                setPercent(Math.floor(data[0]));
-                setBytes(data[1]);
-              })
-              .with({ type: "processing" }, ({ data }) => {
-                setPercent(data);
-              })
-              .with({ type: "finished" }, () => {
-                setPercent(100);
-                setIsNextDisabled(false);
-              })
-              .exhaustive();
-          });
+          const shouldInstallTemplate = await initOrOpenBlog(values.projectDir);
+          if (shouldInstallTemplate) {
+            setStep(1);
+            setBytes(0);
+            setPercent(0);
+            setIsNextDisabled(true);
+            await installTemplate(values.projectDir, (progress) => {
+              match(progress)
+                .with({ type: "receiving" }, ({ data }) => {
+                  setPercent(Math.floor(data[0]));
+                  setBytes(data[1]);
+                })
+                .with({ type: "processing" }, ({ data }) => {
+                  setPercent(data);
+                })
+                .with({ type: "finished" }, () => {
+                  setPercent(100);
+                  setIsNextDisabled(false);
+                })
+                .exhaustive();
+            });
+          } else {
+            setStep(2);
+            setIsNextDisabled(true);
+
+            await installDependencies({
+              cwd: `${projectDir}/template`,
+              onOutput: (output) => {
+                terminalRef.current?.write(output.log);
+              },
+              onStatus: (installStatus) => {
+                setInstallStatus(installStatus);
+                if (installStatus === "completed") {
+                  setIsNextDisabled(false);
+                }
+              },
+            });
+          }
         } catch (_error) {
           console.log(_error);
           message.error("初始化博客失败，请检查路径或网络连接");
@@ -107,7 +125,7 @@ export const Init = () => {
       },
     },
     {
-      title: "初始化项目",
+      title: "下载模版",
       content: (
         <div className="w-100 mx-auto">
           <Typography.Text>下载模版中</Typography.Text>
@@ -183,7 +201,19 @@ export const Init = () => {
     },
     {
       title: "完成",
-      content: <div>完成内容</div>,
+      content: (
+        <div className="w-100 mx-auto">
+          <Result
+            status="success"
+            title={<Trans>博客初始化完成！</Trans>}
+            subTitle={
+              <Trans>
+                你现在可以开始使用博客管理系统了，点击完成按钮进入内容管理页面。
+              </Trans>
+            }
+          />
+        </div>
+      ),
       onPrev: () => setStep(0),
       onNext: async () => {
         navigate("/content-manager");
