@@ -71,21 +71,6 @@ export type Progress =
     };
 
 /**
- * 初始化博客项目
- *
- * @param path - 博客项目路径
- * @param cb - 进度回调函数，接收初始化进度状态
- * @returns 返回Promise，包含初始化结果
- *
- * @remarks
- * 该函数通过Tauri命令调用Rust后端的init_blog函数，
- * 用于初始化博客项目，并通过回调函数实时返回进度信息。
- */
-export async function initBlog(path: string, cb: (progress: Progress) => void) {
-  return await invoke("init_blog", { path, onProgress: new Channel(cb) });
-}
-
-/**
  * 检查命令是否存在
  *
  * @param command - 需要检查的命令名称
