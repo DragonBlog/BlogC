@@ -1,7 +1,7 @@
 pre-commit:
   jobs:
     - name: translations
-      run: pnpm extract | git add .
+      run: pnpm extract
       stage_fixed: true
 
     - name: check

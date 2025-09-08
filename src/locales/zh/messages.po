@@ -58,6 +58,10 @@ msgstr "代码"
 #~ msgid "代码块"
 #~ msgstr "代码块"
 
+#: src/pages/Init/index.tsx:210
+msgid "你现在可以开始使用博客管理系统了，点击完成按钮进入内容管理页面。"
+msgstr "你现在可以开始使用博客管理系统了，点击完成按钮进入内容管理页面。"
+
 #: src/components/ui/insert-toolbar-button.tsx:177
 msgid "公式"
 msgstr "公式"
@@ -133,6 +137,10 @@ msgstr "删除表格"
 #: src/components/ui/table-toolbar-button.tsx:78
 msgid "单元格"
 msgstr "单元格"
+
+#: src/pages/Init/index.tsx:208
+msgid "博客初始化完成！"
+msgstr "博客初始化完成！"
 
 #: src/components/ui/media-toolbar-button.tsx:215
 msgid "取消"
