@@ -187,16 +187,22 @@ export const FileTree = (props: FileTreeProps) => {
         }}
         trigger={["contextMenu"]}
       >
-        {virtual ? (
-          <VirtualInner
-            onClick={onClick}
-            tree={tree}
-            setCurrent={setCurrent}
-            ref={virtualizer}
-          />
-        ) : (
-          <AnimateInner onClick={onClick} tree={tree} setCurrent={setCurrent} />
-        )}
+        <div className="flex-1 overflow-hidden">
+          {virtual ? (
+            <VirtualInner
+              onClick={onClick}
+              tree={tree}
+              setCurrent={setCurrent}
+              ref={virtualizer}
+            />
+          ) : (
+            <AnimateInner
+              onClick={onClick}
+              tree={tree}
+              setCurrent={setCurrent}
+            />
+          )}
+        </div>
       </Dropdown>
     </div>
   );

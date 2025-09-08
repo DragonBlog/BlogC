@@ -1,5 +1,8 @@
 pre-commit:
   commands:
+    translations:
+      run: pnpm extract
+      stage_fixed: true
     check:
       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
       run: pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
@@ -7,9 +10,6 @@ pre-commit:
     css:
       glob: "*.{css,scss,less}"
       run: pnpm stylelint {staged_files}  --custom-syntax postcss-less --allow-empty-input --fix
-      stage_fixed: true
-    translations:
-      run: pnpm extract
       stage_fixed: true
 
 commit-msg:

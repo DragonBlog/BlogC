@@ -83,7 +83,7 @@ impl FileTree {
         for entry in WalkBuilder::new(path)
             .max_depth(Some(1)) // 只读取一层目录
             .standard_filters(true) // 应用标准过滤器（如.gitignore）
-            .filter_entry(is_markdown_file) // 只保留markdown文件和目录
+            // .filter_entry(is_markdown_file) // 只保留markdown文件和目录
             .build()
         {
             let entry = entry?;
