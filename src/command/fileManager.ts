@@ -1,7 +1,6 @@
 //@ts-ignore
 
 import { Channel, invoke } from "@tauri-apps/api/core";
-import PathBrowserify from "path-browserify";
 
 export type FileTreeItem = {
   path: string;
@@ -39,13 +38,13 @@ export async function moveFileOrFolder(path: string, newParent: string) {
  * @param onProgress 进度回调函数
  * @returns Promise<FileTreeItem> 返回移动后的新节点
  */
-export async function moveTreeItem(
+export async function copyTreeItem(
   path: string,
   newParent: string,
   options: ExistFileProcess = "skip",
   onProgress?: (progress: TransitProcess) => void,
 ): Promise<FileTreeItem> {
-  return await invoke<FileTreeItem>("move_tree_item", {
+  return await invoke<FileTreeItem>("copy_tree_item", {
     path,
     newParent,
     options,
@@ -53,20 +52,6 @@ export async function moveTreeItem(
   });
 }
 
-/**
- * windows生成重命名后的新路径
- * @param path 原始路径
- * @param newName 新的文件名或文件夹名
- * @returns 新路径
- */
-export function getNewPath(path: string, newName: string): string {
-  const normalizedPath = path.replace(/\\/g, "/");
-
-  let parentDir = PathBrowserify.dirname(normalizedPath);
-
-  if (/^[A-Za-z]:$/.test(parentDir)) {
-    parentDir += "/";
-  }
-
-  return `${parentDir}/${newName}`;
+export async function rename(path: string, newName: string) {
+  return await invoke<string>("rename", { path, newName });
 }

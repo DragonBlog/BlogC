@@ -41,7 +41,7 @@ export const useAppStore = createWithEqualityFn(
       partialize: (state) => ({
         accessToken: state.accessToken,
         theme: state.theme,
-        blogPath: state.projectDir,
+        projectDir: state.projectDir,
       }),
     },
   ),

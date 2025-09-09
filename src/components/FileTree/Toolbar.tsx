@@ -1,35 +1,28 @@
 import {
   FileAddOutlined,
   FolderAddOutlined,
-  ReloadOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import { TreeInstance } from "@headless-tree/core";
 import { useLingui } from "@lingui/react/macro";
-import { create, mkdir } from "@tauri-apps/plugin-fs";
-import { App, Button, Tooltip } from "antd";
-import { useEffect } from "react";
+import { Button, Tooltip } from "antd";
+import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
+import { useState } from "react";
 import { FileTreeItem } from "../../command/fileManager";
 
 type TreeToolbarProps = {
   tree: TreeInstance<FileTreeItem>;
-  openDialog: (
-    title: string,
-    defaultValue: string | undefined,
-    action: (value: string) => Promise<void>,
-    mode: "rename" | "createFile" | "createFolder" | "delete",
-  ) => void;
-  parent?: FileTreeItem;
+  onCreateFile?: () => void;
+  onCreateFolder?: () => void;
 };
 
-export const TreeToolbar = ({ tree, openDialog, parent }: TreeToolbarProps) => {
+export const TreeToolbar = ({
+  tree,
+  onCreateFile,
+  onCreateFolder,
+}: TreeToolbarProps) => {
   const { t } = useLingui();
-  const { message } = App.useApp();
-  const target = parent ?? {
-    path: tree.getRootItem().getId(),
-    name: "根目录",
-    isDir: true,
-  };
+  const [isExpandAll, setIsExpandAll] = useState(false);
 
   return (
     <div className="flex items-center justify-between border-b border-border w-full px-2 py-1">
@@ -42,22 +35,7 @@ export const TreeToolbar = ({ tree, openDialog, parent }: TreeToolbarProps) => {
             color="default"
             variant="text"
             icon={<FileAddOutlined />}
-            onClick={() => {
-              openDialog(
-                "新建文件",
-                target.name,
-
-                async (fileName) => {
-                  if (!fileName) return;
-                  const filePath = `${target.path}/${fileName}.md`;
-                  const file = await create(filePath);
-                  await file.close();
-                  tree.getItemInstance(target.path)?.invalidateChildrenIds();
-                  message.success("文件创建成功");
-                },
-                "createFile",
-              );
-            }}
+            onClick={onCreateFile}
           />
         </Tooltip>
 
@@ -66,28 +44,31 @@ export const TreeToolbar = ({ tree, openDialog, parent }: TreeToolbarProps) => {
             color="default"
             variant="text"
             icon={<FolderAddOutlined />}
-            onClick={() => {
-              openDialog(
-                "新建文件夹",
-                target.path,
-                async (folderName) => {
-                  if (!folderName) return;
-                  await mkdir(`${target.path}/${folderName}`);
-                  tree.getItemInstance(target.path)?.invalidateChildrenIds();
-                  message.success("文件夹创建成功");
-                },
-                "createFolder",
-              );
-            }}
+            onClick={onCreateFolder}
           />
         </Tooltip>
 
-        <Tooltip title={t`刷新`}>
+        <Tooltip title={isExpandAll ? t`折叠全部` : t`展开全部`}>
           <Button
             color="default"
             variant="text"
-            icon={<ReloadOutlined />}
-            onClick={() => tree.expandAll()}
+            icon={
+              <div className="flex justify-center items-center">
+                {isExpandAll ? (
+                  <ChevronsDownUp className="w-4" />
+                ) : (
+                  <ChevronsUpDown className="w-4" />
+                )}
+              </div>
+            }
+            onClick={() => {
+              if (isExpandAll) {
+                tree.collapseAll();
+              } else {
+                tree.expandAll();
+              }
+              setIsExpandAll(!isExpandAll);
+            }}
           />
         </Tooltip>
       </div>

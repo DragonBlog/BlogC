@@ -33,6 +33,7 @@ export const useEditorTabsStore = createWithEqualityFn(
         autoSave: true,
         autoSaveTimeout: 10000, // 默认自动保存间隔为10秒
         activeTabId: "",
+        selectedItem: "",
       },
       (set) => ({
         setTabs: (tabs: EditorTab[]) => set({ tabs }),
@@ -40,6 +41,7 @@ export const useEditorTabsStore = createWithEqualityFn(
         setAutoSaveTimeout: (timeout: number) =>
           set({ autoSaveTimeout: timeout }),
         setActiveTabId: (id: string) => set({ activeTabId: id }),
+        setSelectedItem: (path: string) => set({ selectedItem: path }),
       }),
     ),
     {

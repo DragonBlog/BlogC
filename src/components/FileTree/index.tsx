@@ -7,25 +7,27 @@ import {
   expandAllFeature,
   hotkeysCoreFeature,
   keyboardDragAndDropFeature,
+  renamingFeature,
   selectionFeature,
 } from "@headless-tree/core";
 import { useTree } from "@headless-tree/react";
+import { useLingui } from "@lingui/react/macro";
 import { Virtualizer } from "@tanstack/react-virtual";
-import { create, mkdir, remove, rename } from "@tauri-apps/plugin-fs";
+import { remove } from "@tauri-apps/plugin-fs";
 import { App, Dropdown } from "antd";
-
 import { useRef, useState } from "react";
 import { match } from "ts-pattern";
+import { useEditorTabsStore } from "@/store/useEditorTabsStore";
 import { CommandError } from "../../command";
 import {
   FileTreeItem,
-  getNewPath,
   moveFileOrFolder,
   readChildren,
+  rename,
 } from "../../command/fileManager";
 import { useAppStore } from "../../store/useAppStore";
 import { AnimateInner } from "./AnimateInner";
-import { FileTreeDialog } from "./FileTreeDialog";
+import { CreateModal, CreateModalRef } from "./CreateModal";
 import { TreeToolbar } from "./Toolbar";
 import { VirtualInner } from "./VirtualInner";
 
@@ -38,42 +40,29 @@ type FileTreeProps = {
 export const FileTree = (props: FileTreeProps) => {
   const { disableToolbar, virtual, onClick } = props;
   const [projectDir] = useAppStore((store) => [store.projectDir]);
-  const { message } = App.useApp();
+
+  const [selectedItem, setSelectedItem] = useEditorTabsStore((store) => [
+    store.selectedItem,
+    store.setSelectedItem,
+  ]);
+
+  const { message, modal } = App.useApp();
   const [current, setCurrent] = useState<FileTreeItem>();
   const virtualizer = useRef<Virtualizer<HTMLDivElement, Element> | null>(null);
-  const [dialog, setDialog] = useState<{
-    open: boolean;
-    title: string;
-    defaultValue?: string;
-    mode?: "rename" | "createFile" | "createFolder" | "delete";
-    action?: (value: string) => Promise<void>;
-  }>({ open: false, title: "" });
+  const { t } = useLingui();
 
-  const openDialog = (
-    title: string,
-    defaultValue: string | undefined,
-    action: (value: string) => Promise<void>,
-    mode: "rename" | "createFile" | "createFolder" | "delete",
-  ) => {
-    setDialog({ open: true, title, defaultValue, action, mode });
-  };
-
-  const closeDialog = () => {
-    setDialog({ ...dialog, open: false });
-  };
-
-  const handleOk = async (value: string) => {
-    if (dialog.action) {
-      await dialog.action(value);
-    }
-    setDialog({ ...dialog, open: false });
-  };
+  const createModalRef = useRef<CreateModalRef>(null);
 
   const tree = useTree<FileTreeItem>({
     isItemFolder: (item) => item.getItemData().isDir,
-    rootItemId: projectDir || "D:/test",
+    rootItemId: projectDir,
     getItemName: (item) => {
       return item.getItemData().name;
+    },
+    state: { selectedItems: [selectedItem] },
+    setSelectedItems: (items) => {
+      const path = (items as string[]).at(-1) || "";
+      setSelectedItem(path);
     },
     instanceBuilder: virtual ? buildProxiedInstance : buildStaticInstance,
     canReorder: false,
@@ -84,6 +73,7 @@ export const FileTree = (props: FileTreeProps) => {
       keyboardDragAndDropFeature,
       hotkeysCoreFeature,
       expandAllFeature,
+      renamingFeature,
     ],
     dataLoader: {
       getItem: async (path) => {
@@ -101,7 +91,7 @@ export const FileTree = (props: FileTreeProps) => {
             }) || []
           );
         } catch (error) {
-          message.error(`读取文件夹失败: ${error}`);
+          message.error(t`读取文件夹失败: ${(error as Error).message}`);
           return [];
         }
       },
@@ -121,7 +111,7 @@ export const FileTree = (props: FileTreeProps) => {
       : undefined,
     onDrop: async (items, target) => {
       if (items.some((i) => i.getParent()?.getId() === target.item.getId())) {
-        message.warning("已经在当前目录下，无需移动");
+        message.warning(t`已经在当前目录下，无需移动`);
         return;
       }
 
@@ -136,83 +126,72 @@ export const FileTree = (props: FileTreeProps) => {
           item.invalidateChildrenIds();
         })(items, target);
 
-        message.success("移动成功");
+        message.success(t`移动成功`);
       } catch (e) {
         let error = e as CommandError;
-        message.error(`移动失败: ${error.message}`);
+        message.error(t`移动失败: ${error.message}`);
+      }
+    },
+    onRename: async (item, value) => {
+      if (!value) {
+        message.warning(t`名称不能为空`);
+        return;
+      }
+      if (item.getItemName() === value) {
+        return;
+      }
+
+      try {
+        await rename(item.getId(), value);
+        item.getParent()?.invalidateChildrenIds();
+        message.success(t`重命名成功`);
+      } catch (error) {
+        message.error(t`重命名失败: ${(error as Error).message}`);
       }
     },
   });
 
   const items = match(current)
-    .with({ isDir: true }, ({ path }) => [
+    .with({ isDir: true }, ({ path, name }) => [
       {
         key: "rename",
         label: "重命名",
         onClick: async () => {
-          try {
-            openDialog(
-              "重命名文件夹",
-              current?.name,
-              async (newName) => {
-                const newPath = getNewPath(path, newName);
-                await rename(path, newPath);
-                tree
-                  .getItemInstance(path)
-                  ?.getParent()
-                  ?.invalidateChildrenIds();
-                message.success("重命名成功");
-              },
-              "rename",
-            );
-          } catch (e) {
-            message.error(`重命名失败: ${(e as Error).message}`);
-          }
+          tree.getItemInstance(path)?.startRenaming();
         },
       },
       {
         key: "newFile",
         label: "新建文件",
         onClick: async () => {
-          try {
-            openDialog(
-              "新建文件",
-              current?.name,
-              async (fileName) => {
-                if (!fileName) return;
-
-                const filePath = `${path}/${fileName}.md`;
-                const file = await create(filePath);
-                await file.close();
-                tree.getItemInstance(path)?.invalidateChildrenIds();
-                message.success("文件创建成功");
-              },
-              "createFile",
-            );
-          } catch (e) {
-            message.error(`文件创建失败: ${(e as Error).message}`);
-          }
+          createModalRef.current?.open({
+            type: "createFile",
+            folderPath: path,
+            name: t`未命名.md`,
+          });
         },
       },
       {
         key: "newFolder",
         label: "新建文件夹",
         onClick: async () => {
-          try {
-            openDialog(
-              "新建文件夹",
-              current?.name,
-              async (folderName) => {
-                if (!folderName) return;
-                await mkdir(`${path}/${folderName}`);
-                tree.getItemInstance(path)?.invalidateChildrenIds();
-                message.success("文件夹创建成功");
-              },
-              "createFolder",
-            );
-          } catch (e) {
-            message.error(`新建文件夹失败: ${(e as Error).message}`);
-          }
+          createModalRef.current?.open({
+            type: "createFolder",
+            folderPath: path,
+            name: t`未命名`,
+          });
+        },
+      },
+      {
+        key: "copy",
+        label: "复制",
+        onClick: async () => {
+          const parent = tree.getItemInstance(path)?.getParent();
+          createModalRef.current?.open({
+            type: "copy",
+            folderPath: parent?.getId() || "",
+            name: `${name} Copy`,
+          });
         },
       },
       {
@@ -222,30 +201,58 @@ export const FileTree = (props: FileTreeProps) => {
           tree.getItemInstance(path)?.invalidateChildrenIds();
         },
       },
-    ])
-    .with({ isDir: false }, ({ path }) => [
       {
-        key: "rename",
-        label: "重命名",
+        key: "delete",
+        label: "删除",
+        danger: true,
         onClick: async () => {
-          try {
-            openDialog(
-              "重命名文件",
-              current?.name,
-              async (newName) => {
-                const newPath = getNewPath(path, newName);
-                await rename(path, newPath);
+          modal.confirm({
+            title: t`删除文件夹`,
+            content: t`确定要删除文件夹 ${name} 吗？子文件夹和文件也会被删除，此操作不可撤销。`,
+            okType: "danger",
+            onOk: async () => {
+              try {
+                await remove(path, { recursive: true });
                 tree
                   .getItemInstance(path)
                   ?.getParent()
                   ?.invalidateChildrenIds();
-                message.success("重命名成功");
-              },
-              "rename",
-            );
-          } catch (e) {
-            message.error(`重命名失败: ${(e as Error).message}`);
-          }
+                message.success(t`删除成功`);
+              } catch (e) {
+                message.error(t`删除失败`);
+              }
+            },
+          });
+        },
+      },
+    ])
+    .with({ isDir: false }, ({ path, name }) => [
+      {
+        key: "rename",
+        label: "重命名",
+        onClick: async () => {
+          tree.getItemInstance(path)?.startRenaming();
+        },
+      },
+      {
+        key: "copy",
+        label: "复制",
+        onClick: async () => {
+          const parent = tree.getItemInstance(path)?.getParent();
+          const names = name.split(".");
+
+          createModalRef.current?.open({
+            type: "copy",
+            folderPath: parent?.getId() || "",
+            name: `${names.slice(0, -1).join(".")} Copy.${names.at(-1)}`,
+          });
+        },
+      },
+      {
+        key: "move",
+        label: "移动",
+        onClick: async () => {
+          // tree.getItemInstance(path)?.startRenaming();
         },
       },
       {
@@ -253,23 +260,23 @@ export const FileTree = (props: FileTreeProps) => {
         label: "删除",
         danger: true,
         onClick: async () => {
-          try {
-            openDialog(
-              "删除文件",
-              current?.name,
-              async () => {
+          modal.confirm({
+            title: t`删除文件`,
+            content: t`确定要删除文件 ${name} 吗？此操作不可撤销。`,
+            okType: "danger",
+            onOk: async () => {
+              try {
                 await remove(path, { recursive: true });
                 tree
                   .getItemInstance(path)
                   ?.getParent()
                   ?.invalidateChildrenIds();
-                message.success("删除成功");
-              },
-              "delete",
-            );
-          } catch (e) {
-            message.error(`删除失败: ${(e as Error).message}`);
-          }
+                message.success(t`删除成功`);
+              } catch (e) {
+                message.error(t`删除失败: ${e}`);
+              }
+            },
+          });
         },
       },
     ])
@@ -277,9 +284,7 @@ export const FileTree = (props: FileTreeProps) => {
 
   return (
     <div className="flex flex-col h-full w-full">
-      {!disableToolbar && (
-        <TreeToolbar tree={tree} openDialog={openDialog} parent={current} />
-      )}
+      {!disableToolbar && <TreeToolbar tree={tree} />}
       <Dropdown
         menu={{
           items,
@@ -291,7 +296,7 @@ export const FileTree = (props: FileTreeProps) => {
         }}
         trigger={["contextMenu"]}
       >
-        <div className="flex-1 overflow-hidden">
+        <div className="flex flex-1 overflow-hidden">
           {virtual ? (
             <VirtualInner
               onClick={onClick}
@@ -308,14 +313,7 @@ export const FileTree = (props: FileTreeProps) => {
           )}
         </div>
       </Dropdown>
-      <FileTreeDialog
-        open={dialog.open}
-        title={dialog.title}
-        defaultValue={dialog.defaultValue}
-        onOk={handleOk}
-        mode={dialog.mode}
-        onCancel={closeDialog}
-      />
+      <CreateModal ref={createModalRef} />
     </div>
   );
 };

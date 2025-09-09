@@ -107,7 +107,7 @@ pub async fn copy_tree_item(
     options: ExistFileProcess,
     on_progress: Channel<CopyTransitProcess>,
 ) -> Result<FileTreeItem> {
-    let item = FileTreeItem::new(path)?;
+    let mut item = FileTreeItem::new(path)?;
     info!("Move item: {:?} to {:?}", item.path, new_parent);
     info!("Copy options: {:?}", options);
     info!("Item exists: {}", item.path.exists());
@@ -127,6 +127,19 @@ pub async fn move_file_or_folder(path: String, new_parent: String) -> Result<Str
         "Unable to get file or folder name from path: {:?}",
         path
     ))?);
+
+    tokio::fs::rename(path, &new_path).await?;
+
+    Ok(new_path.to_string_lossy().to_string())
+}
+
+#[tauri::command]
+pub async fn rename(path: String, new_name: String) -> Result<String> {
+    let path = PathBuf::from(path);
+    let new_path = path
+        .parent()
+        .ok_or(anyhow!("Unable to get parent directory of {:?}", path))?
+        .join(new_name);
 
     tokio::fs::rename(path, &new_path).await?;
 

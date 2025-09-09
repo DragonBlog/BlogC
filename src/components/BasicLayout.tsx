@@ -1,6 +1,6 @@
 import { App, ConfigProvider } from "antd";
+import zhCN from "antd/locale/zh_CN";
 import { Outlet } from "react-router-dom";
-
 export const BasicLayout = () => {
   return (
     <ConfigProvider
@@ -10,6 +10,7 @@ export const BasicLayout = () => {
         },
         hashed: false,
       }}
+      locale={zhCN}
     >
       <App>
         <Outlet />
