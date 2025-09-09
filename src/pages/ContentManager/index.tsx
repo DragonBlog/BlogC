@@ -1,5 +1,6 @@
 import { Flex } from "antd";
 import { PlateEditor } from "@/components/editor/plate-editor";
+import { FileEditor } from "@/components/FileEditor";
 import { FileTree } from "../../components/FileTree";
 
 export const ContentManager = () => {
@@ -15,7 +16,7 @@ export const ContentManager = () => {
         <FileTree />
       </div>
       <div className="flex-1 h-full w-full overflow-hidden">
-        <PlateEditor />
+        <FileEditor />
       </div>
     </Flex>
   );

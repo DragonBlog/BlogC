@@ -16,14 +16,12 @@ type AnimateInnerProps = {
   tree: TreeInstance<FileTreeItem>;
   setCurrent: (item: FileTreeItem) => void;
   onClick?: (item: FileTreeItem) => void;
-  items: any[];
 };
 
 export const AnimateInner = ({
   tree,
   setCurrent,
   onClick,
-  items,
 }: AnimateInnerProps) => {
   return (
     <div
@@ -41,7 +39,6 @@ export const AnimateInner = ({
               onClick={onClick}
               item={item}
               setCurrent={setCurrent}
-              items={items}
             />
           );
         })}
@@ -53,12 +50,10 @@ const Item = ({
   item,
   setCurrent,
   onClick,
-  items,
 }: {
   item: ItemInstance<FileTreeItem>;
   setCurrent: (item: FileTreeItem) => void;
   onClick?: (item: FileTreeItem) => void;
-  items: any[];
 }) => {
   const itemProps = item.getProps();
 
@@ -146,7 +141,6 @@ const Item = ({
               onClick={onClick}
               item={child}
               setCurrent={setCurrent}
-              items={items}
             />
           ))}
         </motion.div>

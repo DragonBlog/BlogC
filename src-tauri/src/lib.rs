@@ -4,6 +4,7 @@ use tauri::{async_runtime::Mutex, Manager};
 use tauri_plugin_shell::ShellExt;
 use tokio_util::sync::CancellationToken;
 use tracing::info;
+mod blog_manager;
 mod commands;
 mod config;
 mod error;
@@ -64,13 +65,16 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::start,
             commands::check_dir,
-            commands::init_blog,
             commands::check_command_exists,
             commands::read_schemas,
             commands::read_blog_build_config,
+            // file manager
             commands::read_children,
             commands::copy_tree_item,
             commands::move_file_or_folder,
+            // blog manager
+            commands::init_or_open_blog,
+            commands::install_template,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

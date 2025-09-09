@@ -1,4 +1,5 @@
 import { createBrowserRouter, Link } from "react-router-dom";
+import { BasicLayout } from "@/components/BasicLayout";
 import Layout from "../components/Layout";
 import { Config } from "../pages/Config";
 import { ContentManager } from "../pages/ContentManager";
@@ -8,34 +9,40 @@ import { Init } from "../pages/Init";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: <BasicLayout />,
     children: [
       {
-        index: true,
-        element: <Home />,
+        path: "/",
+        element: <Layout />,
+        children: [
+          {
+            index: true,
+            element: <Home />,
+          },
+          {
+            path: "/content-manager",
+            element: <ContentManager />,
+          },
+          {
+            path: "/config",
+            element: <Config />,
+          },
+        ],
       },
       {
-        path: "/content-manager",
-        element: <ContentManager />,
+        path: "/init",
+        element: <Init />,
       },
       {
-        path: "/config",
-        element: <Config />,
+        path: "*",
+        element: (
+          <div>
+            404
+            <Link to="/">返回首页</Link>
+          </div>
+        ),
       },
     ],
-  },
-  {
-    path: "/init",
-    element: <Init />,
-  },
-  {
-    path: "*",
-    element: (
-      <div>
-        404
-        <Link to="/">返回首页</Link>
-      </div>
-    ),
   },
 ]);
 

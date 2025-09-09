@@ -58,6 +58,10 @@ msgstr "代码"
 #~ msgid "代码块"
 #~ msgstr "代码块"
 
+#: src/pages/Init/index.tsx:210
+msgid "你现在可以开始使用博客管理系统了，点击完成按钮进入内容管理页面。"
+msgstr "你现在可以开始使用博客管理系统了，点击完成按钮进入内容管理页面。"
+
 #: src/components/ui/insert-toolbar-button.tsx:177
 msgid "公式"
 msgstr "公式"
@@ -65,6 +69,10 @@ msgstr "公式"
 #: src/components/ui/suggestion-toolbar-button.tsx:23
 msgid "关闭建议模式"
 msgstr "关闭建议模式"
+
+#: src/components/FileEditor/ItemTab.tsx:50
+msgid "关闭标签页"
+msgstr "关闭标签页"
 
 #: src/components/ui/insert-toolbar-button.tsx:188
 msgid "内联"
@@ -96,6 +104,10 @@ msgstr "列"
 msgid "列表"
 msgstr "列表"
 
+#: src/components/FileEditor/ItemTab.tsx:42
+msgid "创建新文件"
+msgstr "创建新文件"
+
 #: src/components/ui/block-context-menu.tsx:125
 #~ msgid "删除"
 #~ msgstr "删除"
@@ -122,13 +134,17 @@ msgstr "删除行"
 msgid "删除表格"
 msgstr "删除表格"
 
-#: src/components/FileTree/Toolbar.tsx:83
+#: src/components/FileTree/Toolbar.tsx:85
 msgid "刷新"
 msgstr "刷新"
 
 #: src/components/ui/table-toolbar-button.tsx:78
 msgid "单元格"
 msgstr "单元格"
+
+#: src/pages/Init/index.tsx:208
+msgid "博客初始化完成！"
+msgstr "博客初始化完成！"
 
 #: src/components/ui/media-toolbar-button.tsx:215
 msgid "取消"
@@ -268,6 +284,10 @@ msgstr "待办事项"
 msgid "待办列表"
 msgstr "待办列表"
 
+#: src/components/FileEditor/ItemTab.tsx:53
+msgid "或者从左侧文件树中选择一个文件进行编辑"
+msgstr "或者从左侧文件树中选择一个文件进行编辑"
+
 #: src/components/ui/table-toolbar-button.tsx:102
 msgid "拆分单元格"
 msgstr "拆分单元格"
@@ -333,13 +353,18 @@ msgstr "文本"
 #~ msgid "斜体 (⌘+I)"
 #~ msgstr "斜体 (⌘+I)"
 
-#: src/components/FileTree/Toolbar.tsx:38
+#: src/components/FileTree/Toolbar.tsx:40
 msgid "新建文件"
 msgstr "新建文件"
 
-#: src/components/FileTree/Toolbar.tsx:62
+#: src/components/FileTree/Toolbar.tsx:64
 msgid "新建文件夹"
 msgstr "新建文件夹"
+
+#: src/components/FileEditor/index.tsx:90
+#: src/components/FileEditor/index.tsx:102
+msgid "新标签页"
+msgstr "新标签页"
 
 #: src/components/ui/list-toolbar-button.tsx:96
 msgid "方形"

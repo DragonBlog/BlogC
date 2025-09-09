@@ -17,7 +17,6 @@ type VirtualInnerProps = {
   tree: TreeInstance<FileTreeItem>;
   setCurrent: (item: FileTreeItem) => void;
   onClick?: (item: FileTreeItem) => void;
-  items: any[];
 };
 
 export const VirtualInner = forwardRef<
