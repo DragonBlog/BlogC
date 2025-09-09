@@ -121,24 +121,24 @@ msgstr "创建新文件"
 msgid "删除列"
 msgstr "删除列"
 
-#: src/components/FileTree/index.tsx:222
+#: src/components/FileTree/index.tsx:223
 msgid "删除失败"
 msgstr "删除失败"
 
-#: src/components/FileTree/index.tsx:276
+#: src/components/FileTree/index.tsx:278
 msgid "删除失败: {e}"
 msgstr "删除失败: {e}"
 
-#: src/components/FileTree/index.tsx:220
-#: src/components/FileTree/index.tsx:274
+#: src/components/FileTree/index.tsx:221
+#: src/components/FileTree/index.tsx:276
 msgid "删除成功"
 msgstr "删除成功"
 
-#: src/components/FileTree/index.tsx:264
+#: src/components/FileTree/index.tsx:266
 msgid "删除文件"
 msgstr "删除文件"
 
-#: src/components/FileTree/index.tsx:210
+#: src/components/FileTree/index.tsx:211
 msgid "删除文件夹"
 msgstr "删除文件夹"
 
@@ -183,7 +183,7 @@ msgstr "取消"
 msgid "合并单元格"
 msgstr "合并单元格"
 
-#: src/components/FileTree/CreateModal.tsx:85
+#: src/components/FileTree/CreateModal.tsx:81
 msgid "名称"
 msgstr "名称"
 
@@ -225,7 +225,7 @@ msgstr "基本"
 #~ msgid "增加缩进"
 #~ msgstr "增加缩进"
 
-#: src/components/FileTree/CreateModal.tsx:57
+#: src/components/FileTree/CreateModal.tsx:53
 msgid "复制"
 msgstr "复制"
 
@@ -281,7 +281,7 @@ msgstr "小写英文字母 (a, b, c)"
 #~ msgid "居中"
 #~ msgstr "居中"
 
-#: src/components/FileTree/Toolbar.tsx:51
+#: src/components/FileTree/Toolbar.tsx:80
 msgid "展开全部"
 msgstr "展开全部"
 
@@ -324,7 +324,7 @@ msgstr "待办列表"
 msgid "或者从左侧文件树中选择一个文件进行编辑"
 msgstr "或者从左侧文件树中选择一个文件进行编辑"
 
-#: src/components/FileTree/Toolbar.tsx:51
+#: src/components/FileTree/Toolbar.tsx:80
 msgid "折叠全部"
 msgstr "折叠全部"
 
@@ -380,7 +380,7 @@ msgstr "数字 (1, 2, 3)"
 msgid "文件"
 msgstr "文件"
 
-#: src/components/FileTree/CreateModal.tsx:90
+#: src/components/FileTree/CreateModal.tsx:86
 msgid "文件夹路径"
 msgstr "文件夹路径"
 
@@ -397,13 +397,13 @@ msgstr "文本"
 #~ msgid "斜体 (⌘+I)"
 #~ msgstr "斜体 (⌘+I)"
 
-#: src/components/FileTree/CreateModal.tsx:54
-#: src/components/FileTree/Toolbar.tsx:33
+#: src/components/FileTree/CreateModal.tsx:50
+#: src/components/FileTree/Toolbar.tsx:37
 msgid "新建文件"
 msgstr "新建文件"
 
-#: src/components/FileTree/CreateModal.tsx:55
-#: src/components/FileTree/Toolbar.tsx:42
+#: src/components/FileTree/CreateModal.tsx:51
+#: src/components/FileTree/Toolbar.tsx:50
 msgid "新建文件夹"
 msgstr "新建文件夹"
 
@@ -507,11 +507,11 @@ msgstr "目录"
 msgid "确定"
 msgstr "确定"
 
-#: src/components/FileTree/index.tsx:265
+#: src/components/FileTree/index.tsx:267
 msgid "确定要删除文件 {name} 吗？此操作不可撤销。"
 msgstr "确定要删除文件 {name} 吗？此操作不可撤销。"
 
-#: src/components/FileTree/index.tsx:211
+#: src/components/FileTree/index.tsx:212
 msgid "确定要删除文件夹 {name} 吗？子文件夹和文件也会被删除，此操作不可撤销。"
 msgstr "确定要删除文件夹 {name} 吗？子文件夹和文件也会被删除，此操作不可撤销。"
 
@@ -520,7 +520,7 @@ msgstr "确定要删除文件夹 {name} 吗？子文件夹和文件也会被删�
 msgid "视频"
 msgstr "视频"
 
-#: src/components/FileTree/CreateModal.tsx:56
+#: src/components/FileTree/CreateModal.tsx:52
 msgid "移动"
 msgstr "移动"
 
@@ -590,7 +590,7 @@ msgstr "评论"
 #~ msgid "询问AI"
 #~ msgstr "询问AI"
 
-#: src/components/FileTree/CreateModal.tsx:86
+#: src/components/FileTree/CreateModal.tsx:82
 msgid "请输入名称"
 msgstr "请输入名称"
 
@@ -612,6 +612,10 @@ msgstr "通过URL插入"
 #: src/components/ui/history-toolbar-button.tsx:25
 #~ msgid "重做"
 #~ msgstr "重做"
+
+#: src/components/FileTree/Toolbar.tsx:63
+msgid "重命名"
+msgstr "重命名"
 
 #. placeholder {0}: (error as Error).message
 #: src/components/FileTree/index.tsx:149
