@@ -1,10 +1,9 @@
 use std::{collections::HashMap, path::Path};
 
 use crate::{
-    blog_manager::BlogManager,
+    blog_manager::{BlogManager, BlogTemplate},
     config::BlogBuildConfig,
     error::Result,
-    git::Git,
     utils::{self, check_directory_is_empty},
 };
 use serde::{Deserialize, Serialize};
@@ -77,6 +76,12 @@ pub async fn install_template(path: &str, on_progress: OnProgress) -> Result<()>
     on_progress.send(Progress::Finished)?;
 
     Ok(())
+}
+
+#[tauri::command]
+pub async fn get_templates(path: &str) -> Result<Vec<BlogTemplate>> {
+    let blog_manager = BlogManager::open(path)?;
+    blog_manager.get_blog_templates()
 }
 
 #[tauri::command]

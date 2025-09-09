@@ -399,6 +399,16 @@ impl Git {
             .unwrap_or("main")
             .to_string())
     }
+
+    pub fn get_remotes_names(&self) -> Result<Vec<String>> {
+        Ok(self
+            .repo
+            .remotes()?
+            .iter()
+            .flatten()
+            .map(|s| s.to_string())
+            .collect())
+    }
 }
 
 /// 递归复制Git树对象到指定目录

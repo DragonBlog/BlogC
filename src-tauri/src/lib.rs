@@ -75,6 +75,7 @@ pub fn run() {
             // blog manager
             commands::init_or_open_blog,
             commands::install_template,
+            commands::get_templates,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
