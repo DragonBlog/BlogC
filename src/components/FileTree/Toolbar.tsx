@@ -1,13 +1,16 @@
-import {
-  FileAddOutlined,
-  FolderAddOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { TreeInstance } from "@headless-tree/core";
 import { useLingui } from "@lingui/react/macro";
 import { Button, Tooltip } from "antd";
-import { ChevronsDownUp, ChevronsUpDown } from "lucide-react";
+import {
+  ChevronsDownUp,
+  ChevronsUpDown,
+  FilePlus2,
+  FolderPen,
+  FolderPlus,
+} from "lucide-react";
 import { useState } from "react";
+import { useEditorTabsStore } from "@/store/useEditorTabsStore";
 import { FileTreeItem } from "../../command/fileManager";
 
 type TreeToolbarProps = {
@@ -23,6 +26,7 @@ export const TreeToolbar = ({
 }: TreeToolbarProps) => {
   const { t } = useLingui();
   const [isExpandAll, setIsExpandAll] = useState(false);
+  const [selectedItem] = useEditorTabsStore((store) => [store.selectedItem]);
 
   return (
     <div className="flex items-center justify-between border-b border-border w-full px-2 py-1">
@@ -34,7 +38,11 @@ export const TreeToolbar = ({
           <Button
             color="default"
             variant="text"
-            icon={<FileAddOutlined />}
+            icon={
+              <div className="flex justify-center items-center">
+                <FilePlus2 className="size-4" />
+              </div>
+            }
             onClick={onCreateFile}
           />
         </Tooltip>
@@ -43,11 +51,32 @@ export const TreeToolbar = ({
           <Button
             color="default"
             variant="text"
-            icon={<FolderAddOutlined />}
+            icon={
+              <div className="flex justify-center items-center">
+                <FolderPlus className="size-4" />
+              </div>
+            }
             onClick={onCreateFolder}
           />
         </Tooltip>
 
+        <Tooltip title={t`重命名`}>
+          <Button
+            color="default"
+            variant="text"
+            icon={
+              <div className="flex justify-center items-center">
+                <FolderPen className="size-4" />
+              </div>
+            }
+            disabled={!selectedItem}
+            onClick={() => {
+              if (selectedItem) {
+                tree.getItemInstance(selectedItem)?.startRenaming();
+              }
+            }}
+          />
+        </Tooltip>
         <Tooltip title={isExpandAll ? t`折叠全部` : t`展开全部`}>
           <Button
             color="default"

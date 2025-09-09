@@ -25,22 +25,24 @@ type Options =
   | {
       type: "move";
       name: string;
+      path: string;
       folderPath: string;
     }
   | {
       type: "copy";
       name: string;
+      path: string;
       folderPath: string;
     };
 
 export type CreateModalRef = {
   open: (options: Options) => void;
-  onCreateFile?: (name: string, folderPath: string) => void;
-  onCreateFolder?: (name: string, folderPath: string) => void;
-  onMove?: (name: string, folderPath: string) => void;
-  onCopy?: (name: string, folderPath: string) => void;
 };
 
+// todo 业务组件，完成创建、移动功能，复制有点复杂，先不做
+// toolbar中的创建，和移动的folderPath是根据当前选中的节点来的，如果是文件就选它父级，如果是目录就选那个目录
+// selectedItem可以从useEditorTabsStore里拿到 可以参考toolbar中的重命名文件
+// 移动功能后端使用 moveFileOrFolder
 export const CreateModal = forwardRef(
   (props, ref: ForwardedRef<CreateModalRef>) => {
     const [form] = Form.useForm();

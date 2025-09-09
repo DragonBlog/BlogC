@@ -121,12 +121,23 @@ pub async fn copy_tree_item(
 }
 
 #[tauri::command]
-pub async fn move_file_or_folder(path: String, new_parent: String) -> Result<String> {
+pub async fn move_file_or_folder(
+    path: String,
+    new_parent: String,
+    new_name: Option<String>,
+) -> Result<String> {
     let path = PathBuf::from(path);
-    let new_path = PathBuf::from(new_parent).join(path.iter().last().ok_or(anyhow!(
-        "Unable to get file or folder name from path: {:?}",
-        path
-    ))?);
+    let new_name = new_name.unwrap_or(
+        path.iter()
+            .last()
+            .ok_or(anyhow!(
+                "Unable to get file or folder name from path: {:?}",
+                path
+            ))?
+            .to_string_lossy()
+            .to_string(),
+    );
+    let new_path = PathBuf::from(new_parent).join(new_name);
 
     tokio::fs::rename(path, &new_path).await?;
 

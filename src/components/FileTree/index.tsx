@@ -191,6 +191,7 @@ export const FileTree = (props: FileTreeProps) => {
             type: "copy",
             folderPath: parent?.getId() || "",
             name: `${name} Copy`,
+            path,
           });
         },
       },
@@ -245,6 +246,7 @@ export const FileTree = (props: FileTreeProps) => {
             type: "copy",
             folderPath: parent?.getId() || "",
             name: `${names.slice(0, -1).join(".")} Copy.${names.at(-1)}`,
+            path,
           });
         },
       },

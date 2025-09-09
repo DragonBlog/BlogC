@@ -26,8 +26,16 @@ export async function readChildren(path: string) {
   return await invoke<FileTreeItem>("read_children", { path });
 }
 
-export async function moveFileOrFolder(path: string, newParent: string) {
-  return await invoke<void>("move_file_or_folder", { path, newParent });
+export async function moveFileOrFolder(
+  path: string,
+  newParent: string,
+  newName?: string,
+) {
+  return await invoke<void>("move_file_or_folder", {
+    path,
+    newParent,
+    newName,
+  });
 }
 
 /**
