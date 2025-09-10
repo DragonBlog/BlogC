@@ -106,7 +106,7 @@ export const Init = () => {
             setIsNextDisabled(true);
 
             await installDependencies({
-              cwd: `${projectDir}/template`,
+              cwd: `${values.projectDir}/template`,
               onOutput: (output) => {
                 terminalRef.current?.write(output.log);
               },
@@ -118,8 +118,8 @@ export const Init = () => {
               },
             });
           }
-        } catch (_error) {
-          console.log(_error);
+        } catch (error) {
+          console.error(error);
           message.error("初始化博客失败，请检查路径或网络连接");
         }
       },

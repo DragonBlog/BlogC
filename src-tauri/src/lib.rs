@@ -72,6 +72,7 @@ pub fn run() {
             commands::read_children,
             commands::copy_tree_item,
             commands::move_file_or_folder,
+            commands::rename,
             // blog manager
             commands::init_or_open_blog,
             commands::install_template,

@@ -94,8 +94,8 @@ impl FileTreeItem {
     /// # 返回值
     /// 返回Result<FileTreeItem>，包含复制后的新节点
     pub fn copy_to<P, F>(
-        &self,
-        new_parent: P,
+        &mut self,
+        new_path: P,
         options: CopyOptions,
         progress_handler: F,
     ) -> Result<FileTreeItem>
@@ -103,13 +103,35 @@ impl FileTreeItem {
         P: AsRef<Path>,
         F: FnMut(TransitProcess) -> TransitProcessResult,
     {
-        let new_path = new_parent.as_ref();
+        let new_path = new_path.as_ref();
 
         if !new_path.exists() {
             create_dir_all(new_path)?;
         }
 
-        fs_extra::copy_items_with_progress(&[&self.path], &new_path, &options, progress_handler)?;
+        self.read_children()?;
+
+        if self.is_dir {
+            fs_extra::copy_items_with_progress(
+                &self
+                    .children
+                    .as_ref()
+                    .ok_or_else(|| anyhow!("Children not loaded"))?
+                    .iter()
+                    .map(|child| &child.path)
+                    .collect::<Vec<&PathBuf>>(),
+                &new_path,
+                &options,
+                progress_handler,
+            )?;
+        } else {
+            fs_extra::copy_items_with_progress(
+                &[&self.path],
+                &new_path,
+                &options,
+                progress_handler,
+            )?;
+        }
 
         Ok(FileTreeItem::new(new_path)?)
     }

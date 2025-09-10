@@ -16,536 +16,658 @@ msgstr ""
 #: src/components/ui/insert-toolbar-button.tsx:171
 #: src/components/ui/turn-into-toolbar-button.tsx:118
 msgid "3列"
-msgstr ""
+msgstr "3 Columns"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:62
 #: src/components/ui/floating-toolbar-buttons.tsx:34
 #~ msgid "AI 命令"
-#~ msgstr ""
+#~ msgstr "AI Command"
 
 #: src/components/ui/more-toolbar-button.tsx:62
 msgid "上标"
-msgstr ""
+msgstr "Superscript"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:98
 #: src/components/ui/floating-toolbar-buttons.tsx:59
 #~ msgid "下划线 (⌘+U)"
-#~ msgstr ""
+#~ msgstr "Underline (⌘+U)"
 
 #: src/components/ui/more-toolbar-button.tsx:74
 msgid "下标"
-msgstr ""
+msgstr "Subscript"
 
 #: src/components/ui/import-toolbar-button.tsx:84
 msgid "从HTML导入"
-msgstr ""
+msgstr "Import from HTML"
 
 #: src/components/ui/import-toolbar-button.tsx:92
 msgid "从Markdown导入"
-msgstr ""
+msgstr "Import from Markdown"
 
 #: src/components/ui/insert-toolbar-button.tsx:91
 #: src/components/ui/turn-into-toolbar-button.tsx:107
 msgid "代码"
-msgstr ""
+msgstr "Code"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:112
 #: src/components/ui/floating-toolbar-buttons.tsx:73
 #~ msgid "代码 (⌘+E)"
-#~ msgstr ""
+#~ msgstr "Code (⌘+E)"
 
 #: src/components/ui/block-suggestion.tsx:52
 #~ msgid "代码块"
-#~ msgstr ""
+#~ msgstr "Code Block"
 
 #: src/pages/Init/index.tsx:210
 msgid "你现在可以开始使用博客管理系统了，点击完成按钮进入内容管理页面。"
-msgstr ""
+msgstr "You can now start using the blog management system. Click the finish button to go to the content management page."
 
 #: src/components/ui/insert-toolbar-button.tsx:177
 msgid "公式"
-msgstr ""
+msgstr "Formula"
 
 #: src/components/ui/suggestion-toolbar-button.tsx:23
 msgid "关闭建议模式"
-msgstr ""
+msgstr "Turn off suggestion mode"
 
 #: src/components/FileEditor/ItemTab.tsx:50
 msgid "关闭标签页"
-msgstr ""
+msgstr "Close tab"
 
 #: src/components/ui/insert-toolbar-button.tsx:188
 msgid "内联"
-msgstr ""
+msgstr "Inline"
 
 #: src/components/ui/block-context-menu.tsx:179
 #: src/components/ui/indent-toolbar-button.tsx:35
 #~ msgid "减少缩进"
-#~ msgstr ""
+#~ msgstr "Decrease indent"
 
 #: src/components/ui/insert-toolbar-button.tsx:101
 msgid "分隔线"
-msgstr ""
+msgstr "Divider"
 
 #: src/components/ui/toggle-toolbar-button.tsx:20
 msgid "切换"
-msgstr ""
+msgstr "Toggle"
 
 #: src/components/ui/insert-toolbar-button.tsx:131
 #: src/components/ui/turn-into-toolbar-button.tsx:101
 msgid "切换列表"
-msgstr ""
+msgstr "Toggle List"
 
 #: src/components/ui/table-toolbar-button.tsx:161
 msgid "列"
-msgstr ""
+msgstr "Column"
 
 #: src/components/ui/insert-toolbar-button.tsx:112
 msgid "列表"
-msgstr ""
+msgstr "List"
 
 #: src/components/FileEditor/ItemTab.tsx:42
 msgid "创建新文件"
-msgstr ""
+msgstr "Create new file"
 
 #: src/components/ui/block-context-menu.tsx:125
 #~ msgid "删除"
-#~ msgstr ""
+#~ msgstr "Delete"
 
 #: src/components/ui/block-suggestion.tsx:162
 #: src/components/ui/block-suggestion.tsx:218
 #~ msgid "删除:"
-#~ msgstr ""
+#~ msgstr "Delete:"
 
 #: src/components/ui/table-toolbar-button.tsx:196
 msgid "删除列"
-msgstr ""
+msgstr "Delete column"
+
+#: src/components/FileTree/index.tsx:223
+msgid "删除失败"
+msgstr "Delete failed"
+
+#: src/components/FileTree/index.tsx:278
+msgid "删除失败: {e}"
+msgstr "Delete failed: {e}"
+
+#: src/components/FileTree/index.tsx:221
+#: src/components/FileTree/index.tsx:276
+msgid "删除成功"
+msgstr "Delete successful"
+
+#: src/components/FileTree/index.tsx:266
+msgid "删除文件"
+msgstr "Delete file"
+
+#: src/components/FileTree/index.tsx:211
+msgid "删除文件夹"
+msgstr "Delete folder"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:105
 #: src/components/ui/floating-toolbar-buttons.tsx:66
 #~ msgid "删除线 (⌘+⇧+M)"
-#~ msgstr ""
+#~ msgstr "Strikethrough (⌘+⇧+M)"
 
 #: src/components/ui/table-toolbar-button.tsx:149
 msgid "删除行"
-msgstr ""
+msgstr "Delete row"
 
 #: src/components/ui/table-toolbar-button.tsx:210
 msgid "删除表格"
-msgstr ""
+msgstr "Delete table"
 
 #: src/components/ui/table-toolbar-button.tsx:78
 msgid "单元格"
-msgstr ""
+msgstr "Cell"
 
 #: src/pages/Init/index.tsx:208
 msgid "博客初始化完成！"
-msgstr ""
+msgstr "Blog initialization completed!"
 
 #: src/components/ui/media-toolbar-button.tsx:215
 msgid "取消"
-msgstr ""
+msgstr "Cancel"
 
 #: src/components/ui/block-suggestion.tsx:235
 #~ msgid "取消{key}"
-#~ msgstr ""
+#~ msgstr "Cancel {key}"
 
 #: src/components/ui/block-context-menu.tsx:193
 #~ msgid "右对齐"
-#~ msgstr ""
+#~ msgstr "Right align"
 
 #: src/components/ui/table-toolbar-button.tsx:91
 msgid "合并单元格"
-msgstr ""
+msgstr "Merge cells"
+
+#: src/components/FileTree/CreateModal.tsx:81
+msgid "名称"
+msgstr "Name"
+
+#: src/components/FileTree/index.tsx:137
+msgid "名称不能为空"
+msgstr "Name cannot be empty"
 
 #: src/components/ui/insert-toolbar-button.tsx:146
 #: src/components/ui/media-toolbar-button.tsx:69
 msgid "图片"
-msgstr ""
+msgstr "Image"
 
 #: src/components/ui/list-toolbar-button.tsx:84
 msgid "圆形"
-msgstr ""
+msgstr "Circle"
 
 #: src/components/ui/table-toolbar-button.tsx:127
 msgid "在上方插入行"
-msgstr ""
+msgstr "Insert row above"
 
 #: src/components/ui/table-toolbar-button.tsx:138
 msgid "在下方插入行"
-msgstr ""
+msgstr "Insert row below"
 
 #: src/components/ui/table-toolbar-button.tsx:185
 msgid "在右侧插入列"
-msgstr ""
+msgstr "Insert column right"
 
 #: src/components/ui/table-toolbar-button.tsx:174
 msgid "在左侧插入列"
-msgstr ""
+msgstr "Insert column left"
 
 #: src/components/ui/insert-toolbar-button.tsx:62
 msgid "基本"
-msgstr ""
+msgstr "Basic"
 
 #: src/components/ui/block-context-menu.tsx:170
 #: src/components/ui/indent-toolbar-button.tsx:19
 #~ msgid "增加缩进"
-#~ msgstr ""
+#~ msgstr "Increase indent"
 
-#: src/components/ui/block-context-menu.tsx:134
-#: src/components/ui/code-block-node.tsx:186
-#~ msgid "复制"
-#~ msgstr ""
+#: src/components/FileTree/CreateModal.tsx:53
+msgid "复制"
+msgstr "Copy"
 
 #: src/components/ui/list-toolbar-button.tsx:186
 msgid "大写罗马数字 (I, II, III)"
-msgstr ""
+msgstr "Uppercase Roman numerals (I, II, III)"
 
 #: src/components/ui/list-toolbar-button.tsx:168
 msgid "大写英文字母 (A, B, C)"
-msgstr ""
+msgstr "Uppercase letters (A, B, C)"
 
 #: src/components/ui/insert-toolbar-button.tsx:142
 msgid "媒体"
-msgstr ""
+msgstr "Media"
 
 #: src/components/ui/align-toolbar-button.tsx:60
 msgid "对齐"
-msgstr ""
+msgstr "Align"
 
 #: src/components/ui/import-toolbar-button.tsx:72
 msgid "导入"
-msgstr ""
+msgstr "Import"
 
 #: src/components/ui/export-toolbar-button.tsx:150
 msgid "导出"
-msgstr ""
+msgstr "Export"
 
 #: src/components/ui/export-toolbar-button.tsx:158
 msgid "导出为HTML"
-msgstr ""
+msgstr "Export as HTML"
 
 #: src/components/ui/export-toolbar-button.tsx:167
 msgid "导出为Markdown"
-msgstr ""
+msgstr "Export as Markdown"
 
 #: src/components/ui/export-toolbar-button.tsx:161
 msgid "导出为PDF"
-msgstr ""
+msgstr "Export as PDF"
 
 #: src/components/ui/export-toolbar-button.tsx:164
 msgid "导出为图片"
-msgstr ""
+msgstr "Export as Image"
 
 #: src/components/ui/list-toolbar-button.tsx:177
 msgid "小写罗马数字 (i, ii, iii)"
-msgstr ""
+msgstr "Lowercase Roman numerals (i, ii, iii)"
 
 #: src/components/ui/list-toolbar-button.tsx:159
 msgid "小写英文字母 (a, b, c)"
-msgstr ""
+msgstr "Lowercase letters (a, b, c)"
 
 #: src/components/ui/block-context-menu.tsx:190
 #~ msgid "居中"
-#~ msgstr ""
+#~ msgstr "Center"
+
+#: src/components/FileTree/Toolbar.tsx:80
+msgid "展开全部"
+msgstr "Expand all"
 
 #: src/components/ui/block-context-menu.tsx:187
 #~ msgid "左对齐"
-#~ msgstr ""
+#~ msgstr "Left align"
+
+#: src/components/FileTree/index.tsx:114
+msgid "已经在当前目录下，无需移动"
+msgstr "Already in the current directory, no need to move"
 
 #: src/components/ui/mode-toolbar-button.tsx:46
 msgid "建议"
-msgstr ""
+msgstr "Suggestion"
 
 #: src/components/ui/suggestion-toolbar-button.tsx:23
 msgid "建议编辑"
-msgstr ""
+msgstr "Suggest edit"
 
 #: src/components/ui/insert-toolbar-button.tsx:96
 #: src/components/ui/turn-into-toolbar-button.tsx:113
 msgid "引用"
-msgstr ""
+msgstr "Quote"
 
 #: src/components/ui/block-context-menu.tsx:156
 #: src/components/ui/block-suggestion.tsx:50
 #~ msgid "引用块"
-#~ msgstr ""
+#~ msgstr "Quote Block"
 
 #: src/components/ui/list-toolbar-button.tsx:205
 msgid "待办事项"
-msgstr ""
+msgstr "To-do"
 
 #: src/components/ui/insert-toolbar-button.tsx:126
 #: src/components/ui/turn-into-toolbar-button.tsx:95
 msgid "待办列表"
-msgstr ""
+msgstr "To-do List"
 
 #: src/components/FileEditor/ItemTab.tsx:53
 msgid "或者从左侧文件树中选择一个文件进行编辑"
-msgstr ""
+msgstr "Or select a file from the left file tree to edit"
+
+#: src/components/FileTree/Toolbar.tsx:80
+msgid "折叠全部"
+msgstr "Collapse all"
 
 #: src/components/ui/table-toolbar-button.tsx:102
 msgid "拆分单元格"
-msgstr ""
+msgstr "Split cell"
 
 #: src/components/ui/block-draggable.tsx:331
 msgid "拖拽移动"
-msgstr ""
+msgstr "Drag to move"
 
 #: src/components/ui/block-suggestion.tsx:124
 #: src/components/ui/block-suggestion.tsx:183
 #: src/components/ui/block-suggestion.tsx:204
 #: src/components/ui/block-suggestion.tsx:222
 #~ msgid "换行"
-#~ msgstr ""
+#~ msgstr "Line break"
 
 #: src/components/ui/insert-toolbar-button.tsx:219
 #: src/components/ui/more-toolbar-button.tsx:32
 msgid "插入"
-msgstr ""
+msgstr "Insert"
 
 #: src/components/ui/media-toolbar-button.tsx:68
 msgid "插入图片"
-msgstr ""
+msgstr "Insert image"
 
 #: src/components/ui/media-toolbar-button.tsx:62
 msgid "插入文件"
-msgstr ""
+msgstr "Insert file"
 
 #: src/components/ui/media-toolbar-button.tsx:74
 msgid "插入视频"
-msgstr ""
+msgstr "Insert video"
 
 #: src/components/ui/media-toolbar-button.tsx:56
 msgid "插入音频"
-msgstr ""
+msgstr "Insert audio"
 
 #: src/components/ui/code-block-node.tsx:122
 #~ msgid "搜索语言..."
-#~ msgstr ""
+#~ msgstr "Search language..."
 
 #: src/components/ui/history-toolbar-button.tsx:47
 #~ msgid "撤销"
-#~ msgstr ""
+#~ msgstr "Undo"
 
 #: src/components/ui/list-toolbar-button.tsx:150
 msgid "数字 (1, 2, 3)"
-msgstr ""
+msgstr "Numbers (1, 2, 3)"
 
 #: src/components/ui/media-toolbar-button.tsx:63
 msgid "文件"
-msgstr ""
+msgstr "File"
+
+#: src/components/FileTree/CreateModal.tsx:86
+msgid "文件夹路径"
+msgstr "Folder path"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:117
 #~ msgid "文字颜色"
-#~ msgstr ""
+#~ msgstr "Text color"
 
 #: src/components/ui/turn-into-toolbar-button.tsx:41
 msgid "文本"
-msgstr ""
+msgstr "Text"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:91
 #: src/components/ui/floating-toolbar-buttons.tsx:52
 #~ msgid "斜体 (⌘+I)"
-#~ msgstr ""
+#~ msgstr "Italic (⌘+I)"
+
+#: src/components/FileTree/CreateModal.tsx:50
+#: src/components/FileTree/Toolbar.tsx:37
+msgid "新建文件"
+msgstr "New file"
+
+#: src/components/FileTree/CreateModal.tsx:51
+#: src/components/FileTree/Toolbar.tsx:50
+msgid "新建文件夹"
+msgstr "New folder"
 
 #: src/components/FileEditor/index.tsx:90
 #: src/components/FileEditor/index.tsx:102
 msgid "新标签页"
-msgstr ""
+msgstr "New tab"
 
 #: src/components/ui/list-toolbar-button.tsx:96
 msgid "方形"
-msgstr ""
+msgstr "Square"
 
 #: src/components/ui/insert-toolbar-button.tsx:198
 msgid "日期"
-msgstr ""
+msgstr "Date"
 
 #: src/components/ui/block-suggestion.tsx:216
 #~ msgid "替换:"
-#~ msgstr ""
+#~ msgstr "Replace:"
 
 #: src/components/ui/block-suggestion.tsx:201
 #~ msgid "替换为:"
-#~ msgstr ""
+#~ msgstr "Replace with:"
 
 #: src/components/ui/block-suggestion.tsx:67
 #~ msgid "有序列表"
-#~ msgstr ""
+#~ msgstr "Ordered List"
+
+#: src/components/FileTree/index.tsx:181
+msgid "未命名"
+msgstr "Untitled"
+
+#: src/components/FileTree/index.tsx:170
+msgid "未命名.md"
+msgstr "Untitled.md"
 
 #: src/components/ui/code-block-node.tsx:125
 #~ msgid "未找到该语言。"
-#~ msgstr ""
+#~ msgstr "Language not found."
 
 #: src/components/ui/media-toolbar-button.tsx:133
 msgid "本地上传"
-msgstr ""
+msgstr "Local upload"
 
 #: src/components/ui/block-suggestion.tsx:51
 #~ msgid "标注"
-#~ msgstr ""
+#~ msgstr "Annotation"
 
 #: src/components/ui/equation-toolbar-button.tsx:22
 msgid "标记为公式"
-msgstr ""
+msgstr "Mark as formula"
 
 #: src/components/ui/insert-toolbar-button.tsx:71
 #: src/components/ui/turn-into-toolbar-button.tsx:47
 msgid "标题 1"
-msgstr ""
+msgstr "Heading 1"
 
 #: src/components/ui/insert-toolbar-button.tsx:76
 #: src/components/ui/turn-into-toolbar-button.tsx:53
 msgid "标题 2"
-msgstr ""
+msgstr "Heading 2"
 
 #: src/components/ui/insert-toolbar-button.tsx:81
 #: src/components/ui/turn-into-toolbar-button.tsx:59
 msgid "标题 3"
-msgstr ""
+msgstr "Heading 3"
 
 #: src/components/ui/turn-into-toolbar-button.tsx:65
 msgid "标题 4"
-msgstr ""
+msgstr "Heading 4"
 
 #: src/components/ui/turn-into-toolbar-button.tsx:71
 msgid "标题 5"
-msgstr ""
+msgstr "Heading 5"
 
 #: src/components/ui/turn-into-toolbar-button.tsx:77
 msgid "标题 6"
-msgstr ""
+msgstr "Heading 6"
 
 #: src/components/ui/code-block-node.tsx:57
 #~ msgid "格式化代码"
-#~ msgstr ""
+#~ msgstr "Format code"
 
 #: src/components/ui/insert-toolbar-button.tsx:66
 msgid "段落"
-msgstr ""
+msgstr "Paragraph"
 
 #: src/components/ui/block-suggestion.tsx:62
 #~ msgid "水平线"
-#~ msgstr ""
+#~ msgstr "Horizontal line"
+
+#: src/components/Layout.tsx:109
+msgid "浅色模式"
+msgstr "Light Mode"
+
+#: src/components/Layout.tsx:115
+msgid "深色模式"
+msgstr "Dark Mode"
 
 #: src/components/ui/block-suggestion.tsx:179
 #~ msgid "添加:"
-#~ msgstr ""
+#~ msgstr "Add:"
 
 #: src/components/ui/insert-toolbar-button.tsx:166
 msgid "目录"
-msgstr ""
+msgstr "Table of Contents"
 
 #: src/components/ui/media-toolbar-button.tsx:223
 msgid "确定"
-msgstr ""
+msgstr "OK"
+
+#: src/components/FileTree/index.tsx:267
+msgid "确定要删除文件 {name} 吗？此操作不可撤销。"
+msgstr "Are you sure you want to delete the file {name}? This action cannot be undone."
+
+#: src/components/FileTree/index.tsx:212
+msgid "确定要删除文件夹 {name} 吗？子文件夹和文件也会被删除，此操作不可撤销。"
+msgstr "Are you sure you want to delete the folder {name}? Subfolders and files will also be deleted. This action cannot be undone."
 
 #: src/components/ui/insert-toolbar-button.tsx:151
 #: src/components/ui/media-toolbar-button.tsx:75
 msgid "视频"
-msgstr ""
+msgstr "Video"
+
+#: src/components/FileTree/CreateModal.tsx:52
+msgid "移动"
+msgstr "Move"
+
+#. placeholder {0}: error.message
+#: src/components/FileTree/index.tsx:132
+msgid "移动失败: {0}"
+msgstr "Move failed: {0}"
+
+#: src/components/FileTree/index.tsx:129
+msgid "移动成功"
+msgstr "Move successful"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:84
 #: src/components/ui/floating-toolbar-buttons.tsx:45
 #~ msgid "粗体 (⌘+B)"
-#~ msgstr ""
+#~ msgstr "Bold (⌘+B)"
 
 #: src/components/ui/code-block-node.tsx:109
 #~ msgid "纯文本"
-#~ msgstr ""
+#~ msgstr "Plain text"
 
 #: src/components/ui/insert-toolbar-button.tsx:121
 #: src/components/ui/turn-into-toolbar-button.tsx:89
 msgid "编号列表"
-msgstr ""
+msgstr "Numbered List"
 
 #: src/components/ui/mode-toolbar-button.tsx:42
 msgid "编辑"
-msgstr ""
+msgstr "Edit"
 
 #: src/components/ui/mode-toolbar-button.tsx:59
 msgid "编辑模式"
-msgstr ""
+msgstr "Edit mode"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:123
 #~ msgid "背景颜色"
-#~ msgstr ""
+#~ msgstr "Background color"
 
 #: src/components/ui/table-toolbar-button.tsx:114
 msgid "行"
-msgstr ""
+msgstr "Row"
 
 #: src/components/ui/insert-toolbar-button.tsx:204
 msgid "行内公式"
-msgstr ""
+msgstr "Inline formula"
 
 #: src/components/ui/line-height-toolbar-button.tsx:36
 #~ msgid "行高"
-#~ msgstr ""
+#~ msgstr "Line height"
 
 #: src/components/ui/emoji-toolbar-button.tsx:56
 msgid "表情符号"
-msgstr ""
+msgstr "Emoji"
 
 #: src/components/ui/insert-toolbar-button.tsx:86
 #: src/components/ui/table-toolbar-button.tsx:49
 #: src/components/ui/table-toolbar-button.tsx:63
 msgid "表格"
-msgstr ""
+msgstr "Table"
 
 #: src/components/ui/comment-toolbar-button.tsx:21
 msgid "评论"
-msgstr ""
+msgstr "Comment"
 
 #: src/components/ui/block-context-menu.tsx:115
 #: src/components/ui/floating-toolbar-buttons.tsx:36
 #~ msgid "询问AI"
-#~ msgstr ""
+#~ msgstr "Ask AI"
+
+#: src/components/Layout.tsx:95
+#~ msgid "语言"
+#~ msgstr "Language"
+
+#: src/components/FileTree/CreateModal.tsx:82
+msgid "请输入名称"
+msgstr "Please enter a name"
+
+#. placeholder {0}: (error as Error).message
+#: src/components/FileTree/index.tsx:94
+#: src/components/FolderSelector/index.tsx:71
+msgid "读取文件夹失败: {0}"
+msgstr "Failed to read folder: {0}"
+
+#: src/components/Layout.tsx:121
+msgid "跟随系统"
+msgstr "Follow System"
 
 #: src/components/ui/turn-into-toolbar-button.tsx:144
 #: src/components/ui/turn-into-toolbar-button.tsx:164
 msgid "转换为"
-msgstr ""
+msgstr "Convert to"
 
 #: src/components/ui/media-toolbar-button.tsx:137
 msgid "通过URL插入"
-msgstr ""
+msgstr "Insert by URL"
 
 #: src/components/ui/history-toolbar-button.tsx:25
 #~ msgid "重做"
-#~ msgstr ""
+#~ msgstr "Redo"
+
+#: src/components/FileTree/Toolbar.tsx:63
+msgid "重命名"
+msgstr "Rename"
+
+#. placeholder {0}: (error as Error).message
+#: src/components/FileTree/index.tsx:149
+msgid "重命名失败: {0}"
+msgstr "Rename failed: {0}"
+
+#: src/components/FileTree/index.tsx:147
+msgid "重命名成功"
+msgstr "Rename successful"
 
 #: src/components/ui/insert-toolbar-button.tsx:192
 #: src/components/ui/link-toolbar-button.tsx:24
 msgid "链接"
-msgstr ""
+msgstr "Link"
 
 #: src/components/ui/more-toolbar-button.tsx:50
 msgid "键盘输入"
-msgstr ""
+msgstr "Keyboard input"
 
 #: src/components/ui/media-toolbar-button.tsx:57
 msgid "音频"
-msgstr ""
+msgstr "Audio"
 
 #: src/components/ui/insert-toolbar-button.tsx:116
 #: src/components/ui/turn-into-toolbar-button.tsx:83
 msgid "项目符号列表"
-msgstr ""
+msgstr "Bulleted List"
 
 #: src/components/ui/mode-toolbar-button.tsx:50
 msgid "预览"
-msgstr ""
+msgstr "Preview"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:168
 #~ msgid "高亮"
-#~ msgstr ""
+#~ msgstr "Highlight"
 
 #: src/components/ui/insert-toolbar-button.tsx:162
 msgid "高级"
-msgstr ""
+msgstr "Advanced"
 
 #: src/components/ui/list-toolbar-button.tsx:72
 msgid "默认"
-msgstr ""
+msgstr "Default"
