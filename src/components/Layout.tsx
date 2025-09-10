@@ -1,8 +1,10 @@
 import type { ProSettings } from "@ant-design/pro-components";
 import { ProLayout, SettingDrawer } from "@ant-design/pro-components";
-import { Avatar } from "antd";
+import { Avatar, Dropdown } from "antd";
+import { Languages } from "lucide-react";
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import { Language, useAppStore } from "@/store/useAppStore";
 
 export default () => {
   const navigate = useNavigate();
@@ -10,6 +12,10 @@ export default () => {
     fixSiderbar: true,
   });
   const [pathname, setPathname] = useState("/");
+  const [language, setLanguage] = useAppStore((store) => [
+    store.language,
+    store.setLanguage,
+  ]);
 
   return (
     <>
@@ -60,6 +66,34 @@ export default () => {
         }}
         contentStyle={{
           padding: 0,
+        }}
+        actionsRender={() => {
+          return (
+            <Dropdown
+              menu={{
+                selectable: true,
+                defaultSelectedKeys: [language],
+                selectedKeys: [language],
+                items: [
+                  {
+                    key: "zh",
+                    label: "中文",
+                    onClick: () => setLanguage("zh"),
+                  },
+                  {
+                    key: "en",
+                    label: "English",
+                    onClick: () => setLanguage("en"),
+                  },
+                ],
+                onSelect: (e) => {
+                  setLanguage(e.key as Language);
+                },
+              }}
+            >
+              <Languages className="size-4" />
+            </Dropdown>
+          );
         }}
       >
         <Outlet />

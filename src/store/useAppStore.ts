@@ -18,6 +18,7 @@ async function initializeStore() {
 initializeStore();
 
 type Theme = "light" | "dark" | "system";
+export type Language = "en" | "zh";
 
 export const useAppStore = createWithEqualityFn(
   persist(
@@ -27,12 +28,14 @@ export const useAppStore = createWithEqualityFn(
         theme: "system" as Theme,
         projectDir: "",
         devPid: null as number | null,
+        language: "zh" as Language,
       },
       (set) => ({
         setAccessToken: (token: string) => set({ accessToken: token }),
         setTheme: (theme: Theme) => set({ theme }),
         setProjectDir: (path: string) => set({ projectDir: path }),
         setDevPid: (pid: number | null) => set({ devPid: pid }),
+        setLanguage: (lang: Language) => set({ language: lang }),
       }),
     ),
     {
@@ -41,7 +44,8 @@ export const useAppStore = createWithEqualityFn(
       partialize: (state) => ({
         accessToken: state.accessToken,
         theme: state.theme,
-        blogPath: state.projectDir,
+        projectDir: state.projectDir,
+        language: state.language,
       }),
     },
   ),

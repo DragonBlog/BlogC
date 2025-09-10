@@ -106,7 +106,7 @@ export const Init = () => {
             setIsNextDisabled(true);
 
             await installDependencies({
-              cwd: `${projectDir}/template`,
+              cwd: `${values.projectDir}/template`,
               onOutput: (output) => {
                 terminalRef.current?.write(output.log);
               },

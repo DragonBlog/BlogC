@@ -503,6 +503,10 @@ msgstr "评论"
 #~ msgid "询问AI"
 #~ msgstr "询问AI"
 
+#: src/components/Layout.tsx:95
+#~ msgid "语言"
+#~ msgstr "语言"
+
 #: src/components/ui/turn-into-toolbar-button.tsx:144
 #: src/components/ui/turn-into-toolbar-button.tsx:164
 msgid "转换为"
