@@ -17,6 +17,7 @@ export class TauriStoreState implements StateStorage {
   async setItem(name: string, value: string) {
     await this.store?.set(name, value);
     this.store?.save();
+    console.log("setItem", name, value);
   }
 
   async removeItem(name: string) {

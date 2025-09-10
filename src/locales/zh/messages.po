@@ -429,6 +429,14 @@ msgstr "段落"
 #~ msgid "水平线"
 #~ msgstr "水平线"
 
+#: src/components/Layout.tsx:109
+msgid "浅色模式"
+msgstr "浅色模式"
+
+#: src/components/Layout.tsx:115
+msgid "深色模式"
+msgstr "深色模式"
+
 #: src/components/ui/block-suggestion.tsx:179
 #~ msgid "添加:"
 #~ msgstr "添加:"
@@ -502,6 +510,14 @@ msgstr "评论"
 #: src/components/ui/floating-toolbar-buttons.tsx:36
 #~ msgid "询问AI"
 #~ msgstr "询问AI"
+
+#: src/components/Layout.tsx:95
+#~ msgid "语言"
+#~ msgstr "语言"
+
+#: src/components/Layout.tsx:121
+msgid "跟随系统"
+msgstr "跟随系统"
 
 #: src/components/ui/turn-into-toolbar-button.tsx:144
 #: src/components/ui/turn-into-toolbar-button.tsx:164
