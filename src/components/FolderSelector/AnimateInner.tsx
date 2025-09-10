@@ -3,26 +3,20 @@ import {
   FolderOpenOutlined,
   FolderOutlined,
   LoadingOutlined,
-  MoreOutlined,
 } from "@ant-design/icons";
 import { ItemInstance, TreeInstance } from "@headless-tree/core";
 import { AssistiveTreeDescription } from "@headless-tree/react";
-import { Button, Flex, Input, Spin, Typography } from "antd";
+import { Button, Flex, Spin, Typography } from "antd";
 import clsx from "clsx";
+import { ChevronRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { FileTreeItem } from "../../command/fileManager";
 
 type AnimateInnerProps = {
   tree: TreeInstance<FileTreeItem>;
-  setCurrent?: (item: FileTreeItem) => void;
-  onClick?: (item: FileTreeItem) => void;
 };
 
-export const AnimateInner = ({
-  tree,
-  setCurrent,
-  onClick,
-}: AnimateInnerProps) => {
+export const AnimateInner = ({ tree }: AnimateInnerProps) => {
   return (
     <div
       {...tree.getContainerProps()}
@@ -32,29 +26,15 @@ export const AnimateInner = ({
       {tree
         .getRootItem()
         .getChildren()
+        .filter((item) => item.getItemData().isDir)
         .map((item) => {
-          return (
-            <Item
-              key={item.getId()}
-              onClick={onClick}
-              item={item}
-              setCurrent={setCurrent}
-            />
-          );
+          return <Item key={item.getId()} item={item} />;
         })}
     </div>
   );
 };
 
-const Item = ({
-  item,
-  setCurrent,
-  onClick,
-}: {
-  item: ItemInstance<FileTreeItem>;
-  setCurrent?: (item: FileTreeItem) => void;
-  onClick?: (item: FileTreeItem) => void;
-}) => {
+const Item = ({ item }: { item: ItemInstance<FileTreeItem> }) => {
   const itemProps = item.getProps();
 
   return (
@@ -70,18 +50,37 @@ const Item = ({
         className={clsx(
           "transition rounded-lg hover:bg-fill-tertiary cursor-pointer flex overflow-hidden items-center shrink-0",
           item.isSelected() && "bg-primary-bg hover:bg-primary-bg text-primary",
-          item.isDragTarget() && "bg-info-bg-hover",
-          item.isRenaming() && "bg-primary-bg hover:bg-primary-bg",
         )}
-        onClick={(e) => {
-          itemProps.onClick?.(e);
-          onClick?.(item.getItemData());
-        }}
-        onContextMenu={() => {
-          setCurrent?.(item.getItemData());
+        onClick={() => {
+          item.toggleSelect();
         }}
       >
         <div className="px-2 flex gap-1 overflow-hidden flex-1 items-center group">
+          <Button
+            variant="text"
+            color="default"
+            size="small"
+            icon={
+              <motion.div
+                className="flex items-center justify-center"
+                animate={{ rotate: item.isExpanded() ? 90 : 0 }}
+                transition={{
+                  duration: 0.2,
+                }}
+              >
+                <ChevronRight className="w-4" />
+              </motion.div>
+            }
+            onClick={(e) => {
+              e.stopPropagation();
+
+              if (item.isExpanded()) {
+                item.collapse();
+              } else {
+                item.expand();
+              }
+            }}
+          />
           <Flex flex={1} align="center" className="gap-1 overflow-hidden">
             <Spin
               indicator={<LoadingOutlined />}
@@ -100,36 +99,14 @@ const Item = ({
               )}
             </Spin>
 
-            {item.isRenaming() ? (
-              <Input {...item.getRenameInputProps()} size="small" />
-            ) : (
-              <Typography.Text
-                ellipsis={{ tooltip: true }}
-                style={{ color: "inherit" }}
-                className={clsx(item.isSelected() && "text-primary")}
-              >
-                {item.getItemName()}
-              </Typography.Text>
-            )}
+            <Typography.Text
+              ellipsis={{ tooltip: true }}
+              style={{ color: "inherit" }}
+              className={clsx(item.isSelected() && "text-primary")}
+            >
+              {item.getItemName()}
+            </Typography.Text>
           </Flex>
-
-          <Button
-            className="opacity-0 group-hover:opacity-100 transition"
-            onClick={(e) => {
-              setCurrent?.(item.getItemData());
-              e.stopPropagation();
-              e.target.dispatchEvent(
-                new MouseEvent("contextmenu", {
-                  bubbles: true,
-                  clientX: e.clientX,
-                  clientY: e.clientY,
-                }),
-              );
-            }}
-            icon={<MoreOutlined />}
-            type="text"
-            size="small"
-          />
         </div>
       </div>
 
@@ -139,15 +116,14 @@ const Item = ({
           animate={{ height: "fit-content", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ ease: "linear" }}
+          className="flex flex-col gap-1"
         >
-          {item.getChildren().map((child) => (
-            <Item
-              key={child.getId()}
-              onClick={onClick}
-              item={child}
-              setCurrent={setCurrent}
-            />
-          ))}
+          {item
+            .getChildren()
+            .filter((item) => item.getItemData().isDir)
+            .map((child) => (
+              <Item key={child.getId()} item={child} />
+            ))}
         </motion.div>
       )}
     </AnimatePresence>

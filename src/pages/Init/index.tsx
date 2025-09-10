@@ -118,8 +118,8 @@ export const Init = () => {
               },
             });
           }
-        } catch (_error) {
-          console.log(_error);
+        } catch (error) {
+          console.error(error);
           message.error("初始化博客失败，请检查路径或网络连接");
         }
       },
