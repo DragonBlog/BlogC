@@ -4,6 +4,7 @@ use tauri::{async_runtime::Mutex, Manager};
 use tauri_plugin_shell::ShellExt;
 use tokio_util::sync::CancellationToken;
 use tracing::info;
+mod back_links;
 mod blog_manager;
 mod commands;
 mod config;
@@ -12,6 +13,7 @@ mod file_manager;
 mod git;
 mod oauth;
 mod utils;
+mod db;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

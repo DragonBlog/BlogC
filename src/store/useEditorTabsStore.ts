@@ -45,7 +45,7 @@ export const useEditorTabsStore = createWithEqualityFn(
       }),
     ),
     {
-      name: "app-store",
+      name: "editor-tabs-store",
       storage: createJSONStorage(() => store),
     },
   ),
