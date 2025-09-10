@@ -17,7 +17,7 @@ async function initializeStore() {
 // 立即调用初始化函数
 initializeStore();
 
-type Theme = "light" | "dark" | "system";
+export type Theme = "light" | "dark" | "system";
 export type Language = "en" | "zh";
 
 export const useAppStore = createWithEqualityFn(

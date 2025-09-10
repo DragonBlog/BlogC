@@ -1,20 +1,26 @@
 import type { ProSettings } from "@ant-design/pro-components";
 import { ProLayout, SettingDrawer } from "@ant-design/pro-components";
+import { useLingui } from "@lingui/react/macro";
 import { Avatar, Dropdown } from "antd";
-import { Languages } from "lucide-react";
+import { Languages, Moon, Sun, SunMoon } from "lucide-react";
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Language, useAppStore } from "@/store/useAppStore";
+import { match } from "ts-pattern";
+import { Language, Theme, useAppStore } from "@/store/useAppStore";
 
 export default () => {
   const navigate = useNavigate();
   const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
     fixSiderbar: true,
   });
+  const { t } = useLingui();
+
   const [pathname, setPathname] = useState("/");
-  const [language, setLanguage] = useAppStore((store) => [
+  const [language, setLanguage, theme, setTheme] = useAppStore((store) => [
     store.language,
     store.setLanguage,
+    store.theme,
+    store.setTheme,
   ]);
 
   return (
@@ -68,7 +74,7 @@ export default () => {
           padding: 0,
         }}
         actionsRender={() => {
-          return (
+          return [
             <Dropdown
               menu={{
                 selectable: true,
@@ -92,8 +98,49 @@ export default () => {
               }}
             >
               <Languages className="size-4" />
-            </Dropdown>
-          );
+            </Dropdown>,
+            <Dropdown
+              menu={{
+                selectable: true,
+                selectedKeys: [theme],
+                items: [
+                  {
+                    key: "light",
+                    label: t`浅色模式`,
+                    icon: <Sun className="size-4" />,
+                    onClick: () => setTheme("light"),
+                  },
+                  {
+                    key: "dark",
+                    label: t`深色模式`,
+                    icon: <Moon className="size-4" />,
+                    onClick: () => setTheme("dark"),
+                  },
+                  {
+                    key: "system",
+                    label: t`跟随系统`,
+                    icon: <SunMoon className="size-4" />,
+                    onClick: () => setTheme("system"),
+                  },
+                ],
+                onSelect: (e) => {
+                  setTheme(e.key as Theme);
+                },
+              }}
+            >
+              {match(theme)
+                .with("light", () => {
+                  return <Sun className="size-4" />;
+                })
+                .with("dark", () => {
+                  return <Moon className="size-4" />;
+                })
+                .with("system", () => {
+                  return <SunMoon className="size-4" />;
+                })
+                .exhaustive()}
+            </Dropdown>,
+          ];
         }}
       >
         <Outlet />
