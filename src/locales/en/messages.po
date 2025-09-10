@@ -429,6 +429,14 @@ msgstr "Paragraph"
 #~ msgid "水平线"
 #~ msgstr "Horizontal line"
 
+#: src/components/Layout.tsx:109
+msgid "浅色模式"
+msgstr "Light Mode"
+
+#: src/components/Layout.tsx:115
+msgid "深色模式"
+msgstr "Dark Mode"
+
 #: src/components/ui/block-suggestion.tsx:179
 #~ msgid "添加:"
 #~ msgstr "Add:"
@@ -506,6 +514,10 @@ msgstr "Comment"
 #: src/components/Layout.tsx:95
 #~ msgid "语言"
 #~ msgstr "Language"
+
+#: src/components/Layout.tsx:121
+msgid "跟随系统"
+msgstr "Follow System"
 
 #: src/components/ui/turn-into-toolbar-button.tsx:144
 #: src/components/ui/turn-into-toolbar-button.tsx:164
