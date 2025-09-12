@@ -1,4 +1,4 @@
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   App,
   Button,
@@ -30,6 +30,7 @@ export const Init = () => {
     store.projectDir,
     store.setProjectDir,
   ]);
+  const { t } = useLingui();
   const { message } = App.useApp();
   const [step, setStep] = useState(0);
   const [form] = Form.useForm();
@@ -76,51 +77,58 @@ export const Init = () => {
         </Form>
       ),
       onNext: async () => {
-        try {
-          const values = await form.validateFields();
-          setProjectDir(values.projectDir);
+        const values = await form.validateFields();
+        setProjectDir(values.projectDir);
 
+        try {
           const shouldInstallTemplate = await initOrOpenBlog(values.projectDir);
           if (shouldInstallTemplate) {
             setStep(1);
             setBytes(0);
             setPercent(0);
             setIsNextDisabled(true);
-            await installTemplate(values.projectDir, (progress) => {
-              match(progress)
-                .with({ type: "receiving" }, ({ data }) => {
-                  setPercent(Math.floor(data[0]));
-                  setBytes(data[1]);
-                })
-                .with({ type: "processing" }, ({ data }) => {
-                  setPercent(data);
-                })
-                .with({ type: "finished" }, () => {
-                  setPercent(100);
-                  setIsNextDisabled(false);
-                })
-                .exhaustive();
-            });
+            try {
+              await installTemplate(values.projectDir, (progress) => {
+                match(progress)
+                  .with({ type: "receiving" }, ({ data }) => {
+                    setPercent(Math.floor(data[0]));
+                    setBytes(data[1]);
+                  })
+                  .with({ type: "processing" }, ({ data }) => {
+                    setPercent(data);
+                  })
+                  .with({ type: "finished" }, () => {
+                    setPercent(100);
+                    setIsNextDisabled(false);
+                  })
+                  .exhaustive();
+              });
+            } catch (error) {
+              message.error(t`模版下载失败 ${(error as Error).message}`);
+            }
           } else {
             setStep(2);
             setIsNextDisabled(true);
 
-            await installDependencies({
-              cwd: `${values.projectDir}/template`,
-              onOutput: (output) => {
-                terminalRef.current?.write(output.log);
-              },
-              onStatus: (installStatus) => {
-                setInstallStatus(installStatus);
-                if (installStatus === "completed") {
-                  setIsNextDisabled(false);
-                }
-              },
-            });
+            try {
+              await installDependencies({
+                cwd: `${values.projectDir}/template`,
+                onOutput: (output) => {
+                  terminalRef.current?.write(output.log);
+                },
+                onStatus: (installStatus) => {
+                  setInstallStatus(installStatus);
+                  if (installStatus === "completed") {
+                    setIsNextDisabled(false);
+                  }
+                },
+              });
+            } catch (error) {
+              message.error(t`依赖安装失败 ${(error as Error).message}`);
+            }
           }
         } catch (error) {
-          console.error(error);
-          message.error("初始化博客失败，请检查路径或网络连接");
+          message.error(t`初始化博客失败 ${(error as Error).message}`);
         }
       },
     },
@@ -139,18 +147,22 @@ export const Init = () => {
         setStep(2);
         setIsNextDisabled(true);
 
-        await installDependencies({
-          cwd: `${projectDir}/template`,
-          onOutput: (output) => {
-            terminalRef.current?.write(output.log);
-          },
-          onStatus: (installStatus) => {
-            setInstallStatus(installStatus);
-            if (installStatus === "completed") {
-              setIsNextDisabled(false);
-            }
-          },
-        });
+        try {
+          await installDependencies({
+            cwd: `${projectDir}/template`,
+            onOutput: (output) => {
+              terminalRef.current?.write(output.log);
+            },
+            onStatus: (installStatus) => {
+              setInstallStatus(installStatus);
+              if (installStatus === "completed") {
+                setIsNextDisabled(false);
+              }
+            },
+          });
+        } catch (error) {
+          message.error(t`依赖安装失败 ${(error as Error).message}`);
+        }
       },
     },
     {
@@ -172,6 +184,9 @@ export const Init = () => {
             ))
             .with("completed", () => (
               <Typography.Text>依赖安装完成</Typography.Text>
+            ))
+            .with("checking_network", () => (
+              <Typography.Text>检查网络中...</Typography.Text>
             ))
             .otherwise(() => (
               <Typography.Text>等待中...</Typography.Text>

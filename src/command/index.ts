@@ -1,4 +1,6 @@
 import { Channel, invoke } from "@tauri-apps/api/core";
+import { SpawnOptions } from "@tauri-apps/plugin-shell";
+import { CommandStdout } from "@/utils";
 
 /**
  * 命令执行错误类型定义
@@ -80,8 +82,8 @@ export type Progress =
  * 该函数通过Tauri命令调用Rust后端的check_command_exists函数，
  * 用于检查系统中是否存在指定的命令。
  */
-export async function checkCommand(command: string): Promise<boolean> {
-  return await invoke("check_command_exists", { command });
+export async function getCommandPath(command: string): Promise<string> {
+  return await invoke("get_command_path", { command });
 }
 
 /**
@@ -138,4 +140,26 @@ export async function readBlogBuildConfig(
   projectDir: string,
 ): Promise<BlogBuildConfig> {
   return await invoke("read_blog_build_config", { projectDir });
+}
+
+export async function exec(
+  command: string,
+  args: string[] = [],
+  isSidecar = false,
+  options: SpawnOptions & {
+    onStart?: (child: number) => void;
+    onOutput?: (output: CommandStdout) => void;
+  } = {},
+) {
+  const { onOutput, onStart } = options;
+  const channel = new Channel(onOutput);
+  const startChannel = new Channel(onStart);
+  return await invoke<void>("exec", {
+    command,
+    args,
+    sidecar: isSidecar,
+    onStart: startChannel,
+    onOutput: channel,
+    cwd: options.cwd,
+  });
 }

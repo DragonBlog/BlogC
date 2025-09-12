@@ -29,6 +29,7 @@ pub fn run() {
         .unwrap_or("91cca246b43b848af21e97037a68015fc0726381".to_string());
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
@@ -65,17 +66,20 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            commands::start,
+            // utils
             commands::check_dir,
-            commands::check_command_exists,
-            commands::read_schemas,
-            commands::read_blog_build_config,
+            commands::get_command_path,
+            commands::exec,
+            // oauth
+            commands::start,
             // file manager
             commands::read_children,
             commands::copy_tree_item,
             commands::move_file_or_folder,
             commands::rename,
             // blog manager
+            commands::read_schemas,
+            commands::read_blog_build_config,
             commands::init_or_open_blog,
             commands::install_template,
             commands::get_templates,
