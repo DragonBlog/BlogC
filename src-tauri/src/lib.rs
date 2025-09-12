@@ -63,17 +63,20 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            commands::start,
+            // utils
             commands::check_dir,
             commands::get_command_path,
-            commands::read_schemas,
-            commands::read_blog_build_config,
+            commands::exec,
+            // oauth
+            commands::start,
             // file manager
             commands::read_children,
             commands::copy_tree_item,
             commands::move_file_or_folder,
             commands::rename,
             // blog manager
+            commands::read_schemas,
+            commands::read_blog_build_config,
             commands::init_or_open_blog,
             commands::install_template,
         ])

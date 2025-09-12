@@ -1,49 +1,49 @@
-import {
-  type Child,
-  Command,
-  type SpawnOptions,
-  type TerminatedPayload,
-} from "@tauri-apps/plugin-shell";
-import { getCommandPath } from "../command";
+// import {
+//   type Child,
+//   Command,
+//   type SpawnOptions,
+//   type TerminatedPayload,
+// } from "@tauri-apps/plugin-shell";
+import { exec, getCommandPath } from "../command";
 
-type CommandStdout = {
+export type CommandStdout = {
   log: string | Uint8Array;
   isError: boolean;
 };
 
-export async function exec(
-  command: string,
-  args: string[] = [],
-  isSidecar = false,
-  options: SpawnOptions & {
-    onStart?: (child: Child) => void;
-    onOutput?: (output: CommandStdout) => void;
-  } = {},
-) {
-  const { onOutput, onStart, ...reset } = options;
-  const cmd = isSidecar
-    ? Command.sidecar(command, args, reset)
-    : Command.create(command, args, reset);
+// export async function exec(
+//   command: string,
+//   args: string[] = [],
+//   isSidecar = false,
+//   options: SpawnOptions & {
+//     onStart?: (child: Child) => void;
+//     onOutput?: (output: CommandStdout) => void;
+//   } = {}
+// ) {
+//   const { onOutput, onStart, ...reset } = options;
+//   const cmd = isSidecar
+//     ? Command.sidecar(command, args, reset)
+//     : Command.create(command, args, reset);
 
-  const child = await cmd.spawn();
+//   const child = await cmd.spawn();
 
-  onStart?.(child);
+//   onStart?.(child);
 
-  return new Promise<TerminatedPayload>((resolve, reject) => {
-    cmd.on("close", (data) => {
-      resolve(data);
-    });
-    cmd.on("error", (error) => {
-      reject(error);
-    });
-    cmd.stdout.on("data", (data) => {
-      onOutput?.({ log: data, isError: false });
-    });
-    cmd.stderr.on("data", (data) => {
-      onOutput?.({ log: data, isError: true });
-    });
-  });
-}
+//   return new Promise<TerminatedPayload>((resolve, reject) => {
+//     cmd.on("close", (data) => {
+//       resolve(data);
+//     });
+//     cmd.on("error", (error) => {
+//       reject(error);
+//     });
+//     cmd.stdout.on("data", (data) => {
+//       onOutput?.({ log: data, isError: false });
+//     });
+//     cmd.stderr.on("data", (data) => {
+//       onOutput?.({ log: data, isError: true });
+//     });
+//   });
+// }
 
 export function formatBytes(bytes: number) {
   if (bytes === 0) return "0 B";
@@ -62,7 +62,7 @@ export type InstallStatus =
   | "completed";
 
 export async function installDependencies(options: {
-  onStart?: (child: Child) => void;
+  onStart?: (child: number) => void;
   onOutput?: (output: CommandStdout) => void;
   cwd: string;
   onStatus?: (status: InstallStatus) => void;

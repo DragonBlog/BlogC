@@ -1,6 +1,8 @@
-use crate::error::Result;
 use crate::utils;
+use crate::{error::Result, utils::CommandStdout};
 use serde::{Deserialize, Serialize};
+use tauri::{ipc::Channel, AppHandle};
+use tauri_plugin_shell::ShellExt;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -23,4 +25,26 @@ pub async fn check_dir(path: &str) -> Result<CheckResult> {
 pub async fn get_command_path(command: &str) -> Result<String> {
     let path = which::which_global(command)?;
     Ok(path.to_string_lossy().to_string())
+}
+
+#[tauri::command]
+pub async fn exec(
+    app: AppHandle,
+    command: &str,
+    sidecar: bool,
+    args: Vec<String>,
+    cwd: Option<String>,
+    on_start: Channel<u32>,
+    on_output: Channel<CommandStdout>,
+) -> Result<()> {
+    utils::exec(
+        app.shell(),
+        command,
+        sidecar,
+        args,
+        cwd.as_deref(),
+        on_output,
+        on_start,
+    )
+    .await
 }

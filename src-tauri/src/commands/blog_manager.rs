@@ -4,7 +4,6 @@ use crate::{
     blog_manager::BlogManager,
     config::BlogBuildConfig,
     error::Result,
-    git::Git,
     utils::{self, check_directory_is_empty},
 };
 use serde::{Deserialize, Serialize};
