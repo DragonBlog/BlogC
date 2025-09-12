@@ -52,6 +52,10 @@
     "fs:allow-rename",
     "fs:allow-remove",
     "fs:allow-read-text-file",
-    "fs:allow-create"
+    "fs:allow-create",
+    {
+      "identifier": "http:default",
+      "allow": ["https://*", "http://*"]
+    }
   ]
 }
