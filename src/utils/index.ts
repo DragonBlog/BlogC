@@ -4,7 +4,7 @@ import {
   type SpawnOptions,
   type TerminatedPayload,
 } from "@tauri-apps/plugin-shell";
-import { checkCommand } from "../command";
+import { getCommandPath } from "../command";
 
 type CommandStdout = {
   log: string | Uint8Array;
@@ -68,37 +68,53 @@ export async function installDependencies(options: {
   onStatus?: (status: InstallStatus) => void;
 }) {
   const { onStatus } = options;
-  const hasNode = await checkCommand("node");
+  const nodePath = await getCommandPath("node");
 
-  if (!hasNode) {
+  if (!nodePath) {
     onStatus?.("installing_node");
     await exec("binaries/fnm", ["install", "24"], true, options);
   }
-  const hasPnpm = await checkCommand("pnpm");
 
+  const npmPath = await getCommandPath("npm");
+
+  if (!npmPath) {
+    throw new Error("npm not found after installing node");
+  }
   onStatus?.("installing_nrm");
 
   // 配置npm 镜像 为https://registry.npmmirror.com/
   await exec(
-    "npm",
+    npmPath,
     ["config", "set", "registry", "https://registry.npmmirror.com/"],
     false,
     options,
   );
 
   // 安装 nrm 并使用 taobao 镜像（可选）
-  await exec("npm", ["install", "-g", "nrm"], false, options);
-  await exec("nrm", ["use", "taobao"], false, options);
-  await exec("nrm", ["ls"], false, options);
+  await exec(npmPath, ["install", "-g", "nrm"], false, options);
 
-  if (!hasPnpm) {
+  const nrmPath = await getCommandPath("nrm");
+  if (!nrmPath) {
+    throw new Error("nrm not found after installing nrm");
+  }
+  await exec(nrmPath, ["use", "taobao"], false, options);
+  await exec(nrmPath, ["ls"], false, options);
+
+  let pnpmPath = await getCommandPath("pnpm");
+
+  if (!pnpmPath) {
     onStatus?.("installing_pnpm");
 
-    await exec("npm", ["install", "-g", "pnpm"], false, options);
+    await exec(npmPath, ["install", "-g", "pnpm"], false, options);
+    pnpmPath = await getCommandPath("pnpm");
   }
+
   onStatus?.("installing_dependencies");
 
-  await exec("pnpm", ["install"], false, options);
+  if (!pnpmPath) {
+    throw new Error("pnpm not found after installing pnpm");
+  }
+  await exec(pnpmPath, ["install"], false, options);
 
   onStatus?.("completed");
 }

@@ -20,6 +20,7 @@ pub async fn check_dir(path: &str) -> Result<CheckResult> {
 }
 
 #[tauri::command]
-pub async fn check_command_exists(command: &str) -> Result<bool> {
-    Ok(which::which_global(command).is_ok())
+pub async fn get_command_path(command: &str) -> Result<String> {
+    let path = which::which_global(command)?;
+    Ok(path.to_string_lossy().to_string())
 }

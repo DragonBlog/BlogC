@@ -80,8 +80,8 @@ export type Progress =
  * 该函数通过Tauri命令调用Rust后端的check_command_exists函数，
  * 用于检查系统中是否存在指定的命令。
  */
-export async function checkCommand(command: string): Promise<boolean> {
-  return await invoke("check_command_exists", { command });
+export async function getCommandPath(command: string): Promise<string> {
+  return await invoke("get_command_path", { command });
 }
 
 /**

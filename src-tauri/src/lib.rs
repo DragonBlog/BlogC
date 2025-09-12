@@ -65,7 +65,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::start,
             commands::check_dir,
-            commands::check_command_exists,
+            commands::get_command_path,
             commands::read_schemas,
             commands::read_blog_build_config,
             // file manager

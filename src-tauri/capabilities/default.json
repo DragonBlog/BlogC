@@ -51,7 +51,7 @@
     "fs:allow-mkdir",
     "fs:allow-rename",
     "fs:allow-remove",
-    "fs:allow-read-text-file", 
+    "fs:allow-read-text-file",
     "fs:allow-create"
   ]
 }
