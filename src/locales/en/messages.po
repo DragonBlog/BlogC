@@ -58,9 +58,15 @@ msgstr "Code"
 #~ msgid "代码块"
 #~ msgstr "Code Block"
 
-#: src/pages/Init/index.tsx:210
+#: src/pages/Init/index.tsx:225
 msgid "你现在可以开始使用博客管理系统了，点击完成按钮进入内容管理页面。"
 msgstr "You can now start using the blog management system. Click the finish button to go to the content management page."
+
+#. placeholder {0}: (error as Error).message
+#: src/pages/Init/index.tsx:127
+#: src/pages/Init/index.tsx:164
+msgid "依赖安装失败 {0}"
+msgstr ""
 
 #: src/components/ui/insert-toolbar-button.tsx:177
 msgid "公式"
@@ -107,6 +113,11 @@ msgstr "List"
 #: src/components/FileEditor/ItemTab.tsx:42
 msgid "创建新文件"
 msgstr "Create new file"
+
+#. placeholder {0}: (error as Error).message
+#: src/pages/Init/index.tsx:131
+msgid "初始化博客失败 {0}"
+msgstr ""
 
 #: src/components/ui/block-context-menu.tsx:125
 #~ msgid "删除"
@@ -159,7 +170,7 @@ msgstr "Delete table"
 msgid "单元格"
 msgstr "Cell"
 
-#: src/pages/Init/index.tsx:208
+#: src/pages/Init/index.tsx:223
 msgid "博客初始化完成！"
 msgstr "Blog initialization completed!"
 
@@ -482,6 +493,11 @@ msgstr "Heading 6"
 #: src/components/ui/code-block-node.tsx:57
 #~ msgid "格式化代码"
 #~ msgstr "Format code"
+
+#. placeholder {0}: (error as Error).message
+#: src/pages/Init/index.tsx:107
+msgid "模版下载失败 {0}"
+msgstr ""
 
 #: src/components/ui/insert-toolbar-button.tsx:66
 msgid "段落"

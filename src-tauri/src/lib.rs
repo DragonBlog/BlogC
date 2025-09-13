@@ -14,6 +14,7 @@ mod git;
 mod oauth;
 mod utils;
 mod db;
+mod md_parser;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

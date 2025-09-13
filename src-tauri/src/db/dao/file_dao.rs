@@ -1,8 +1,5 @@
-// src/dao/file_dao.rs
-
-use rusqlite::{params, Result as SqlResult, Row};
-
 use crate::db::{models::File, DbConnection};
+use rusqlite::{params, Result as SqlResult, Row};
 
 pub struct FileDao {
     conn: DbConnection,
@@ -14,7 +11,7 @@ impl FileDao {
     }
 
     // ✅ 插入或替换文件（用于索引更新）
-    pub async fn upsert(&self, file: &File) -> SqlResult<i64> {
+    pub async fn insert(&self, file: &File) -> SqlResult<i64> {
         let conn = self.conn.lock().await;
         conn.execute(
             "INSERT OR REPLACE INTO files (path, file_type, modify_time, indexed_at, hash)
