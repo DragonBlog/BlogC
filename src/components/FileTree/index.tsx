@@ -286,11 +286,20 @@ export const FileTree = (props: FileTreeProps) => {
   const onCreateFile = async () => {
     try {
       const currentItem = tree.getItemInstance(selectedItem);
-      createModalRef?.current?.open({
-        type: "createFile",
-        folderPath: currentItem?.getId(),
-        name: t`未命名.md`,
-      });
+      if (!currentItem.isFolder()) {
+        const parent = currentItem.getParent();
+        createModalRef?.current?.open({
+          type: "createFile",
+          folderPath: parent?.getId() || projectDir,
+          name: t`未命名.md`,
+        });
+      } else {
+        createModalRef?.current?.open({
+          type: "createFile",
+          folderPath: currentItem?.getId(),
+          name: t`未命名.md`,
+        });
+      }
     } catch (e) {
       message.error(t`创建失败: ${e}`);
     }

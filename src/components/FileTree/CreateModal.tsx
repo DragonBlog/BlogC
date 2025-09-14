@@ -1,13 +1,7 @@
 import { useLingui } from "@lingui/react/macro";
-import { create, mkdir } from "@tauri-apps/plugin-fs";
+import { create, exists, mkdir } from "@tauri-apps/plugin-fs";
 import { App, Form, Input, Modal } from "antd";
-import React, {
-  forwardRef,
-  Ref,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from "react";
+import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
 import { match } from "ts-pattern";
 import { useAppStore } from "@/store/useAppStore";
 import { FolderSelector } from "../FolderSelector";
@@ -66,6 +60,7 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
         title={title}
         onOk={async () => {
           const { folderPath, name } = form.getFieldsValue();
+
           try {
             if (options?.type === "createFolder") {
               await mkdir(`${folderPath}/${name}`);
@@ -93,7 +88,21 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
           <Form.Item
             name="name"
             label={t`名称`}
-            rules={[{ required: true, message: t`请输入名称` }]}
+            rules={[
+              { required: true, message: t`请输入名称` },
+              {
+                validator: async (rule, value) => {
+                  if (!value || !options?.folderPath) return Promise.resolve();
+                  const targetPath = `${options.folderPath}/${value}`;
+                  const isExists = await exists(targetPath);
+                  if (isExists) {
+                    return Promise.reject(new Error(t`${value} 已存在`));
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
+            validateTrigger="onBlur"
           >
             <Input />
           </Form.Item>
