@@ -1,4 +1,4 @@
-use notify::{FsEventWatcher, RecommendedWatcher};
+use notify::RecommendedWatcher;
 use serde_json::Value;
 use std::{env, sync::Arc};
 use tauri::{async_runtime::Mutex, Manager};
