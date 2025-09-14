@@ -32,6 +32,8 @@ pub enum Error {
     Rusqlite(#[from] rusqlite::Error),
     #[error(transparent)]
     UrlEncoding(#[from] FromUtf8Error),
+    #[error(transparent)]
+    Notify(#[from] notify::Error),
 }
 
 #[derive(Debug, Serialize)]
@@ -52,6 +54,7 @@ enum ErrorKind {
     FsExtra(String),
     Rusqlite(String),
     UrlEncoding(String),
+    Notify(String),
 }
 
 impl serde::Serialize for Error {
@@ -75,6 +78,7 @@ impl serde::Serialize for Error {
             Error::FsExtra(_) => ErrorKind::FsExtra(message),
             Error::Rusqlite(_) => ErrorKind::Rusqlite(message),
             Error::UrlEncoding(_) => ErrorKind::UrlEncoding(message),
+            Error::Notify(_) => ErrorKind::Notify(message),
         };
         king.serialize(serializer)
     }

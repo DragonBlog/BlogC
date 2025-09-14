@@ -15,7 +15,7 @@ import { useLingui } from "@lingui/react/macro";
 import { Virtualizer } from "@tanstack/react-virtual";
 import { remove } from "@tauri-apps/plugin-fs";
 import { App, Dropdown } from "antd";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { match } from "ts-pattern";
 import { useEditorTabsStore } from "@/store/useEditorTabsStore";
 import { CommandError } from "../../command";
@@ -24,6 +24,7 @@ import {
   moveFileOrFolder,
   readChildren,
   rename,
+  watchDir,
 } from "../../command/fileManager";
 import { useAppStore } from "../../store/useAppStore";
 import { AnimateInner } from "./AnimateInner";
@@ -52,6 +53,13 @@ export const FileTree = (props: FileTreeProps) => {
   const { t } = useLingui();
 
   const createModalRef = useRef<CreateModalRef>(null);
+
+  useEffect(() => {
+    watchDir(projectDir).catch((e) => {
+      console.error("watchDir error", e);
+      message.error(t`监视文件夹失败: ${e}`);
+    });
+  }, []);
 
   const tree = useTree<FileTreeItem>({
     isItemFolder: (item) => item.getItemData().isDir,

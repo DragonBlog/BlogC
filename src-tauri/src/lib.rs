@@ -1,3 +1,4 @@
+use notify::{FsEventWatcher, RecommendedWatcher};
 use serde_json::Value;
 use std::{env, sync::Arc};
 use tauri::{async_runtime::Mutex, Manager};
@@ -8,13 +9,13 @@ mod back_links;
 mod blog_manager;
 mod commands;
 mod config;
+mod db;
 mod error;
 mod file_manager;
 mod git;
+mod md_parser;
 mod oauth;
 mod utils;
-mod db;
-mod md_parser;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -40,6 +41,7 @@ pub fn run() {
             let oauth = oauth::Oauth::new(&client_id, &client_secret, "http://localhost:8080")?;
             app.manage(Arc::new(oauth));
             app.manage(Mutex::new(CancellationToken::new()));
+            app.manage(Mutex::new(None::<RecommendedWatcher>));
 
             let command = app.shell().sidecar("fnm")?;
 
@@ -78,6 +80,7 @@ pub fn run() {
             commands::copy_tree_item,
             commands::move_file_or_folder,
             commands::rename,
+            commands::watch_dir,
             // blog manager
             commands::read_schemas,
             commands::read_blog_build_config,

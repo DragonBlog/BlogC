@@ -10,9 +10,12 @@ use time::OffsetDateTime;
 use tracing::{info, trace, warn};
 use urlencoding::decode;
 
+
 /// 允许处理的文件扩展名列表
 /// 包括常见的图片格式、Markdown文档格式
-static ALLOW_EXTENSIONS: &[&str] = &["jpg", "png", "jpeg", "gif", "svg", "webp", "md", "mdx"];
+pub static ALLOW_EXTENSIONS: &[&str] = &["jpg", "png", "jpeg", "gif", "svg", "webp", "md", "mdx"];
+
+pub static IMAGE_EXTENSIONS: &[&str] = &["jpg", "png", "jpeg", "gif", "svg", "webp"];
 
 /// 检查目录条目是否应该被处理
 ///

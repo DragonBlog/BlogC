@@ -63,3 +63,7 @@ export async function copyTreeItem(
 export async function rename(path: string, newName: string) {
   return await invoke<string>("rename", { path, newName });
 }
+
+export async function watchDir(path: string) {
+  return await invoke<void>("watch_dir", { path });
+}

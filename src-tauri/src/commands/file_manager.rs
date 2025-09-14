@@ -1,10 +1,13 @@
 use std::path::PathBuf;
 
+use crate::utils::async_watcher;
 use crate::{error::Result, file_manager::FileTreeItem};
 use anyhow::anyhow;
 use fs_extra::dir::{CopyOptions, TransitProcessResult};
+use notify::{RecommendedWatcher, Watcher};
 use serde::{Deserialize, Serialize};
-use tauri::ipc::Channel;
+use tauri::async_runtime::Mutex;
+use tauri::{ipc::Channel, State};
 use tracing::info;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -155,4 +158,20 @@ pub async fn rename(path: String, new_name: String) -> Result<String> {
     tokio::fs::rename(path, &new_path).await?;
 
     Ok(new_path.to_string_lossy().to_string())
+}
+
+#[tauri::command]
+pub async fn watch_dir(
+    state: State<'_, Mutex<Option<RecommendedWatcher>>>,
+    path: String,
+) -> Result<()> {
+    let mut watcher = state.lock().await;
+    let (mut new_watcher, mut rx) = async_watcher().await?;
+    new_watcher.watch(path.as_ref(), notify::RecursiveMode::Recursive)?;
+    watcher.replace(new_watcher);
+
+    while let Some(res) = rx.recv().await {
+        println!("watcher event: {res:#?}");
+    }
+    Ok(())
 }
