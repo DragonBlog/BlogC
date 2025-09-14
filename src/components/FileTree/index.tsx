@@ -13,7 +13,7 @@ import {
 import { useTree } from "@headless-tree/react";
 import { useLingui } from "@lingui/react/macro";
 import { Virtualizer } from "@tanstack/react-virtual";
-import { remove } from "@tauri-apps/plugin-fs";
+import { create, mkdir, remove } from "@tauri-apps/plugin-fs";
 import { App, Dropdown } from "antd";
 import { useRef, useState } from "react";
 import { match } from "ts-pattern";
@@ -155,14 +155,14 @@ export const FileTree = (props: FileTreeProps) => {
     .with({ isDir: true }, ({ path, name }) => [
       {
         key: "rename",
-        label: "重命名",
+        label: t`重命名`,
         onClick: async () => {
           tree.getItemInstance(path)?.startRenaming();
         },
       },
       {
         key: "newFile",
-        label: "新建文件",
+        label: t`新建文件`,
         onClick: async () => {
           createModalRef.current?.open({
             type: "createFile",
@@ -173,18 +173,18 @@ export const FileTree = (props: FileTreeProps) => {
       },
       {
         key: "newFolder",
-        label: "新建文件夹",
+        label: t`新建文件夹`,
         onClick: async () => {
           createModalRef.current?.open({
             type: "createFolder",
-            folderPath: path,
+            folderPath: path.replace(/\\/g, "/"),
             name: t`未命名`,
           });
         },
       },
       {
         key: "copy",
-        label: "复制",
+        label: t`复制`,
         onClick: async () => {
           const parent = tree.getItemInstance(path)?.getParent();
           createModalRef.current?.open({
@@ -197,14 +197,14 @@ export const FileTree = (props: FileTreeProps) => {
       },
       {
         key: "refresh",
-        label: "刷新",
+        label: t`刷新`,
         onClick: () => {
           tree.getItemInstance(path)?.invalidateChildrenIds();
         },
       },
       {
         key: "delete",
-        label: "删除",
+        label: t`删除`,
         danger: true,
         onClick: async () => {
           modal.confirm({
@@ -283,10 +283,43 @@ export const FileTree = (props: FileTreeProps) => {
       },
     ])
     .otherwise(() => []);
-
+  const onCreateFile = async () => {
+    try {
+      const currentItem = tree.getItemInstance(selectedItem);
+      createModalRef?.current?.open({
+        type: "createFile",
+        folderPath: currentItem?.getId(),
+        name: t`未命名.md`,
+      });
+    } catch (e) {
+      message.error(t`创建失败: ${e}`);
+    }
+  };
+  const onCreateFolder = async () => {
+    try {
+      const currentItem = tree.getItemInstance(selectedItem);
+      if (!currentItem.isFolder()) {
+        message.error(t`选中的是文件，不能创建文件夹`);
+        return;
+      }
+      createModalRef?.current?.open({
+        type: "createFolder",
+        folderPath: currentItem?.getId(),
+        name: t`未命名`,
+      });
+    } catch (e) {
+      message.error(t`创建失败: ${e}`);
+    }
+  };
   return (
     <div className="flex flex-col h-full w-full">
-      {!disableToolbar && <TreeToolbar tree={tree} />}
+      {!disableToolbar && (
+        <TreeToolbar
+          tree={tree}
+          onCreateFolder={onCreateFolder}
+          onCreateFile={onCreateFile}
+        />
+      )}
       <Dropdown
         menu={{
           items,
@@ -315,7 +348,17 @@ export const FileTree = (props: FileTreeProps) => {
           )}
         </div>
       </Dropdown>
-      <CreateModal ref={createModalRef} />
+      <CreateModal
+        ref={createModalRef}
+        onSuccess={(parentPath) => {
+          console.log(parentPath);
+          tree
+            .getItemInstance(parentPath)
+            ?.getParent()
+            ?.invalidateChildrenIds();
+          console.log("刷新了");
+        }}
+      />
     </div>
   );
 };
