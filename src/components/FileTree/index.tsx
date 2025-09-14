@@ -13,7 +13,7 @@ import {
 import { useTree } from "@headless-tree/react";
 import { useLingui } from "@lingui/react/macro";
 import { Virtualizer } from "@tanstack/react-virtual";
-import { create, mkdir, remove } from "@tauri-apps/plugin-fs";
+import { remove } from "@tauri-apps/plugin-fs";
 import { App, Dropdown } from "antd";
 import { useRef, useState } from "react";
 import { match } from "ts-pattern";
@@ -299,14 +299,19 @@ export const FileTree = (props: FileTreeProps) => {
     try {
       const currentItem = tree.getItemInstance(selectedItem);
       if (!currentItem.isFolder()) {
-        message.error(t`选中的是文件，不能创建文件夹`);
-        return;
+        const parent = currentItem.getParent();
+        createModalRef?.current?.open({
+          type: "createFolder",
+          folderPath: parent?.getId() || projectDir,
+          name: t`未命名`,
+        });
+      } else {
+        createModalRef?.current?.open({
+          type: "createFolder",
+          folderPath: currentItem?.getId(),
+          name: t`未命名`,
+        });
       }
-      createModalRef?.current?.open({
-        type: "createFolder",
-        folderPath: currentItem?.getId(),
-        name: t`未命名`,
-      });
     } catch (e) {
       message.error(t`创建失败: ${e}`);
     }
@@ -351,12 +356,7 @@ export const FileTree = (props: FileTreeProps) => {
       <CreateModal
         ref={createModalRef}
         onSuccess={(parentPath) => {
-          console.log(parentPath);
-          tree
-            .getItemInstance(parentPath)
-            ?.getParent()
-            ?.invalidateChildrenIds();
-          console.log("刷新了");
+          tree.getItemInstance(parentPath)?.invalidateChildrenIds();
         }}
       />
     </div>
