@@ -6,17 +6,7 @@ import { TauriStoreState } from "./tauriStoreState";
 
 const store = new TauriStoreState("editor-tabs-store.json");
 
-// 创建一个初始化函数来处理异步初始化
-let isStoreInitialized = false;
-async function initializeStore() {
-  if (!isStoreInitialized) {
-    await store.init();
-    isStoreInitialized = true;
-  }
-}
-
-// 立即调用初始化函数
-initializeStore();
+await store.init();
 
 export type EditorTab = {
   id: string;
