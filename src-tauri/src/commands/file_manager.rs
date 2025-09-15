@@ -1,11 +1,8 @@
-use std::path::PathBuf;
-
 use crate::{error::Result, file_manager::FileTreeItem};
 use anyhow::anyhow;
-use fs_extra::dir::{CopyOptions, TransitProcessResult};
+use camino::Utf8PathBuf;
+use fs_extra::dir::CopyOptions;
 use serde::{Deserialize, Serialize};
-use tauri::ipc::Channel;
-use tracing::info;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -94,7 +91,7 @@ impl From<fs_extra::TransitProcess> for CopyTransitProcess {
 /// # 返回值
 /// 返回Result<FileTreeItem>，包含该目录下的文件和子目录信息
 #[tauri::command]
-pub async fn read_children(path: String) -> Result<FileTreeItem> {
+pub async fn read_children(path: Utf8PathBuf) -> Result<FileTreeItem> {
     let mut item = FileTreeItem::new(path)?;
     item.read_children()?;
     Ok(item)
@@ -102,31 +99,11 @@ pub async fn read_children(path: String) -> Result<FileTreeItem> {
 
 #[tauri::command]
 pub async fn copy_tree_item(
-    path: String,
-    new_parent: String,
+    path: Utf8PathBuf,
+    new_parent: Utf8PathBuf,
+    new_name: Option<Utf8PathBuf>,
     options: ExistFileProcess,
-    on_progress: Channel<CopyTransitProcess>,
 ) -> Result<FileTreeItem> {
-    let mut item = FileTreeItem::new(path)?;
-    info!("Move item: {:?} to {:?}", item.path, new_parent);
-    info!("Copy options: {:?}", options);
-    info!("Item exists: {}", item.path.exists());
-
-    item.copy_to(&new_parent, options.into(), move |process| {
-        // 发送进度信息到前端
-        on_progress.send(process.into()).ok();
-
-        TransitProcessResult::SkipAll
-    })
-}
-
-#[tauri::command]
-pub async fn move_file_or_folder(
-    path: String,
-    new_parent: String,
-    new_name: Option<String>,
-) -> Result<String> {
-    let path = PathBuf::from(path);
     let new_name = new_name.unwrap_or(
         path.iter()
             .last()
@@ -134,19 +111,38 @@ pub async fn move_file_or_folder(
                 "Unable to get file or folder name from path: {:?}",
                 path
             ))?
-            .to_string_lossy()
-            .to_string(),
+            .into(),
     );
-    let new_path = PathBuf::from(new_parent).join(new_name);
+    let new_path = new_parent.join(new_name);
 
-    tokio::fs::rename(path, &new_path).await?;
-
-    Ok(new_path.to_string_lossy().to_string())
+    let mut item = FileTreeItem::new(path)?;
+    item.copy_to(&new_path, options.into())
 }
 
 #[tauri::command]
-pub async fn rename(path: String, new_name: String) -> Result<String> {
-    let path = PathBuf::from(path);
+pub async fn move_file_or_folder(
+    path: Utf8PathBuf,
+    new_parent: Utf8PathBuf,
+    new_name: Option<Utf8PathBuf>,
+) -> Result<Utf8PathBuf> {
+    let new_name = new_name.unwrap_or(
+        path.iter()
+            .last()
+            .ok_or(anyhow!(
+                "Unable to get file or folder name from path: {:?}",
+                path
+            ))?
+            .into(),
+    );
+    let new_path = new_parent.join(new_name);
+
+    tokio::fs::rename(path, &new_path).await?;
+
+    Ok(new_path)
+}
+
+#[tauri::command]
+pub async fn rename(path: Utf8PathBuf, new_name: Utf8PathBuf) -> Result<Utf8PathBuf> {
     let new_path = path
         .parent()
         .ok_or(anyhow!("Unable to get parent directory of {:?}", path))?
@@ -154,5 +150,5 @@ pub async fn rename(path: String, new_name: String) -> Result<String> {
 
     tokio::fs::rename(path, &new_path).await?;
 
-    Ok(new_path.to_string_lossy().to_string())
+    Ok(new_path)
 }
