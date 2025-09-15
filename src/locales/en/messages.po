@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/components/FileTree/CreateModal.tsx:155
+msgid "{value} 已存在"
+msgstr ""
+
 #: src/components/ui/insert-toolbar-button.tsx:171
 #: src/components/ui/turn-into-toolbar-button.tsx:118
 msgid "3列"
@@ -84,6 +88,10 @@ msgstr "Close tab"
 msgid "内联"
 msgstr "Inline"
 
+#: src/components/FileTree/CreateModal.tsx:175
+msgid "冲突处理"
+msgstr ""
+
 #: src/components/ui/block-context-menu.tsx:179
 #: src/components/ui/indent-toolbar-button.tsx:35
 #~ msgid "减少缩进"
@@ -110,6 +118,15 @@ msgstr "Column"
 msgid "列表"
 msgstr "List"
 
+#: src/components/FileTree/index.tsx:318
+msgid "创建失败: {e}"
+msgstr ""
+
+#: src/components/FileTree/CreateModal.tsx:88
+#: src/components/FileTree/CreateModal.tsx:94
+msgid "创建成功"
+msgstr ""
+
 #: src/components/FileEditor/ItemTab.tsx:42
 msgid "创建新文件"
 msgstr "Create new file"
@@ -119,9 +136,9 @@ msgstr "Create new file"
 msgid "初始化博客失败 {0}"
 msgstr ""
 
-#: src/components/ui/block-context-menu.tsx:125
-#~ msgid "删除"
-#~ msgstr "Delete"
+#: src/components/FileTree/index.tsx:247
+msgid "删除"
+msgstr "Delete"
 
 #: src/components/ui/block-suggestion.tsx:162
 #: src/components/ui/block-suggestion.tsx:218
@@ -133,23 +150,22 @@ msgid "删除列"
 msgstr "Delete column"
 
 #: src/components/FileTree/index.tsx:223
-msgid "删除失败"
-msgstr "Delete failed"
+#~ msgid "删除失败"
+#~ msgstr "Delete failed"
 
-#: src/components/FileTree/index.tsx:278
+#: src/components/FileTree/index.tsx:265
 msgid "删除失败: {e}"
 msgstr "Delete failed: {e}"
 
-#: src/components/FileTree/index.tsx:221
-#: src/components/FileTree/index.tsx:276
+#: src/components/FileTree/index.tsx:263
 msgid "删除成功"
 msgstr "Delete successful"
 
-#: src/components/FileTree/index.tsx:266
+#: src/components/FileTree/index.tsx:251
 msgid "删除文件"
 msgstr "Delete file"
 
-#: src/components/FileTree/index.tsx:211
+#: src/components/FileTree/index.tsx:251
 msgid "删除文件夹"
 msgstr "Delete folder"
 
@@ -190,11 +206,11 @@ msgstr "Cancel"
 msgid "合并单元格"
 msgstr "Merge cells"
 
-#: src/components/FileTree/CreateModal.tsx:81
+#: src/components/FileTree/CreateModal.tsx:143
 msgid "名称"
 msgstr "Name"
 
-#: src/components/FileTree/index.tsx:137
+#: src/components/FileTree/index.tsx:147
 msgid "名称不能为空"
 msgstr "Name cannot be empty"
 
@@ -223,6 +239,22 @@ msgstr "Insert column right"
 msgid "在左侧插入列"
 msgstr "Insert column left"
 
+#: src/components/FileTree/index.tsx:237
+msgid "在文件夹中打开"
+msgstr ""
+
+#: src/components/FileTree/index.tsx:240
+msgid "在文件夹中显示"
+msgstr ""
+
+#: src/components/FileTree/index.tsx:239
+msgid "在文件管理器中打开"
+msgstr ""
+
+#: src/components/FileTree/index.tsx:238
+msgid "在访达中显示"
+msgstr ""
+
 #: src/components/ui/insert-toolbar-button.tsx:62
 msgid "基本"
 msgstr "Basic"
@@ -232,9 +264,18 @@ msgstr "Basic"
 #~ msgid "增加缩进"
 #~ msgstr "Increase indent"
 
-#: src/components/FileTree/CreateModal.tsx:53
+#: src/components/FileTree/CreateModal.tsx:59
+#: src/components/FileTree/index.tsx:201
 msgid "复制"
 msgstr "Copy"
+
+#: src/components/FileTree/CreateModal.tsx:125
+msgid "复制失败"
+msgstr ""
+
+#: src/components/FileTree/CreateModal.tsx:122
+msgid "复制成功"
+msgstr ""
 
 #: src/components/ui/list-toolbar-button.tsx:186
 msgid "大写罗马数字 (I, II, III)"
@@ -288,7 +329,7 @@ msgstr "Lowercase letters (a, b, c)"
 #~ msgid "居中"
 #~ msgstr "Center"
 
-#: src/components/FileTree/Toolbar.tsx:80
+#: src/components/FileTree/Toolbar.tsx:81
 msgid "展开全部"
 msgstr "Expand all"
 
@@ -296,7 +337,7 @@ msgstr "Expand all"
 #~ msgid "左对齐"
 #~ msgstr "Left align"
 
-#: src/components/FileTree/index.tsx:114
+#: src/components/FileTree/index.tsx:124
 msgid "已经在当前目录下，无需移动"
 msgstr "Already in the current directory, no need to move"
 
@@ -318,6 +359,10 @@ msgstr "Quote"
 #~ msgid "引用块"
 #~ msgstr "Quote Block"
 
+#: src/components/FileTree/index.tsx:181
+msgid "当前系统不支持此功能"
+msgstr ""
+
 #: src/components/ui/list-toolbar-button.tsx:205
 msgid "待办事项"
 msgstr "To-do"
@@ -331,7 +376,7 @@ msgstr "To-do List"
 msgid "或者从左侧文件树中选择一个文件进行编辑"
 msgstr "Or select a file from the left file tree to edit"
 
-#: src/components/FileTree/Toolbar.tsx:80
+#: src/components/FileTree/Toolbar.tsx:81
 msgid "折叠全部"
 msgstr "Collapse all"
 
@@ -387,7 +432,7 @@ msgstr "Numbers (1, 2, 3)"
 msgid "文件"
 msgstr "File"
 
-#: src/components/FileTree/CreateModal.tsx:86
+#: src/components/FileTree/CreateModal.tsx:166
 msgid "文件夹路径"
 msgstr "Folder path"
 
@@ -404,12 +449,14 @@ msgstr "Text"
 #~ msgid "斜体 (⌘+I)"
 #~ msgstr "Italic (⌘+I)"
 
-#: src/components/FileTree/CreateModal.tsx:50
+#: src/components/FileTree/CreateModal.tsx:56
+#: src/components/FileTree/index.tsx:276
 #: src/components/FileTree/Toolbar.tsx:37
 msgid "新建文件"
 msgstr "New file"
 
-#: src/components/FileTree/CreateModal.tsx:51
+#: src/components/FileTree/CreateModal.tsx:57
+#: src/components/FileTree/index.tsx:287
 #: src/components/FileTree/Toolbar.tsx:50
 msgid "新建文件夹"
 msgstr "New folder"
@@ -439,17 +486,23 @@ msgstr "Date"
 #~ msgid "有序列表"
 #~ msgstr "Ordered List"
 
-#: src/components/FileTree/index.tsx:181
+#: src/components/FileTree/index.tsx:292
+#: src/components/FileTree/index.tsx:315
 msgid "未命名"
 msgstr "Untitled"
 
-#: src/components/FileTree/index.tsx:170
+#: src/components/FileTree/index.tsx:281
+#: src/components/FileTree/index.tsx:315
 msgid "未命名.md"
 msgstr "Untitled.md"
 
 #: src/components/ui/code-block-node.tsx:125
 #~ msgid "未找到该语言。"
 #~ msgstr "Language not found."
+
+#: src/components/FileTree/CreateModal.tsx:99
+msgid "未更改位置"
+msgstr ""
 
 #: src/components/ui/media-toolbar-button.tsx:133
 msgid "本地上传"
@@ -519,6 +572,10 @@ msgstr "Dark Mode"
 #~ msgid "添加:"
 #~ msgstr "Add:"
 
+#: src/components/FileTree/index.tsx:62
+msgid "监视文件夹失败: {e}"
+msgstr ""
+
 #: src/components/ui/insert-toolbar-button.tsx:166
 msgid "目录"
 msgstr "Table of Contents"
@@ -527,11 +584,11 @@ msgstr "Table of Contents"
 msgid "确定"
 msgstr "OK"
 
-#: src/components/FileTree/index.tsx:267
+#: src/components/FileTree/index.tsx:254
 msgid "确定要删除文件 {name} 吗？此操作不可撤销。"
 msgstr "Are you sure you want to delete the file {name}? This action cannot be undone."
 
-#: src/components/FileTree/index.tsx:212
+#: src/components/FileTree/index.tsx:253
 msgid "确定要删除文件夹 {name} 吗？子文件夹和文件也会被删除，此操作不可撤销。"
 msgstr "Are you sure you want to delete the folder {name}? Subfolders and files will also be deleted. This action cannot be undone."
 
@@ -540,16 +597,18 @@ msgstr "Are you sure you want to delete the folder {name}? Subfolders and files 
 msgid "视频"
 msgstr "Video"
 
-#: src/components/FileTree/CreateModal.tsx:52
+#: src/components/FileTree/CreateModal.tsx:58
+#: src/components/FileTree/index.tsx:223
 msgid "移动"
 msgstr "Move"
 
 #. placeholder {0}: error.message
-#: src/components/FileTree/index.tsx:132
+#: src/components/FileTree/index.tsx:142
 msgid "移动失败: {0}"
 msgstr "Move failed: {0}"
 
-#: src/components/FileTree/index.tsx:129
+#: src/components/FileTree/CreateModal.tsx:105
+#: src/components/FileTree/index.tsx:139
 msgid "移动成功"
 msgstr "Move successful"
 
@@ -601,6 +660,10 @@ msgstr "Emoji"
 msgid "表格"
 msgstr "Table"
 
+#: src/components/FileTree/CreateModal.tsx:180
+msgid "覆盖"
+msgstr ""
+
 #: src/components/ui/comment-toolbar-button.tsx:21
 msgid "评论"
 msgstr "Comment"
@@ -614,12 +677,16 @@ msgstr "Comment"
 #~ msgid "语言"
 #~ msgstr "Language"
 
-#: src/components/FileTree/CreateModal.tsx:82
+#: src/components/FileTree/CreateModal.tsx:145
 msgid "请输入名称"
 msgstr "Please enter a name"
 
+#: src/components/FileTree/CreateModal.tsx:151
+msgid "请输入正确的名称"
+msgstr ""
+
 #. placeholder {0}: (error as Error).message
-#: src/components/FileTree/index.tsx:94
+#: src/components/FileTree/index.tsx:104
 #: src/components/FolderSelector/index.tsx:71
 msgid "读取文件夹失败: {0}"
 msgstr "Failed to read folder: {0}"
@@ -627,6 +694,10 @@ msgstr "Failed to read folder: {0}"
 #: src/components/Layout.tsx:121
 msgid "跟随系统"
 msgstr "Follow System"
+
+#: src/components/FileTree/CreateModal.tsx:179
+msgid "跳过"
+msgstr ""
 
 #: src/components/ui/turn-into-toolbar-button.tsx:144
 #: src/components/ui/turn-into-toolbar-button.tsx:164
@@ -641,16 +712,17 @@ msgstr "Insert by URL"
 #~ msgid "重做"
 #~ msgstr "Redo"
 
+#: src/components/FileTree/index.tsx:194
 #: src/components/FileTree/Toolbar.tsx:63
 msgid "重命名"
 msgstr "Rename"
 
 #. placeholder {0}: (error as Error).message
-#: src/components/FileTree/index.tsx:149
+#: src/components/FileTree/index.tsx:159
 msgid "重命名失败: {0}"
 msgstr "Rename failed: {0}"
 
-#: src/components/FileTree/index.tsx:147
+#: src/components/FileTree/index.tsx:157
 msgid "重命名成功"
 msgstr "Rename successful"
 
