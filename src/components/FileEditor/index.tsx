@@ -2,6 +2,8 @@ import { useLingui } from "@lingui/react/macro";
 import { useMemoizedFn } from "ahooks";
 import { Tabs } from "antd";
 import { useMemo } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { v4 } from "uuid";
 import { FileTreeItem } from "@/command/fileManager";
 import { EditorTab, useEditorTabsStore } from "@/store/useEditorTabsStore";
@@ -17,14 +19,14 @@ import styles from "./index.module.less";
  * - 标签页状态管理
  */
 export const FileEditor = () => {
-  const [tabs, activeTabId, setActiveTabId, setTabs] = useEditorTabsStore(
-    (store) => [
+  const [tabs, activeTabId, setActiveTabId, setTabs, setSelectedItem] =
+    useEditorTabsStore((store) => [
       store.tabs,
       store.activeTabId,
       store.setActiveTabId,
       store.setTabs,
-    ],
-  );
+      store.setSelectedItem,
+    ]);
 
   const { t } = useLingui();
 
@@ -108,19 +110,27 @@ export const FileEditor = () => {
   }, [t, tabs, setActiveTabId]);
 
   return (
-    <Tabs
-      type="editable-card"
-      items={items}
-      activeKey={activeTabId}
-      onChange={setActiveTabId}
-      onEdit={(e, type) => {
-        if (type === "remove") {
-          remove(e as string);
-        } else {
-          add();
-        }
-      }}
-      className={styles.tabs}
-    />
+    <DndProvider backend={HTML5Backend}>
+      <Tabs
+        type="editable-card"
+        items={items}
+        activeKey={activeTabId}
+        onChange={(key) => {
+          const current = tabs.find((tab) => tab.id === key);
+          if (current?.fileItem) {
+            setSelectedItem(current.fileItem.path);
+          }
+          setActiveTabId(key);
+        }}
+        onEdit={(e, type) => {
+          if (type === "remove") {
+            remove(e as string);
+          } else {
+            add();
+          }
+        }}
+        className={styles.tabs}
+      />
+    </DndProvider>
   );
 };

@@ -1,6 +1,13 @@
-import { Trans } from "@lingui/react/macro";
-import { Typography } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Trans, useLingui } from "@lingui/react/macro";
+import { MarkdownPlugin } from "@platejs/markdown";
+import { readTextFile } from "@tauri-apps/plugin-fs";
+import { useAsyncEffect } from "ahooks";
+import { App, Spin, Typography } from "antd";
+import { usePlateEditor } from "platejs/react";
+import { useState } from "react";
 import { EditorTab } from "@/store/useEditorTabsStore";
+import { EditorKit } from "../editor/editor-kit";
 import { PlateEditor } from "../editor/plate-editor";
 
 /**
@@ -26,9 +33,49 @@ type ItemFileTabProps = {
 export const ItemFileTab = (props: ItemFileTabProps) => {
   const { data, onChange, onClose } = props;
   const { fileItem } = data;
+  const { message } = App.useApp();
+  const { t } = useLingui();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const editor = usePlateEditor({
+    plugins: EditorKit,
+  });
+
+  useAsyncEffect(async () => {
+    if (fileItem) {
+      setIsLoading(true);
+      try {
+        const res = await readTextFile(fileItem.path);
+        editor.tf.reset();
+        editor.tf.setValue(
+          editor.getApi(MarkdownPlugin).markdown.deserialize(res),
+        );
+      } catch (error) {
+        message.error(t`读取文件失败 ${error}`);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }, [fileItem]);
 
   if (fileItem) {
-    return <PlateEditor />;
+    return (
+      <div className="w-full h-full flex items-center justify-center flex-col relative">
+        {isLoading ? (
+          <Spin
+            indicator={<LoadingOutlined spin />}
+            spinning={isLoading}
+            tip={t`正在加载文件...`}
+            delay={300}
+          >
+            <div className="w-30"></div>
+          </Spin>
+        ) : (
+          <PlateEditor editor={editor} />
+        )}
+      </div>
+    );
   }
 
   return (
