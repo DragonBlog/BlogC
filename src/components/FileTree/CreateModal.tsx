@@ -20,19 +20,16 @@ type CreateModalProps = {
   onSuccess?: (parentPath: string) => void;
 };
 
-//  业务组件，完成创建、移动功能，复制有点复杂，先不做
-// toolbar中的创建，和移动的folderPath是根据当前选中的节点来的，如果是文件就选它父级，如果是目录就选那个目录
-// selectedItem可以从useEditorTabsStore里拿到 可以参考toolbar中的重命名文件
-//  移动功能后端使用 moveFileOrFolder
 export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
   ({ onSuccess }, ref) => {
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const { message } = App.useApp();
     const { t } = useLingui();
-    const [projectDir] =
-      useAppStore((store) => [store.projectDir]) || "E:/test/22222";
+    const [projectDir] = useAppStore((store) => [store.projectDir]);
     const [options, setOptions] = useState<Options>();
+
+    const folderPath = Form.useWatch("folderPath", form);
 
     const title = useMemo(() => {
       return match(options)
@@ -58,8 +55,10 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
       <Modal
         open={open}
         title={title}
+        centered
+        width={328}
         onOk={async () => {
-          const { folderPath, name } = form.getFieldsValue();
+          const { folderPath, name } = await form.validateFields();
 
           try {
             if (options?.type === "createFolder") {
@@ -91,18 +90,22 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
             rules={[
               { required: true, message: t`请输入名称` },
               {
-                validator: async (rule, value) => {
-                  if (!value || !options?.folderPath) return Promise.resolve();
-                  const targetPath = `${options.folderPath}/${value}`;
-                  const isExists = await exists(targetPath);
-                  if (isExists) {
-                    return Promise.reject(new Error(t`${value} 已存在`));
+                validator: async (_rule, value) => {
+                  if (value) {
+                    const targetPath = `${folderPath}/${value}`;
+                    const isExists = await exists(targetPath).catch(() => {
+                      throw new Error(t`请输入正确的名称`);
+                    });
+
+                    if (isExists) {
+                      return Promise.reject(new Error(t`${value} 已存在`));
+                    }
                   }
+
                   return Promise.resolve();
                 },
               },
             ]}
-            validateTrigger="onBlur"
           >
             <Input />
           </Form.Item>
