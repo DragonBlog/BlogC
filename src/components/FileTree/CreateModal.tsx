@@ -1,8 +1,15 @@
 import { useLingui } from "@lingui/react/macro";
 import { create, exists, mkdir } from "@tauri-apps/plugin-fs";
 import { App, Form, Input, Modal } from "antd";
-import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 import { match } from "ts-pattern";
+import { moveFileOrFolder } from "@/command/fileManager";
 import { useAppStore } from "@/store/useAppStore";
 import { FolderSelector } from "../FolderSelector";
 
@@ -17,11 +24,11 @@ export type CreateModalRef = {
 };
 
 type CreateModalProps = {
-  onSuccess?: (parentPath: string) => void;
+  onRefresh?: (parentPath: string) => void;
 };
 
 export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
-  ({ onSuccess }, ref) => {
+  ({ onRefresh }, ref) => {
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const { message } = App.useApp();
@@ -30,6 +37,12 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
     const [options, setOptions] = useState<Options>();
 
     const folderPath = Form.useWatch("folderPath", form);
+
+    useEffect(() => {
+      if (folderPath) {
+        form.validateFields(["name"]);
+      }
+    }, [folderPath]);
 
     const title = useMemo(() => {
       return match(options)
@@ -61,17 +74,30 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
           const { folderPath, name } = await form.validateFields();
 
           try {
-            if (options?.type === "createFolder") {
-              await mkdir(`${folderPath}/${name}`);
-              onSuccess?.(folderPath);
-              message.success(t`创建成功`);
-            }
-            if (options?.type === "createFile") {
-              const file = await create(`${folderPath}/${name}`);
-              await file.close();
-              onSuccess?.(folderPath);
-              message.success(t`创建成功`);
-            }
+            await match(options)
+              .with({ type: "createFolder" }, async () => {
+                await mkdir(`${folderPath}/${name}`);
+                onRefresh?.(folderPath);
+                message.success(t`创建成功`);
+              })
+              .with({ type: "createFile" }, async () => {
+                const file = await create(`${folderPath}/${name}`);
+                await file.close();
+                onRefresh?.(folderPath);
+                message.success(t`创建成功`);
+              })
+              .with({ type: "move" }, async (opts) => {
+                const to = `${folderPath}/${name}`;
+                if (opts.path === to) {
+                  message.info(t`未更改位置`);
+                  return;
+                }
+                await moveFileOrFolder(opts.path, folderPath, name);
+                onRefresh?.(opts.folderPath);
+                onRefresh?.(folderPath);
+                message.success(t`移动成功`);
+              })
+              .otherwise(async () => {});
             setOpen(false);
             form.resetFields();
           } catch (error) {

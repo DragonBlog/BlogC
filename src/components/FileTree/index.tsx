@@ -14,8 +14,10 @@ import { useTree } from "@headless-tree/react";
 import { useLingui } from "@lingui/react/macro";
 import { Virtualizer } from "@tanstack/react-virtual";
 import { remove } from "@tauri-apps/plugin-fs";
+import { openPath } from "@tauri-apps/plugin-opener";
+import { type } from "@tauri-apps/plugin-os";
 import { App, Dropdown } from "antd";
-import { useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { match } from "ts-pattern";
 import { useEditorTabsStore } from "@/store/useEditorTabsStore";
 import { CommandError } from "../../command";
@@ -151,187 +153,172 @@ export const FileTree = (props: FileTreeProps) => {
     },
   });
 
-  const items = match(current)
-    .with({ isDir: true }, ({ path, name }) => [
-      {
-        key: "rename",
-        label: t`重命名`,
-        onClick: async () => {
-          tree.getItemInstance(path)?.startRenaming();
-        },
-      },
-      {
-        key: "newFile",
-        label: t`新建文件`,
-        onClick: async () => {
-          createModalRef.current?.open({
-            type: "createFile",
-            folderPath: path,
-            name: t`未命名.md`,
-          });
-        },
-      },
-      {
-        key: "newFolder",
-        label: t`新建文件夹`,
-        onClick: async () => {
-          createModalRef.current?.open({
-            type: "createFolder",
-            folderPath: path.replace(/\\/g, "/"),
-            name: t`未命名`,
-          });
-        },
-      },
-      {
-        key: "copy",
-        label: t`复制`,
-        onClick: async () => {
-          const parent = tree.getItemInstance(path)?.getParent();
-          createModalRef.current?.open({
-            type: "copy",
-            folderPath: parent?.getId() || "",
-            name: `${name} Copy`,
-            path,
-          });
-        },
-      },
-      {
-        key: "refresh",
-        label: t`刷新`,
-        onClick: () => {
-          tree.getItemInstance(path)?.invalidateChildrenIds();
-        },
-      },
-      {
-        key: "delete",
-        label: t`删除`,
-        danger: true,
-        onClick: async () => {
-          modal.confirm({
-            title: t`删除文件夹`,
-            content: t`确定要删除文件夹 ${name} 吗？子文件夹和文件也会被删除，此操作不可撤销。`,
-            okType: "danger",
-            onOk: async () => {
-              try {
-                await remove(path, { recursive: true });
-                tree
-                  .getItemInstance(path)
-                  ?.getParent()
-                  ?.invalidateChildrenIds();
-                message.success(t`删除成功`);
-              } catch (e) {
-                message.error(t`删除失败`);
-              }
-            },
-          });
-        },
-      },
-    ])
-    .with({ isDir: false }, ({ path, name }) => [
-      {
-        key: "rename",
-        label: "重命名",
-        onClick: async () => {
-          tree.getItemInstance(path)?.startRenaming();
-        },
-      },
-      {
-        key: "copy",
-        label: "复制",
-        onClick: async () => {
-          const parent = tree.getItemInstance(path)?.getParent();
-          const names = name.split(".");
+  // 提取 openInFolder 逻辑
+  const handleOpenInFolder = useCallback(
+    async (path: string) => {
+      const parent = tree.getItemInstance(path)?.getParent();
+      const parentPath = parent?.getId() || projectDir;
+      const osType = type();
+      await match(osType)
+        .with("macos", async () => {
+          await openPath(parentPath, "finder");
+        })
+        .with("windows", async () => {
+          await openPath(parentPath, "explorer");
+        })
+        .with("linux", async () => {
+          await openPath(parentPath, "xdg-open");
+        })
+        .otherwise(() => {
+          message.error(t`当前系统不支持此功能`);
+        });
+    },
+    [tree, projectDir, message, t],
+  );
 
-          createModalRef.current?.open({
-            type: "copy",
-            folderPath: parent?.getId() || "",
-            name: `${names.slice(0, -1).join(".")} Copy.${names.at(-1)}`,
-            path,
-          });
+  // 菜单项生成函数
+  const getMenuItems = useCallback(
+    (item?: FileTreeItem) => {
+      if (!item) return [];
+      const { path, name, isDir } = item;
+      const common = [
+        {
+          key: "rename",
+          label: t`重命名`,
+          onClick: async () => {
+            tree.getItemInstance(path)?.startRenaming();
+          },
         },
-      },
-      {
-        key: "move",
-        label: "移动",
-        onClick: async () => {
-          // tree.getItemInstance(path)?.startRenaming();
+        {
+          key: "copy",
+          label: t`复制`,
+          onClick: async () => {
+            const parent = tree.getItemInstance(path)?.getParent();
+            const copyName = isDir
+              ? `${name} Copy`
+              : (() => {
+                  const names = name.split(".");
+                  return `${names.slice(0, -1).join(".")} Copy.${names.at(-1)}`;
+                })();
+            createModalRef.current?.open({
+              type: "copy",
+              folderPath: parent?.getId() || "",
+              name: copyName,
+              path,
+            });
+          },
         },
-      },
-      {
-        key: "delete",
-        label: "删除",
-        danger: true,
-        onClick: async () => {
-          modal.confirm({
-            title: t`删除文件`,
-            content: t`确定要删除文件 ${name} 吗？此操作不可撤销。`,
-            okType: "danger",
-            onOk: async () => {
-              try {
-                await remove(path, { recursive: true });
-                tree
-                  .getItemInstance(path)
-                  ?.getParent()
-                  ?.invalidateChildrenIds();
-                message.success(t`删除成功`);
-              } catch (e) {
-                message.error(t`删除失败: ${e}`);
-              }
+        {
+          key: "move",
+          label: t`移动`,
+          onClick: async () => {
+            const parent = tree.getItemInstance(path)?.getParent();
+            createModalRef.current?.open({
+              type: "move",
+              folderPath: parent?.getId() || "",
+              name,
+              path,
+            });
+          },
+        },
+        {
+          key: "openInFolder",
+          label: match(type())
+            .with("windows", () => t`在文件夹中打开`)
+            .with("macos", () => t`在访达中显示`)
+            .with("linux", () => t`在文件管理器中打开`)
+            .otherwise(() => t`在文件夹中显示`),
+          onClick: async () => {
+            await handleOpenInFolder(path);
+          },
+        },
+        {
+          key: "delete",
+          label: t`删除`,
+          danger: true,
+          onClick: async () => {
+            modal.confirm({
+              title: isDir ? t`删除文件夹` : t`删除文件`,
+              content: isDir
+                ? t`确定要删除文件夹 ${name} 吗？子文件夹和文件也会被删除，此操作不可撤销。`
+                : t`确定要删除文件 ${name} 吗？此操作不可撤销。`,
+              okType: "danger",
+              onOk: async () => {
+                try {
+                  await remove(path, { recursive: true });
+                  tree
+                    .getItemInstance(path)
+                    ?.getParent()
+                    ?.invalidateChildrenIds();
+                  message.success(t`删除成功`);
+                } catch (e) {
+                  message.error(t`删除失败: ${e}`);
+                }
+              },
+            });
+          },
+        },
+      ];
+      if (isDir) {
+        return [
+          {
+            key: "newFile",
+            label: t`新建文件`,
+            onClick: async () => {
+              createModalRef.current?.open({
+                type: "createFile",
+                folderPath: path,
+                name: t`未命名.md`,
+              });
             },
-          });
-        },
-      },
-    ])
-    .otherwise(() => []);
-  const onCreateFile = async () => {
-    try {
-      const currentItem = tree.getItemInstance(selectedItem);
-      if (!currentItem.isFolder()) {
-        const parent = currentItem.getParent();
-        createModalRef?.current?.open({
-          type: "createFile",
-          folderPath: parent?.getId() || projectDir,
-          name: t`未命名.md`,
-        });
-      } else {
-        createModalRef?.current?.open({
-          type: "createFile",
-          folderPath: currentItem?.getId(),
-          name: t`未命名.md`,
-        });
+          },
+          {
+            key: "newFolder",
+            label: t`新建文件夹`,
+            onClick: async () => {
+              createModalRef.current?.open({
+                type: "createFolder",
+                folderPath: path.replace(/\\/g, "/"),
+                name: t`未命名`,
+              });
+            },
+          },
+          ...common,
+        ];
       }
-    } catch (e) {
-      message.error(t`创建失败: ${e}`);
-    }
-  };
-  const onCreateFolder = async () => {
-    try {
-      const currentItem = tree.getItemInstance(selectedItem);
-      if (!currentItem.isFolder()) {
-        const parent = currentItem.getParent();
-        createModalRef?.current?.open({
-          type: "createFolder",
+      return common;
+    },
+    [tree, t, modal, message, handleOpenInFolder],
+  );
+
+  const items = useMemo(() => getMenuItems(current), [current, getMenuItems]);
+
+  // 新建文件/文件夹逻辑合并
+  const handleCreate = useCallback(
+    async (type: "createFile" | "createFolder") => {
+      try {
+        const currentItem = tree.getItemInstance(selectedItem);
+        const isFolder = currentItem.isFolder();
+        const parent = isFolder ? currentItem : currentItem.getParent();
+        createModalRef.current?.open({
+          type,
           folderPath: parent?.getId() || projectDir,
-          name: t`未命名`,
+          name: type === "createFile" ? t`未命名.md` : t`未命名`,
         });
-      } else {
-        createModalRef?.current?.open({
-          type: "createFolder",
-          folderPath: currentItem?.getId(),
-          name: t`未命名`,
-        });
+      } catch (e) {
+        message.error(t`创建失败: ${e}`);
       }
-    } catch (e) {
-      message.error(t`创建失败: ${e}`);
-    }
-  };
+    },
+    [tree, selectedItem, projectDir, t, message],
+  );
+
   return (
     <div className="flex flex-col h-full w-full">
       {!disableToolbar && (
         <TreeToolbar
           tree={tree}
-          onCreateFolder={onCreateFolder}
-          onCreateFile={onCreateFile}
+          onCreateFolder={() => handleCreate("createFolder")}
+          onCreateFile={() => handleCreate("createFile")}
         />
       )}
       <Dropdown
@@ -364,7 +351,7 @@ export const FileTree = (props: FileTreeProps) => {
       </Dropdown>
       <CreateModal
         ref={createModalRef}
-        onSuccess={(parentPath) => {
+        onRefresh={(parentPath) => {
           tree.getItemInstance(parentPath)?.invalidateChildrenIds();
         }}
       />

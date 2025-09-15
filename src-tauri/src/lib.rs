@@ -27,6 +27,7 @@ pub fn run() {
         .unwrap_or("91cca246b43b848af21e97037a68015fc0726381".to_string());
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
