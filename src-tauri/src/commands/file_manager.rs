@@ -1,8 +1,11 @@
-use crate::{error::Result, file_manager::FileTreeItem};
+use crate::{error::Result, file_manager::FileTreeItem, utils::async_watcher};
 use anyhow::anyhow;
 use camino::Utf8PathBuf;
 use fs_extra::dir::CopyOptions;
+use notify::{RecommendedWatcher, Watcher};
 use serde::{Deserialize, Serialize};
+use tauri::State;
+use tokio::sync::Mutex;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -151,4 +154,20 @@ pub async fn rename(path: Utf8PathBuf, new_name: Utf8PathBuf) -> Result<Utf8Path
     tokio::fs::rename(path, &new_path).await?;
 
     Ok(new_path)
+}
+
+#[tauri::command]
+pub async fn watch_dir(
+    state: State<'_, Mutex<Option<RecommendedWatcher>>>,
+    path: String,
+) -> Result<()> {
+    let mut watcher = state.lock().await;
+    let (mut new_watcher, mut rx) = async_watcher().await?;
+    new_watcher.watch(path.as_ref(), notify::RecursiveMode::Recursive)?;
+    watcher.replace(new_watcher);
+
+    while let Some(res) = rx.recv().await {
+        println!("watcher event: {res:#?}");
+    }
+    Ok(())
 }

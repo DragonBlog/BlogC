@@ -58,9 +58,15 @@ msgstr "代码"
 #~ msgid "代码块"
 #~ msgstr "代码块"
 
-#: src/pages/Init/index.tsx:210
+#: src/pages/Init/index.tsx:225
 msgid "你现在可以开始使用博客管理系统了，点击完成按钮进入内容管理页面。"
 msgstr "你现在可以开始使用博客管理系统了，点击完成按钮进入内容管理页面。"
+
+#. placeholder {0}: (error as Error).message
+#: src/pages/Init/index.tsx:127
+#: src/pages/Init/index.tsx:164
+msgid "依赖安装失败 {0}"
+msgstr "依赖安装失败 {0}"
 
 #: src/components/ui/insert-toolbar-button.tsx:177
 msgid "公式"
@@ -107,6 +113,11 @@ msgstr "列表"
 #: src/components/FileEditor/ItemTab.tsx:42
 msgid "创建新文件"
 msgstr "创建新文件"
+
+#. placeholder {0}: (error as Error).message
+#: src/pages/Init/index.tsx:131
+msgid "初始化博客失败 {0}"
+msgstr "初始化博客失败 {0}"
 
 #: src/components/ui/block-context-menu.tsx:125
 #~ msgid "删除"
@@ -163,7 +174,7 @@ msgstr "删除表格"
 msgid "单元格"
 msgstr "单元格"
 
-#: src/pages/Init/index.tsx:208
+#: src/pages/Init/index.tsx:223
 msgid "博客初始化完成！"
 msgstr "博客初始化完成！"
 
@@ -486,6 +497,11 @@ msgstr "标题 6"
 #: src/components/ui/code-block-node.tsx:57
 #~ msgid "格式化代码"
 #~ msgstr "格式化代码"
+
+#. placeholder {0}: (error as Error).message
+#: src/pages/Init/index.tsx:107
+msgid "模版下载失败 {0}"
+msgstr "模版下载失败 {0}"
 
 #: src/components/ui/insert-toolbar-button.tsx:66
 msgid "段落"

@@ -1,15 +1,19 @@
+use notify::RecommendedWatcher;
 use serde_json::Value;
 use std::{env, sync::Arc};
 use tauri::{async_runtime::Mutex, Manager};
 use tauri_plugin_shell::ShellExt;
 use tokio_util::sync::CancellationToken;
 use tracing::info;
+mod back_links;
 mod blog_manager;
 mod commands;
 mod config;
+mod db;
 mod error;
 mod file_manager;
 mod git;
+mod md_parser;
 mod oauth;
 mod utils;
 
@@ -38,6 +42,7 @@ pub fn run() {
             let oauth = oauth::Oauth::new(&client_id, &client_secret, "http://localhost:8080")?;
             app.manage(Arc::new(oauth));
             app.manage(Mutex::new(CancellationToken::new()));
+            app.manage(Mutex::new(None::<RecommendedWatcher>));
 
             let command = app.shell().sidecar("fnm")?;
 
@@ -76,11 +81,13 @@ pub fn run() {
             commands::copy_tree_item,
             commands::move_file_or_folder,
             commands::rename,
+            commands::watch_dir,
             // blog manager
             commands::read_schemas,
             commands::read_blog_build_config,
             commands::init_or_open_blog,
             commands::install_template,
+            commands::get_templates,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

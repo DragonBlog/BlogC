@@ -1,11 +1,12 @@
 use crate::config::BlogBuildConfig;
 use crate::error::Result;
-use crate::{blog_manager::template::BlogTemplate, git::Git};
+use crate::git::Git;
 use git2::Progress;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::{Path, PathBuf};
 mod template;
+pub use template::*;
 
 pub static TEMPLATE_DIR: &str = "template";
 pub static BLOG_CONFIG_FILE: &str = "dragon-config.json";
@@ -17,6 +18,7 @@ pub struct BlogManagerConfig {
     current_template: BlogTemplate,
 }
 
+// todo 检查模版更新，拉取最新模版，考虑切换模版和兼容性问题
 pub struct BlogManager {
     config: BlogManagerConfig,
     path: PathBuf,
@@ -151,5 +153,19 @@ impl BlogManager {
             serde_json::to_string_pretty(&self.config)?,
         )?;
         Ok(())
+    }
+
+    pub fn get_blog_templates(&self) -> Result<Vec<BlogTemplate>> {
+        Ok(self
+            .git
+            .get_remotes_names()?
+            .iter()
+            .filter_map(|name| self.git.repo.find_remote(name).ok())
+            .filter_map(|remote| {
+                let url = remote.url()?;
+                let default_branch = self.git.get_remote_default_branch(remote.name()?).ok()?;
+                BlogTemplate::from_url(url, default_branch).ok()
+            })
+            .collect())
     }
 }

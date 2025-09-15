@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::{
-    blog_manager::BlogManager,
+    blog_manager::{BlogManager, BlogTemplate},
     config::BlogBuildConfig,
     error::Result,
     utils::{self, check_directory_is_empty},
@@ -88,4 +88,10 @@ pub async fn read_blog_build_config(project_dir: Utf8PathBuf) -> Result<BlogBuil
     let path = project_dir.join(TEMPLATE_DIR).join("dragon.json");
     let str = fs::read_to_string(path).await?;
     Ok(serde_json::from_str(&str)?)
+}
+
+#[tauri::command]
+pub async fn get_templates(path: Utf8PathBuf) -> Result<Vec<BlogTemplate>> {
+    let blog_manager = BlogManager::open(path)?;
+    blog_manager.get_blog_templates()
 }

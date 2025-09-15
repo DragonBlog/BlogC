@@ -1,3 +1,5 @@
+use std::string::FromUtf8Error;
+
 use serde::Serialize;
 
 #[derive(Debug, thiserror::Error)]
@@ -15,6 +17,10 @@ pub enum Error {
     #[error(transparent)]
     SerdeJson(#[from] serde_json::Error),
     #[error(transparent)]
+    SerdeYaml(#[from] serde_yaml::Error),
+    #[error(transparent)]
+    SerdeToml(#[from] toml::de::Error),
+    #[error(transparent)]
     Which(#[from] which::Error),
     #[error(transparent)]
     Pattern(#[from] glob::PatternError),
@@ -22,6 +28,12 @@ pub enum Error {
     Ignore(#[from] ignore::Error),
     #[error(transparent)]
     FsExtra(#[from] fs_extra::error::Error),
+    #[error(transparent)]
+    Rusqlite(#[from] rusqlite::Error),
+    #[error(transparent)]
+    UrlEncoding(#[from] FromUtf8Error),
+    #[error(transparent)]
+    Notify(#[from] notify::Error),
 }
 
 #[derive(Debug, Serialize)]
@@ -34,10 +46,15 @@ enum ErrorKind {
     Anyhow(String),
     Shell(String),
     SerdeJson(String),
+    SerdeYaml(String),
+    SerdeToml(String),
     Which(String),
     Pattern(String),
     Ignore(String),
     FsExtra(String),
+    Rusqlite(String),
+    UrlEncoding(String),
+    Notify(String),
 }
 
 impl serde::Serialize for Error {
@@ -53,10 +70,15 @@ impl serde::Serialize for Error {
             Error::Anyhow(_) => ErrorKind::Anyhow(message),
             Error::Shell(_) => ErrorKind::Shell(message),
             Error::SerdeJson(_) => ErrorKind::SerdeJson(message),
+            Error::SerdeYaml(_) => ErrorKind::SerdeYaml(message),
+            Error::SerdeToml(_) => ErrorKind::SerdeToml(message),
             Error::Which(_) => ErrorKind::Which(message),
             Error::Pattern(_) => ErrorKind::Pattern(message),
             Error::Ignore(_) => ErrorKind::Ignore(message),
             Error::FsExtra(_) => ErrorKind::FsExtra(message),
+            Error::Rusqlite(_) => ErrorKind::Rusqlite(message),
+            Error::UrlEncoding(_) => ErrorKind::UrlEncoding(message),
+            Error::Notify(_) => ErrorKind::Notify(message),
         };
         king.serialize(serializer)
     }
