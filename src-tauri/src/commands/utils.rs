@@ -1,5 +1,6 @@
 use crate::utils;
 use crate::{error::Result, utils::CommandStdout};
+use camino::Utf8PathBuf;
 use serde::{Deserialize, Serialize};
 use tauri::{ipc::Channel, AppHandle};
 use tauri_plugin_shell::ShellExt;
@@ -14,10 +15,10 @@ pub struct CheckResult {
 /// 检查目录是否存在及是否为空
 /// path: 目录路径
 #[tauri::command]
-pub async fn check_dir(path: &str) -> Result<CheckResult> {
+pub async fn check_dir(path: Utf8PathBuf) -> Result<CheckResult> {
     Ok(CheckResult {
-        exists: utils::check_path_exists(path),
-        is_empty: utils::check_directory_is_empty(path),
+        exists: utils::check_path_exists(&path),
+        is_empty: utils::check_directory_is_empty(&path),
     })
 }
 

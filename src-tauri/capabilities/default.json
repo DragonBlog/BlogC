@@ -56,6 +56,16 @@
     {
       "identifier": "http:default",
       "allow": ["https://*", "http://*"]
-    }
+    },
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [
+        {
+          "path": "**",
+          "app": true
+        }
+      ]
+    },
+    "os:default"
   ]
 }

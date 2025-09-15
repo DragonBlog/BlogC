@@ -1,10 +1,7 @@
 use super::FileTree;
 use crate::error::Result;
 use anyhow::anyhow;
-use fs_extra::{
-    dir::{CopyOptions, TransitProcessResult},
-    TransitProcess,
-};
+use fs_extra::dir::CopyOptions;
 use serde::{Deserialize, Serialize};
 use std::{
     fs::create_dir_all,
@@ -93,15 +90,9 @@ impl FileTreeItem {
     ///
     /// # 返回值
     /// 返回Result<FileTreeItem>，包含复制后的新节点
-    pub fn copy_to<P, F>(
-        &mut self,
-        new_path: P,
-        options: CopyOptions,
-        progress_handler: F,
-    ) -> Result<FileTreeItem>
+    pub fn copy_to<P>(&mut self, new_path: P, options: CopyOptions) -> Result<FileTreeItem>
     where
         P: AsRef<Path>,
-        F: FnMut(TransitProcess) -> TransitProcessResult,
     {
         let new_path = new_path.as_ref();
 
@@ -109,10 +100,9 @@ impl FileTreeItem {
             create_dir_all(new_path)?;
         }
 
-        self.read_children()?;
-
         if self.is_dir {
-            fs_extra::copy_items_with_progress(
+            self.read_children()?;
+            fs_extra::copy_items(
                 &self
                     .children
                     .as_ref()
@@ -122,15 +112,9 @@ impl FileTreeItem {
                     .collect::<Vec<&PathBuf>>(),
                 &new_path,
                 &options,
-                progress_handler,
             )?;
         } else {
-            fs_extra::copy_items_with_progress(
-                &[&self.path],
-                &new_path,
-                &options,
-                progress_handler,
-            )?;
+            fs_extra::copy_items(&[&self.path], &new_path, &options)?;
         }
 
         Ok(FileTreeItem::new(new_path)?)
