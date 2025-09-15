@@ -184,7 +184,6 @@ export const FileTree = (props: FileTreeProps) => {
     [tree, projectDir, message, t],
   );
 
-  // 菜单项生成函数
   const getMenuItems = useCallback(
     (item?: FileTreeItem) => {
       if (!item) return [];
@@ -202,17 +201,20 @@ export const FileTree = (props: FileTreeProps) => {
           label: t`复制`,
           onClick: async () => {
             const parent = tree.getItemInstance(path)?.getParent();
+
             const copyName = isDir
               ? `${name} Copy`
               : (() => {
                   const names = name.split(".");
                   return `${names.slice(0, -1).join(".")} Copy.${names.at(-1)}`;
                 })();
+
             createModalRef.current?.open({
               type: "copy",
               folderPath: parent?.getId() || "",
               name: copyName,
               path,
+              originName: name,
             });
           },
         },
@@ -301,7 +303,6 @@ export const FileTree = (props: FileTreeProps) => {
 
   const items = useMemo(() => getMenuItems(current), [current, getMenuItems]);
 
-  // 新建文件/文件夹逻辑合并
   const handleCreate = useCallback(
     async (type: "createFile" | "createFolder") => {
       try {

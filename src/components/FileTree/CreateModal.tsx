@@ -1,6 +1,6 @@
 import { useLingui } from "@lingui/react/macro";
 import { create, exists, mkdir } from "@tauri-apps/plugin-fs";
-import { App, Form, Input, Modal } from "antd";
+import { App, Form, Input, Modal, Radio } from "antd";
 import {
   forwardRef,
   useEffect,
@@ -9,7 +9,8 @@ import {
   useState,
 } from "react";
 import { match } from "ts-pattern";
-import { moveFileOrFolder } from "@/command/fileManager";
+import type { ExistFileProcess } from "@/command/fileManager";
+import { copyTreeItem, moveFileOrFolder } from "@/command/fileManager";
 import { useAppStore } from "@/store/useAppStore";
 import { FolderSelector } from "../FolderSelector";
 
@@ -17,7 +18,13 @@ type Options =
   | { type: "createFile"; name?: string; folderPath: string }
   | { type: "createFolder"; name?: string; folderPath: string }
   | { type: "move"; name: string; path: string; folderPath: string }
-  | { type: "copy"; name: string; path: string; folderPath: string };
+  | {
+      type: "copy";
+      name: string;
+      path: string;
+      folderPath: string;
+      originName?: string;
+    };
 
 export type CreateModalRef = {
   open: (options: Options) => void;
@@ -97,6 +104,27 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
                 onRefresh?.(folderPath);
                 message.success(t`移动成功`);
               })
+
+              .with({ type: "copy" }, async (opts) => {
+                const conflictStrategy =
+                  (form.getFieldValue(
+                    "conflictStrategy",
+                  ) as ExistFileProcess) || "skip";
+                try {
+                  await copyTreeItem(
+                    opts.path,
+                    folderPath,
+                    name,
+                    conflictStrategy,
+                  );
+                  onRefresh?.(opts.folderPath);
+                  onRefresh?.(folderPath);
+                  message.success(t`复制成功`);
+                } catch (err) {
+                  console.error("复制失败:", err);
+                  message.error(t`复制失败`);
+                }
+              })
               .otherwise(async () => {});
             setOpen(false);
             form.resetFields();
@@ -141,6 +169,16 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
               virtual
               className="max-h-60 border"
             />
+          </Form.Item>
+          <Form.Item
+            name="conflictStrategy"
+            label={t`冲突处理`}
+            initialValue="skip"
+          >
+            <Radio.Group>
+              <Radio value="skip">{t`跳过`}</Radio>
+              <Radio value="overwrite">{t`覆盖`}</Radio>
+            </Radio.Group>
           </Form.Item>
         </Form>
       </Modal>

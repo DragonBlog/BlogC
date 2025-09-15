@@ -36,6 +36,15 @@ export async function moveFileOrFolder(
   });
 }
 
+/**
+ * 复制文件或目录树到新位置
+ *
+ * @param path 要复制的文件或目录路径
+ * @param newParent 目标父目录路径
+ * @param options 处理已存在文件的策略，默认为"skip"
+ * @param onProgress 复制进度回调函数
+ * @returns Promise<FileTreeItem> 返回复制后的新节点
+ */
 export async function copyTreeItem(
   path: string,
   newParent: string,
