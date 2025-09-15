@@ -1,6 +1,4 @@
-//@ts-ignore
-
-import { Channel, invoke } from "@tauri-apps/api/core";
+import { invoke } from "@tauri-apps/api/core";
 
 export type FileTreeItem = {
   path: string;
@@ -38,25 +36,17 @@ export async function moveFileOrFolder(
   });
 }
 
-/**
- * 移动文件或目录到新位置
- *
- * @param path 要移动的文件或目录路径
- * @param newParent 新的父目录路径
- * @param onProgress 进度回调函数
- * @returns Promise<FileTreeItem> 返回移动后的新节点
- */
 export async function copyTreeItem(
   path: string,
   newParent: string,
+  newName?: string,
   options: ExistFileProcess = "skip",
-  onProgress?: (progress: TransitProcess) => void,
 ): Promise<FileTreeItem> {
   return await invoke<FileTreeItem>("copy_tree_item", {
     path,
     newParent,
+    newName,
     options,
-    onProgress: new Channel(onProgress),
   });
 }
 
