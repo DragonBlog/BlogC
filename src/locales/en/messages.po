@@ -15,7 +15,7 @@ msgstr ""
 
 #: src/components/FileTree/CreateModal.tsx:155
 msgid "{value} 已存在"
-msgstr ""
+msgstr "{value} already exists"
 
 #: src/components/ui/insert-toolbar-button.tsx:171
 #: src/components/ui/turn-into-toolbar-button.tsx:118
@@ -70,7 +70,7 @@ msgstr "You can now start using the blog management system. Click the finish but
 #: src/pages/Init/index.tsx:127
 #: src/pages/Init/index.tsx:164
 msgid "依赖安装失败 {0}"
-msgstr ""
+msgstr "Dependency installation failed {0}"
 
 #: src/components/ui/insert-toolbar-button.tsx:177
 msgid "公式"
@@ -80,7 +80,7 @@ msgstr "Formula"
 msgid "关闭建议模式"
 msgstr "Turn off suggestion mode"
 
-#: src/components/FileEditor/ItemTab.tsx:50
+#: src/components/FileEditor/ItemTab.tsx:97
 msgid "关闭标签页"
 msgstr "Close tab"
 
@@ -90,7 +90,7 @@ msgstr "Inline"
 
 #: src/components/FileTree/CreateModal.tsx:175
 msgid "冲突处理"
-msgstr ""
+msgstr "Conflict resolution"
 
 #: src/components/ui/block-context-menu.tsx:179
 #: src/components/ui/indent-toolbar-button.tsx:35
@@ -120,21 +120,21 @@ msgstr "List"
 
 #: src/components/FileTree/index.tsx:318
 msgid "创建失败: {e}"
-msgstr ""
+msgstr "Creation failed: {e}"
 
 #: src/components/FileTree/CreateModal.tsx:88
 #: src/components/FileTree/CreateModal.tsx:94
 msgid "创建成功"
-msgstr ""
+msgstr "Created successfully"
 
-#: src/components/FileEditor/ItemTab.tsx:42
+#: src/components/FileEditor/ItemTab.tsx:89
 msgid "创建新文件"
 msgstr "Create new file"
 
 #. placeholder {0}: (error as Error).message
 #: src/pages/Init/index.tsx:131
 msgid "初始化博客失败 {0}"
-msgstr ""
+msgstr "Blog initialization failed {0}"
 
 #: src/components/FileTree/index.tsx:247
 msgid "删除"
@@ -241,19 +241,19 @@ msgstr "Insert column left"
 
 #: src/components/FileTree/index.tsx:237
 msgid "在文件夹中打开"
-msgstr ""
+msgstr "Open in folder"
 
 #: src/components/FileTree/index.tsx:240
 msgid "在文件夹中显示"
-msgstr ""
+msgstr "Show in folder"
 
 #: src/components/FileTree/index.tsx:239
 msgid "在文件管理器中打开"
-msgstr ""
+msgstr "Open in file manager"
 
 #: src/components/FileTree/index.tsx:238
 msgid "在访达中显示"
-msgstr ""
+msgstr "Reveal in Finder"
 
 #: src/components/ui/insert-toolbar-button.tsx:62
 msgid "基本"
@@ -271,11 +271,11 @@ msgstr "Copy"
 
 #: src/components/FileTree/CreateModal.tsx:125
 msgid "复制失败"
-msgstr ""
+msgstr "Copy failed"
 
 #: src/components/FileTree/CreateModal.tsx:122
 msgid "复制成功"
-msgstr ""
+msgstr "Copy successful"
 
 #: src/components/ui/list-toolbar-button.tsx:186
 msgid "大写罗马数字 (I, II, III)"
@@ -361,7 +361,7 @@ msgstr "Quote"
 
 #: src/components/FileTree/index.tsx:181
 msgid "当前系统不支持此功能"
-msgstr ""
+msgstr "This feature is not supported on the current system"
 
 #: src/components/ui/list-toolbar-button.tsx:205
 msgid "待办事项"
@@ -372,7 +372,7 @@ msgstr "To-do"
 msgid "待办列表"
 msgstr "To-do List"
 
-#: src/components/FileEditor/ItemTab.tsx:53
+#: src/components/FileEditor/ItemTab.tsx:100
 msgid "或者从左侧文件树中选择一个文件进行编辑"
 msgstr "Or select a file from the left file tree to edit"
 
@@ -461,8 +461,8 @@ msgstr "New file"
 msgid "新建文件夹"
 msgstr "New folder"
 
-#: src/components/FileEditor/index.tsx:90
-#: src/components/FileEditor/index.tsx:102
+#: src/components/FileEditor/index.tsx:92
+#: src/components/FileEditor/index.tsx:104
 msgid "新标签页"
 msgstr "New tab"
 
@@ -502,7 +502,7 @@ msgstr "Untitled.md"
 
 #: src/components/FileTree/CreateModal.tsx:99
 msgid "未更改位置"
-msgstr ""
+msgstr "Location not changed"
 
 #: src/components/ui/media-toolbar-button.tsx:133
 msgid "本地上传"
@@ -550,7 +550,11 @@ msgstr "Heading 6"
 #. placeholder {0}: (error as Error).message
 #: src/pages/Init/index.tsx:107
 msgid "模版下载失败 {0}"
-msgstr ""
+msgstr "Template download failed {0}"
+
+#: src/components/FileEditor/ItemTab.tsx:69
+msgid "正在加载文件..."
+msgstr "Loading file..."
 
 #: src/components/ui/insert-toolbar-button.tsx:66
 msgid "段落"
@@ -574,7 +578,7 @@ msgstr "Dark Mode"
 
 #: src/components/FileTree/index.tsx:62
 msgid "监视文件夹失败: {e}"
-msgstr ""
+msgstr "Failed to watch folder: {e}"
 
 #: src/components/ui/insert-toolbar-button.tsx:166
 msgid "目录"
@@ -662,7 +666,7 @@ msgstr "Table"
 
 #: src/components/FileTree/CreateModal.tsx:180
 msgid "覆盖"
-msgstr ""
+msgstr "Overwrite"
 
 #: src/components/ui/comment-toolbar-button.tsx:21
 msgid "评论"
@@ -683,7 +687,11 @@ msgstr "Please enter a name"
 
 #: src/components/FileTree/CreateModal.tsx:151
 msgid "请输入正确的名称"
-msgstr ""
+msgstr "Please enter a valid name"
+
+#: src/components/FileEditor/ItemTab.tsx:55
+msgid "读取文件失败 {error}"
+msgstr "Failed to read file {error}"
 
 #. placeholder {0}: (error as Error).message
 #: src/components/FileTree/index.tsx:104
@@ -697,7 +705,7 @@ msgstr "Follow System"
 
 #: src/components/FileTree/CreateModal.tsx:179
 msgid "跳过"
-msgstr ""
+msgstr "Skip"
 
 #: src/components/ui/turn-into-toolbar-button.tsx:144
 #: src/components/ui/turn-into-toolbar-button.tsx:164

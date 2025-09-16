@@ -80,7 +80,7 @@ msgstr "公式"
 msgid "关闭建议模式"
 msgstr "关闭建议模式"
 
-#: src/components/FileEditor/ItemTab.tsx:50
+#: src/components/FileEditor/ItemTab.tsx:97
 msgid "关闭标签页"
 msgstr "关闭标签页"
 
@@ -127,7 +127,7 @@ msgstr "创建失败: {e}"
 msgid "创建成功"
 msgstr "创建成功"
 
-#: src/components/FileEditor/ItemTab.tsx:42
+#: src/components/FileEditor/ItemTab.tsx:89
 msgid "创建新文件"
 msgstr "创建新文件"
 
@@ -376,7 +376,7 @@ msgstr "待办事项"
 msgid "待办列表"
 msgstr "待办列表"
 
-#: src/components/FileEditor/ItemTab.tsx:53
+#: src/components/FileEditor/ItemTab.tsx:100
 msgid "或者从左侧文件树中选择一个文件进行编辑"
 msgstr "或者从左侧文件树中选择一个文件进行编辑"
 
@@ -465,8 +465,8 @@ msgstr "新建文件"
 msgid "新建文件夹"
 msgstr "新建文件夹"
 
-#: src/components/FileEditor/index.tsx:90
-#: src/components/FileEditor/index.tsx:102
+#: src/components/FileEditor/index.tsx:92
+#: src/components/FileEditor/index.tsx:104
 msgid "新标签页"
 msgstr "新标签页"
 
@@ -555,6 +555,10 @@ msgstr "标题 6"
 #: src/pages/Init/index.tsx:107
 msgid "模版下载失败 {0}"
 msgstr "模版下载失败 {0}"
+
+#: src/components/FileEditor/ItemTab.tsx:69
+msgid "正在加载文件..."
+msgstr "正在加载文件..."
 
 #: src/components/ui/insert-toolbar-button.tsx:66
 msgid "段落"
@@ -688,6 +692,10 @@ msgstr "请输入名称"
 #: src/components/FileTree/CreateModal.tsx:151
 msgid "请输入正确的名称"
 msgstr "请输入正确的名称"
+
+#: src/components/FileEditor/ItemTab.tsx:55
+msgid "读取文件失败 {error}"
+msgstr "读取文件失败 {error}"
 
 #. placeholder {0}: (error as Error).message
 #: src/components/FileTree/index.tsx:104
