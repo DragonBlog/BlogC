@@ -5,7 +5,7 @@ use fs_extra::dir::CopyOptions;
 use notify::{RecommendedWatcher, Watcher};
 use serde::{Deserialize, Serialize};
 use tauri::State;
-use tokio::sync::Mutex;
+use tokio::{fs, sync::Mutex};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -101,12 +101,12 @@ pub async fn read_children(path: Utf8PathBuf) -> Result<FileTreeItem> {
 }
 
 #[tauri::command]
-pub async fn copy_tree_item(
+pub async fn copy_file_or_folder(
     path: Utf8PathBuf,
     new_parent: Utf8PathBuf,
     new_name: Option<Utf8PathBuf>,
     options: ExistFileProcess,
-) -> Result<FileTreeItem> {
+) -> Result<Utf8PathBuf> {
     let new_name = new_name.unwrap_or(
         path.iter()
             .last()
@@ -118,8 +118,20 @@ pub async fn copy_tree_item(
     );
     let new_path = new_parent.join(new_name);
 
-    let mut item = FileTreeItem::new(path)?;
-    item.copy_to(&new_path, options.into())
+    if path.is_file() {
+        fs::copy(&path, &new_path).await?;
+    } else {
+        if !new_path.exists() {
+            fs::create_dir_all(&new_path).await?;
+        }
+        let mut items = fs::read_dir(path).await?;
+        let mut paths = vec![];
+        while let Some(item) = items.next_entry().await? {
+            paths.push(item.path());
+        }
+        fs_extra::copy_items(&paths, &new_path, &options.into())?;
+    }
+    Ok(new_path)
 }
 
 #[tauri::command]

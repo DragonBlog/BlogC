@@ -78,7 +78,7 @@ pub fn run() {
             commands::start,
             // file manager
             commands::read_children,
-            commands::copy_tree_item,
+            commands::copy_file_or_folder,
             commands::move_file_or_folder,
             commands::rename,
             commands::watch_dir,

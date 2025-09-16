@@ -10,7 +10,7 @@ import {
 } from "react";
 import { match } from "ts-pattern";
 import type { ExistFileProcess } from "@/command/fileManager";
-import { copyTreeItem, moveFileOrFolder } from "@/command/fileManager";
+import { copyFileOrFolder, moveFileOrFolder } from "@/command/fileManager";
 import { useAppStore } from "@/store/useAppStore";
 import { FolderSelector } from "../FolderSelector";
 
@@ -111,7 +111,7 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
                     "conflictStrategy",
                   ) as ExistFileProcess) || "skip";
                 try {
-                  await copyTreeItem(
+                  await copyFileOrFolder(
                     opts.path,
                     folderPath,
                     name,

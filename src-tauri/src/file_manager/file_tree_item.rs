@@ -1,12 +1,8 @@
 use super::FileTree;
 use crate::error::Result;
 use anyhow::anyhow;
-use fs_extra::dir::CopyOptions;
 use serde::{Deserialize, Serialize};
-use std::{
-    fs::create_dir_all,
-    path::{Path, PathBuf},
-};
+use std::path::{Path, PathBuf};
 
 /// 表示文件树中的一个节点，可以是文件或目录
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -80,43 +76,5 @@ impl FileTreeItem {
             self.children = Some(tree);
         }
         Ok(())
-    }
-
-    /// 复制文件或目录到新位置
-    ///
-    /// # 参数
-    /// * `new_parent` - 新的父目录路径
-    /// * `progress_handler` - 进度处理回调函数
-    ///
-    /// # 返回值
-    /// 返回Result<FileTreeItem>，包含复制后的新节点
-    pub fn copy_to<P>(&mut self, new_path: P, options: CopyOptions) -> Result<FileTreeItem>
-    where
-        P: AsRef<Path>,
-    {
-        let new_path = new_path.as_ref();
-
-        if !new_path.exists() {
-            create_dir_all(new_path)?;
-        }
-
-        if self.is_dir {
-            self.read_children()?;
-            fs_extra::copy_items(
-                &self
-                    .children
-                    .as_ref()
-                    .ok_or_else(|| anyhow!("Children not loaded"))?
-                    .iter()
-                    .map(|child| &child.path)
-                    .collect::<Vec<&PathBuf>>(),
-                &new_path,
-                &options,
-            )?;
-        } else {
-            fs_extra::copy_items(&[&self.path], &new_path, &options)?;
-        }
-
-        Ok(FileTreeItem::new(new_path)?)
     }
 }

@@ -15,7 +15,7 @@ use urlencoding::decode;
 pub static ALLOW_EXTENSIONS: &[&str] = &["jpg", "png", "jpeg", "gif", "svg", "webp", "md", "mdx"];
 pub static IMAGE_EXTENSIONS: &[&str] = &["jpg", "png", "jpeg", "gif", "svg", "webp"];
 
-fn is_entry_allowed(entry: &ignore::DirEntry) -> bool {
+pub fn is_entry_allowed(entry: &ignore::DirEntry) -> bool {
     if entry.path().is_dir() {
         true
     } else if let Some(ext) = entry.path().extension() {
@@ -72,7 +72,8 @@ pub async fn build_index<P: AsRef<Path>>(path: P, conn: DbConnection) -> Result<
                     continue;
                 } else {
                     // ✅ 修复：传入旧文件的 hash，而不是 [0;32]
-                    let (changed, new_hash) = quick_check_file_changed(file_path, old_file.hash).await?;
+                    let (changed, new_hash) =
+                        quick_check_file_changed(file_path, old_file.hash).await?;
                     if !changed {
                         continue;
                     }

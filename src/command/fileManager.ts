@@ -45,13 +45,13 @@ export async function moveFileOrFolder(
  * @param onProgress 复制进度回调函数
  * @returns Promise<FileTreeItem> 返回复制后的新节点
  */
-export async function copyTreeItem(
+export async function copyFileOrFolder(
   path: string,
   newParent: string,
   newName?: string,
   options: ExistFileProcess = "skip",
-): Promise<FileTreeItem> {
-  return await invoke<FileTreeItem>("copy_tree_item", {
+) {
+  return await invoke<string>("copy_file_or_folder", {
     path,
     newParent,
     newName,

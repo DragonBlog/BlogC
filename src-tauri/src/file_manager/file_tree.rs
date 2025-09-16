@@ -1,5 +1,5 @@
 use super::FileTreeItem;
-use crate::error::Result;
+use crate::{back_links::is_entry_allowed, error::Result};
 use ignore::WalkBuilder;
 use serde::{Deserialize, Serialize};
 use std::{
@@ -38,25 +38,6 @@ impl From<Vec<FileTreeItem>> for FileTree {
     }
 }
 
-/// 判断是否为Markdown文件
-///
-/// # 参数
-/// * `entry` - ignore crate的DirEntry
-///
-/// # 返回值
-/// 如果是目录或.md/.mdx文件则返回true，否则返回false
-fn is_markdown_file(entry: &ignore::DirEntry) -> bool {
-    if entry.path().is_file() {
-        if let Some(ext) = entry.path().extension() {
-            ext == "md" || ext == "mdx"
-        } else {
-            false
-        }
-    } else {
-        true // 允许目录通过
-    }
-}
-
 impl FileTree {
     /// 读取指定路径下的文件树
     ///
@@ -83,7 +64,7 @@ impl FileTree {
         for entry in WalkBuilder::new(path)
             .max_depth(Some(1)) // 只读取一层目录
             .standard_filters(true) // 应用标准过滤器（如.gitignore）
-            // .filter_entry(is_markdown_file) // 只保留markdown文件和目录
+            .filter_entry(is_entry_allowed) // 只保留markdown文件和目录
             .build()
         {
             let entry = entry?;
