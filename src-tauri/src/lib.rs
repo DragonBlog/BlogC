@@ -5,6 +5,8 @@ use tauri::{async_runtime::Mutex, Manager};
 use tauri_plugin_shell::ShellExt;
 use tokio_util::sync::CancellationToken;
 use tracing::info;
+
+use crate::state::CancellationTokenManager;
 mod back_links;
 mod blog_manager;
 mod commands;
@@ -13,8 +15,10 @@ mod db;
 mod error;
 mod file_manager;
 mod git;
+// mod llm;
 mod md_parser;
 mod oauth;
+mod state;
 mod utils;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -43,6 +47,7 @@ pub fn run() {
             app.manage(Arc::new(oauth));
             app.manage(Mutex::new(CancellationToken::new()));
             app.manage(Mutex::new(None::<RecommendedWatcher>));
+            app.manage(CancellationTokenManager::default());
 
             let command = app.shell().sidecar("fnm")?;
 
@@ -88,6 +93,9 @@ pub fn run() {
             commands::init_or_open_blog,
             commands::install_template,
             commands::get_templates,
+            // llm
+            // commands::download_model,
+            // commands::cancel_download_model,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
