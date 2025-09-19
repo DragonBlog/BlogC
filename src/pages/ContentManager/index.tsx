@@ -1,5 +1,6 @@
 import { useMemoizedFn } from "ahooks";
-import { Flex } from "antd";
+import { Flex, Splitter } from "antd";
+import { useState } from "react";
 import { v4 } from "uuid";
 import { FileTreeItem } from "@/command/fileManager";
 import { FileEditor } from "@/components/FileEditor";
@@ -15,6 +16,8 @@ export const ContentManager = () => {
       store.setActiveTabId,
     ],
   );
+
+  const [sizes, setSizes] = useState<(number | string)[]>([300, "100%"]);
 
   /** 逻辑说明：
     - 优先复用当前 tab，避免无编辑时产生多余 tab。
@@ -58,19 +61,23 @@ export const ContentManager = () => {
   });
 
   return (
-    <Flex
-      flex={1}
-      style={{
-        overflow: "hidden",
-      }}
-      className=" font-family"
-    >
-      <div className="w-64 border-r h-full border-border overflow-hidden flex shrink-0">
+    <Splitter onResize={setSizes} style={{ height: "100%", width: "100%" }}>
+      <Splitter.Panel
+        size={sizes[0]}
+        defaultSize={300}
+        min={240}
+        max="50%"
+        collapsible={{
+          start: true,
+          end: true,
+          showCollapsibleIcon: (sizes[0] as number) < 240 ? true : "auto",
+        }}
+      >
         <FileTree onClick={handleTreeItemClick} />
-      </div>
-      <div className="flex-1 h-full w-full overflow-hidden">
+      </Splitter.Panel>
+      <Splitter.Panel size={sizes[1]}>
         <FileEditor />
-      </div>
-    </Flex>
+      </Splitter.Panel>
+    </Splitter>
   );
 };

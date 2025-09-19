@@ -5,7 +5,7 @@ import { Editor, EditorContainer } from "@/components/ui/editor";
 export function PlateEditor(props: Pick<PlateProps, "editor">) {
   return (
     <Plate editor={props.editor}>
-      <EditorContainer>
+      <EditorContainer variant="default">
         <Editor variant="fullWidth" />
       </EditorContainer>
       {/* <SettingsDialog /> */}

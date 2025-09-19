@@ -76,7 +76,7 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
         open={open}
         title={title}
         centered
-        width={328}
+        width={380}
         onOk={async () => {
           const { folderPath, name } = await form.validateFields();
 
@@ -170,16 +170,18 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
               className="max-h-60 border"
             />
           </Form.Item>
-          <Form.Item
-            name="conflictStrategy"
-            label={t`冲突处理`}
-            initialValue="skip"
-          >
-            <Radio.Group>
-              <Radio value="skip">{t`跳过`}</Radio>
-              <Radio value="overwrite">{t`覆盖`}</Radio>
-            </Radio.Group>
-          </Form.Item>
+          {options?.type === "copy" && (
+            <Form.Item
+              name="conflictStrategy"
+              label={t`冲突处理`}
+              initialValue="skip"
+            >
+              <Radio.Group>
+                <Radio value="skip">{t`跳过`}</Radio>
+                <Radio value="overwrite">{t`覆盖`}</Radio>
+              </Radio.Group>
+            </Form.Item>
+          )}
         </Form>
       </Modal>
     );
