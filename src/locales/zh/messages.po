@@ -40,6 +40,11 @@ msgstr "上标"
 msgid "下标"
 msgstr "下标"
 
+#. placeholder {0}: (error as Error).message
+#: src/pages/Config/index.tsx:58
+msgid "下载模型失败:{0}"
+msgstr "下载模型失败:{0}"
+
 #: src/components/ui/import-toolbar-button.tsx:84
 msgid "从HTML导入"
 msgstr "从HTML导入"
@@ -80,7 +85,7 @@ msgstr "公式"
 msgid "关闭建议模式"
 msgstr "关闭建议模式"
 
-#: src/components/FileEditor/ItemTab.tsx:97
+#: src/components/FileEditor/ItemTab.tsx:99
 msgid "关闭标签页"
 msgstr "关闭标签页"
 
@@ -88,7 +93,7 @@ msgstr "关闭标签页"
 msgid "内联"
 msgstr "内联"
 
-#: src/components/FileTree/CreateModal.tsx:175
+#: src/components/FileTree/CreateModal.tsx:176
 msgid "冲突处理"
 msgstr "冲突处理"
 
@@ -127,7 +132,7 @@ msgstr "创建失败: {e}"
 msgid "创建成功"
 msgstr "创建成功"
 
-#: src/components/FileEditor/ItemTab.tsx:89
+#: src/components/FileEditor/ItemTab.tsx:91
 msgid "创建新文件"
 msgstr "创建新文件"
 
@@ -376,7 +381,7 @@ msgstr "待办事项"
 msgid "待办列表"
 msgstr "待办列表"
 
-#: src/components/FileEditor/ItemTab.tsx:100
+#: src/components/FileEditor/ItemTab.tsx:102
 msgid "或者从左侧文件树中选择一个文件进行编辑"
 msgstr "或者从左侧文件树中选择一个文件进行编辑"
 
@@ -436,6 +441,10 @@ msgstr "数字 (1, 2, 3)"
 msgid "文件"
 msgstr "文件"
 
+#: src/pages/Config/index.tsx:70
+msgid "文件名："
+msgstr "文件名："
+
 #: src/components/FileTree/CreateModal.tsx:166
 msgid "文件夹路径"
 msgstr "文件夹路径"
@@ -465,8 +474,8 @@ msgstr "新建文件"
 msgid "新建文件夹"
 msgstr "新建文件夹"
 
-#: src/components/FileEditor/index.tsx:92
-#: src/components/FileEditor/index.tsx:104
+#: src/components/FileEditor/index.tsx:102
+#: src/components/FileEditor/index.tsx:127
 msgid "新标签页"
 msgstr "新标签页"
 
@@ -556,7 +565,7 @@ msgstr "标题 6"
 msgid "模版下载失败 {0}"
 msgstr "模版下载失败 {0}"
 
-#: src/components/FileEditor/ItemTab.tsx:69
+#: src/components/FileEditor/ItemTab.tsx:71
 msgid "正在加载文件..."
 msgstr "正在加载文件..."
 
@@ -668,7 +677,7 @@ msgstr "表情符号"
 msgid "表格"
 msgstr "表格"
 
-#: src/components/FileTree/CreateModal.tsx:180
+#: src/components/FileTree/CreateModal.tsx:181
 msgid "覆盖"
 msgstr "覆盖"
 
@@ -693,7 +702,7 @@ msgstr "请输入名称"
 msgid "请输入正确的名称"
 msgstr "请输入正确的名称"
 
-#: src/components/FileEditor/ItemTab.tsx:55
+#: src/components/FileEditor/ItemTab.tsx:57
 msgid "读取文件失败 {error}"
 msgstr "读取文件失败 {error}"
 
@@ -707,7 +716,7 @@ msgstr "读取文件夹失败: {0}"
 msgid "跟随系统"
 msgstr "跟随系统"
 
-#: src/components/FileTree/CreateModal.tsx:179
+#: src/components/FileTree/CreateModal.tsx:180
 msgid "跳过"
 msgstr "跳过"
 

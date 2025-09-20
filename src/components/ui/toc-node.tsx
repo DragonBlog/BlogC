@@ -1,6 +1,10 @@
 "use client";
 
-import { useTocElement, useTocElementState } from "@platejs/toc/react";
+import {
+  useTocElement,
+  useTocElementState,
+  useTocSideBar,
+} from "@platejs/toc/react";
 import { cva } from "class-variance-authority";
 import type { PlateElementProps } from "platejs/react";
 import { PlateElement } from "platejs/react";

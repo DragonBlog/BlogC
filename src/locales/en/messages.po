@@ -40,6 +40,11 @@ msgstr "Superscript"
 msgid "下标"
 msgstr "Subscript"
 
+#. placeholder {0}: (error as Error).message
+#: src/pages/Config/index.tsx:58
+msgid "下载模型失败:{0}"
+msgstr ""
+
 #: src/components/ui/import-toolbar-button.tsx:84
 msgid "从HTML导入"
 msgstr "Import from HTML"
@@ -80,7 +85,7 @@ msgstr "Formula"
 msgid "关闭建议模式"
 msgstr "Turn off suggestion mode"
 
-#: src/components/FileEditor/ItemTab.tsx:97
+#: src/components/FileEditor/ItemTab.tsx:99
 msgid "关闭标签页"
 msgstr "Close tab"
 
@@ -88,7 +93,7 @@ msgstr "Close tab"
 msgid "内联"
 msgstr "Inline"
 
-#: src/components/FileTree/CreateModal.tsx:175
+#: src/components/FileTree/CreateModal.tsx:176
 msgid "冲突处理"
 msgstr "Conflict resolution"
 
@@ -127,7 +132,7 @@ msgstr "Creation failed: {e}"
 msgid "创建成功"
 msgstr "Created successfully"
 
-#: src/components/FileEditor/ItemTab.tsx:89
+#: src/components/FileEditor/ItemTab.tsx:91
 msgid "创建新文件"
 msgstr "Create new file"
 
@@ -372,7 +377,7 @@ msgstr "To-do"
 msgid "待办列表"
 msgstr "To-do List"
 
-#: src/components/FileEditor/ItemTab.tsx:100
+#: src/components/FileEditor/ItemTab.tsx:102
 msgid "或者从左侧文件树中选择一个文件进行编辑"
 msgstr "Or select a file from the left file tree to edit"
 
@@ -432,6 +437,10 @@ msgstr "Numbers (1, 2, 3)"
 msgid "文件"
 msgstr "File"
 
+#: src/pages/Config/index.tsx:70
+msgid "文件名："
+msgstr ""
+
 #: src/components/FileTree/CreateModal.tsx:166
 msgid "文件夹路径"
 msgstr "Folder path"
@@ -461,8 +470,8 @@ msgstr "New file"
 msgid "新建文件夹"
 msgstr "New folder"
 
-#: src/components/FileEditor/index.tsx:92
-#: src/components/FileEditor/index.tsx:104
+#: src/components/FileEditor/index.tsx:102
+#: src/components/FileEditor/index.tsx:127
 msgid "新标签页"
 msgstr "New tab"
 
@@ -552,7 +561,7 @@ msgstr "Heading 6"
 msgid "模版下载失败 {0}"
 msgstr "Template download failed {0}"
 
-#: src/components/FileEditor/ItemTab.tsx:69
+#: src/components/FileEditor/ItemTab.tsx:71
 msgid "正在加载文件..."
 msgstr "Loading file..."
 
@@ -664,7 +673,7 @@ msgstr "Emoji"
 msgid "表格"
 msgstr "Table"
 
-#: src/components/FileTree/CreateModal.tsx:180
+#: src/components/FileTree/CreateModal.tsx:181
 msgid "覆盖"
 msgstr "Overwrite"
 
@@ -689,7 +698,7 @@ msgstr "Please enter a name"
 msgid "请输入正确的名称"
 msgstr "Please enter a valid name"
 
-#: src/components/FileEditor/ItemTab.tsx:55
+#: src/components/FileEditor/ItemTab.tsx:57
 msgid "读取文件失败 {error}"
 msgstr "Failed to read file {error}"
 
@@ -703,7 +712,7 @@ msgstr "Failed to read folder: {0}"
 msgid "跟随系统"
 msgstr "Follow System"
 
-#: src/components/FileTree/CreateModal.tsx:179
+#: src/components/FileTree/CreateModal.tsx:180
 msgid "跳过"
 msgstr "Skip"
 

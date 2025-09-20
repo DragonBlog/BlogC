@@ -4,8 +4,8 @@ import { MarkdownPlugin } from "@platejs/markdown";
 import { readTextFile } from "@tauri-apps/plugin-fs";
 import { useAsyncEffect } from "ahooks";
 import { App, Spin, Typography } from "antd";
-import { usePlateEditor } from "platejs/react";
-import { useState } from "react";
+import { PlateEditor as TPlateEditor, usePlateEditor } from "platejs/react";
+import { Ref, useImperativeHandle, useState } from "react";
 import { EditorTab } from "@/store/useEditorTabsStore";
 import { EditorKit } from "../editor/editor-kit";
 import { PlateEditor } from "../editor/plate-editor";
@@ -23,6 +23,7 @@ type ItemFileTabProps = {
   data: EditorTab;
   onChange?: (data: EditorTab) => void;
   onClose?: (data: EditorTab) => void;
+  ref?: Ref<TPlateEditor>;
 };
 
 /**
@@ -42,12 +43,13 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
     plugins: EditorKit,
   });
 
+  useImperativeHandle(props.ref, () => editor, [editor]);
+
   useAsyncEffect(async () => {
     if (fileItem) {
       setIsLoading(true);
       try {
         const res = await readTextFile(fileItem.path);
-        editor.tf.reset();
         editor.tf.setValue(
           editor.getApi(MarkdownPlugin).markdown.deserialize(res),
         );

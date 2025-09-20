@@ -4,6 +4,7 @@ import { useState } from "react";
 import { v4 } from "uuid";
 import { FileTreeItem } from "@/command/fileManager";
 import { FileEditor } from "@/components/FileEditor";
+import { TocSideBar } from "@/components/TocSideBar";
 import { EditorTab, useEditorTabsStore } from "@/store/useEditorTabsStore";
 import { FileTree } from "../../components/FileTree";
 
@@ -73,7 +74,8 @@ export const ContentManager = () => {
           showCollapsibleIcon: (sizes[0] as number) < 240 ? true : "auto",
         }}
       >
-        <FileTree onClick={handleTreeItemClick} />
+        {/* <FileTree onClick={handleTreeItemClick} /> */}
+        <TocSideBar />
       </Splitter.Panel>
       <Splitter.Panel size={sizes[1]}>
         <FileEditor />
