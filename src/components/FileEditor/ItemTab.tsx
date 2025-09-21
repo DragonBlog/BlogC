@@ -4,7 +4,11 @@ import { MarkdownPlugin } from "@platejs/markdown";
 import { readTextFile } from "@tauri-apps/plugin-fs";
 import { useAsyncEffect } from "ahooks";
 import { App, Spin, Typography } from "antd";
-import { PlateEditor as TPlateEditor, usePlateEditor } from "platejs/react";
+import {
+  PlateElement,
+  PlateEditor as TPlateEditor,
+  usePlateEditor,
+} from "platejs/react";
 import { Ref, useImperativeHandle, useState } from "react";
 import { EditorTab } from "@/store/useEditorTabsStore";
 import { EditorKit } from "../editor/editor-kit";
