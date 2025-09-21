@@ -26,6 +26,7 @@ export const useEditorTabsStore = createWithEqualityFn(
         activeTabId: "",
         selectedItem: "",
         currentMonitorEditor: undefined as PlateEditor | undefined,
+        sideType: "file" as "file" | "toc",
       },
       (set) => ({
         setTabs: (tabs: EditorTab[]) => set({ tabs }),
@@ -36,6 +37,7 @@ export const useEditorTabsStore = createWithEqualityFn(
         setSelectedItem: (path: string) => set({ selectedItem: path }),
         setCurrentMonitorEditor: (editor: PlateEditor | undefined) =>
           set({ currentMonitorEditor: editor }),
+        setSideType: (type: "file" | "toc") => set({ sideType: type }),
       }),
     ),
     {

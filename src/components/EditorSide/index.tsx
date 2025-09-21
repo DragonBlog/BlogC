@@ -31,23 +31,23 @@ import {
 import { useAppStore } from "../../store/useAppStore";
 import { AnimateInner } from "./AnimateInner";
 import { CreateModal, CreateModalRef } from "./CreateModal";
+import { TocSideBar } from "./TocSide";
 import { TreeToolbar } from "./Toolbar";
 import { VirtualInner } from "./VirtualInner";
 
-type FileTreeProps = {
+type EditorSideProps = {
   disableToolbar?: boolean;
   virtual?: boolean;
   onClick?: (item: FileTreeItem) => void;
 };
 
-export const FileTree = (props: FileTreeProps) => {
+export const EditorSide = (props: EditorSideProps) => {
   const { disableToolbar, virtual, onClick } = props;
   const [projectDir] = useAppStore((store) => [store.projectDir]);
 
-  const [selectedItem, setSelectedItem] = useEditorTabsStore((store) => [
-    store.selectedItem,
-    store.setSelectedItem,
-  ]);
+  const [selectedItem, setSelectedItem, sideType] = useEditorTabsStore(
+    (store) => [store.selectedItem, store.setSelectedItem, store.sideType],
+  );
 
   const { message, modal } = App.useApp();
   const [current, setCurrent] = useState<FileTreeItem>();
@@ -330,34 +330,39 @@ export const FileTree = (props: FileTreeProps) => {
           onCreateFile={() => handleCreate("createFile")}
         />
       )}
-      <Dropdown
-        menu={{
-          items,
-        }}
-        onOpenChange={(open) => {
-          if (!open) {
-            setCurrent(undefined);
-          }
-        }}
-        trigger={["contextMenu"]}
-      >
-        <div className="flex flex-1 overflow-hidden">
-          {virtual ? (
-            <VirtualInner
-              onClick={onClick}
-              tree={tree}
-              setCurrent={setCurrent}
-              ref={virtualizer}
-            />
-          ) : (
-            <AnimateInner
-              onClick={onClick}
-              tree={tree}
-              setCurrent={setCurrent}
-            />
-          )}
-        </div>
-      </Dropdown>
+      {match(sideType)
+        .with("file", () => (
+          <Dropdown
+            menu={{
+              items,
+            }}
+            onOpenChange={(open) => {
+              if (!open) {
+                setCurrent(undefined);
+              }
+            }}
+            trigger={["contextMenu"]}
+          >
+            <div className="flex flex-1 overflow-hidden">
+              {virtual ? (
+                <VirtualInner
+                  onClick={onClick}
+                  tree={tree}
+                  setCurrent={setCurrent}
+                  ref={virtualizer}
+                />
+              ) : (
+                <AnimateInner
+                  onClick={onClick}
+                  tree={tree}
+                  setCurrent={setCurrent}
+                />
+              )}
+            </div>
+          </Dropdown>
+        ))
+        .with("toc", () => <TocSideBar />)
+        .exhaustive()}
       <CreateModal
         ref={createModalRef}
         onRefresh={(parentPath) => {

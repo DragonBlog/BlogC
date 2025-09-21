@@ -1,5 +1,6 @@
+import { useLingui } from "@lingui/react/macro";
 import { BlockSelectionPlugin } from "@platejs/selection/react";
-import { Typography } from "antd";
+import { Empty, Typography } from "antd";
 import clsx from "clsx";
 import { NodeApi } from "platejs";
 import { useEffect, useRef, useState } from "react";
@@ -8,9 +9,10 @@ import {
   headingItemVariants,
 } from "@/components/ui/toc-node-static";
 import { useEditorTabsStore } from "@/store/useEditorTabsStore";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 export const TocSideBar = () => {
+  const { t } = useLingui();
   const [editor] = useEditorTabsStore((store) => [store.currentMonitorEditor]);
   const tocRef = useRef<HTMLDivElement>(null);
   const tocButtonRefs = useRef<Record<string, HTMLButtonElement>>({});
@@ -77,58 +79,61 @@ export const TocSideBar = () => {
   }, [headingList, editor]);
 
   return (
-    <div className="w-full h-full p-4">
-      <div
-        ref={tocRef}
-        className="border rounded-lg w-full overflow-x-hidden p-2"
-      >
-        {headingList.length > 0 ? (
-          headingList.map((item) => (
-            <Button
-              key={item.title}
-              ref={(ref) => {
-                if (ref) tocButtonRefs.current[item.id] = ref;
-                return () => {
-                  delete tocButtonRefs.current[item.id];
-                };
-              }}
-              variant={"ghost"}
-              className={headingItemVariants({
+    <div ref={tocRef} className="w-full h-full overflow-x-hidden p-2">
+      {headingList.length > 0 ? (
+        headingList.map((item) => (
+          <Button
+            key={item.title}
+            ref={(ref) => {
+              if (ref) tocButtonRefs.current[item.id] = ref;
+              return () => {
+                delete tocButtonRefs.current[item.id];
+              };
+            }}
+            variant={"ghost"}
+            className={clsx(
+              headingItemVariants({
                 depth: item.depth as 1 | 2 | 3,
-              })}
-              onClick={() => {
-                const node = NodeApi.get(editor!, item.path);
-                if (!node) return;
-                const el = editor?.api.toDOMNode(node);
-                if (el) {
-                  el.scrollIntoView({ behavior: "smooth", block: "center" });
-                  editor
-                    ?.getApi(BlockSelectionPlugin)
-                    .blockSelection.set([item.id]);
-                  setActiveItem(item.id);
-                }
+              }),
+              "rounded-md",
+            )}
+            onClick={() => {
+              const node = NodeApi.get(editor!, item.path);
+              if (!node) return;
+              const el = editor?.api.toDOMNode(node);
+              if (el) {
+                el.scrollIntoView({ behavior: "smooth", block: "center" });
+                editor
+                  ?.getApi(BlockSelectionPlugin)
+                  .blockSelection.set([item.id]);
+                setActiveItem(item.id);
+              }
+            }}
+          >
+            <Typography.Text
+              ellipsis={{
+                tooltip: {
+                  placement: "right",
+                  mouseEnterDelay: 0.5,
+                  arrow: false,
+                },
               }}
+              className={clsx(
+                item.id === activeItem && "text-info! transition",
+              )}
             >
-              <Typography.Text
-                ellipsis={{
-                  tooltip: {
-                    placement: "right",
-                    mouseEnterDelay: 0.5,
-                    arrow: false,
-                  },
-                }}
-                className={clsx(item.id === activeItem && "text-info-active!")}
-              >
-                {item.title}
-              </Typography.Text>
-            </Button>
-          ))
-        ) : (
-          <div className="text-sm text-gray-500">
-            Create a heading to display the table of contents.
-          </div>
-        )}
-      </div>
+              {item.title}
+            </Typography.Text>
+          </Button>
+        ))
+      ) : (
+        <div className="w-full flex items-center justify-center mt-10">
+          <Empty
+            description={t`请创建一个标题以显示目录`}
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+          />
+        </div>
+      )}
     </div>
   );
 };
