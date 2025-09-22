@@ -129,6 +129,7 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
             setOpen(false);
             form.resetFields();
           } catch (error) {
+            console.log("创建失败", error);
             message.error("创建失败");
           }
         }}

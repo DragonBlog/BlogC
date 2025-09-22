@@ -20,6 +20,7 @@ import { App, Dropdown } from "antd";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { match } from "ts-pattern";
 import { useEditorTabsStore } from "@/store/useEditorTabsStore";
+import { useTreeStore } from "@/store/useTreeStore";
 import { CommandError } from "../../command";
 import {
   FileTreeItem,
@@ -44,7 +45,7 @@ type EditorSideProps = {
 export const EditorSide = (props: EditorSideProps) => {
   const { disableToolbar, virtual, onClick } = props;
   const [projectDir] = useAppStore((store) => [store.projectDir]);
-
+  const { setTreeRef } = useTreeStore();
   const [selectedItem, setSelectedItem, sideType] = useEditorTabsStore(
     (store) => [store.selectedItem, store.setSelectedItem, store.sideType],
   );
@@ -160,8 +161,13 @@ export const EditorSide = (props: EditorSideProps) => {
       }
     },
   });
-
-  // 提取 openInFolder 逻辑
+  // 获取tree实例的引用
+  useEffect(() => {
+    setTreeRef(tree);
+    return () => {
+      setTreeRef(null);
+    };
+  }, [tree, setTreeRef]);
   const handleOpenInFolder = useCallback(
     async (path: string) => {
       const parent = tree.getItemInstance(path)?.getParent();

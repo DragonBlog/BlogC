@@ -104,6 +104,7 @@ export const FileEditor = () => {
           <ItemFileTab
             key={tab.id}
             data={tab}
+            onClose={() => remove(tab.id)}
             ref={(ref) => {
               if (ref) {
                 editors.current[tab.id] = ref;
@@ -129,6 +130,7 @@ export const FileEditor = () => {
           <ItemFileTab
             key={newTab.id}
             data={newTab}
+            onClose={() => remove(newTab.id)}
             ref={(ref) => {
               if (ref) {
                 editors.current[newTab.id] = ref;

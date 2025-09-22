@@ -21,42 +21,46 @@ export const TocSideBar = () => {
   const headingElementsRef = useRef<Record<string, IntersectionObserverEntry>>(
     {},
   );
+  const [clickedItemId, setClickedItemId] = useState<string | null>(null);
+  const scrollEndTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!editor) return;
     const callback: IntersectionObserverCallback = (headings) => {
       headingElementsRef.current = headings.reduce((map, headingElement) => {
         const blockId = (headingElement.target as HTMLElement).dataset.blockId;
-
-        if (blockId) {
-          map[blockId] = headingElement;
-        }
-
+        if (blockId) map[blockId] = headingElement;
         return map;
       }, headingElementsRef.current);
 
       const visibleHeadings: string[] = [];
-
       Object.keys(headingElementsRef.current).forEach((key) => {
         const headingElement = headingElementsRef.current[key];
-
         if (headingElement.isIntersecting) visibleHeadings.push(key);
       });
-      const lastKey = Object.keys(headingElementsRef.current).pop()!;
-      const activeItem = visibleHeadings[0] || lastKey;
-      visibleHeadings.length > 0 && setActiveItem(activeItem);
-      const btn = tocButtonRefs.current[activeItem];
-
-      if (btn && tocRef.current) {
-        const { offsetTop: btnOffsetTop, offsetHeight: btnOffsetHeight } = btn;
-        const { scrollTop, offsetHeight } = tocRef.current;
-        if (btnOffsetTop < scrollTop) {
-          btn.scrollIntoView({ behavior: "smooth", block: "start" });
-        } else if (btnOffsetTop + btnOffsetHeight > scrollTop + offsetHeight) {
-          btn.scrollIntoView({ behavior: "smooth", block: "end" });
-        }
+      //实现防抖
+      if (scrollEndTimeoutRef.current) {
+        window.clearTimeout(scrollEndTimeoutRef.current);
       }
-      headingElementsRef.current = {};
+      scrollEndTimeoutRef.current = window.setTimeout(() => {
+        if (clickedItemId) {
+          setActiveItem(clickedItemId);
+          const btn = tocButtonRefs.current[clickedItemId];
+          if (btn && tocRef.current) {
+            const { offsetTop: btnOffsetTop, offsetHeight: btnOffsetHeight } =
+              btn;
+            const { scrollTop, offsetHeight } = tocRef.current;
+            if (btnOffsetTop < scrollTop) {
+              btn.scrollIntoView({ behavior: "smooth", block: "start" });
+            } else if (
+              btnOffsetTop + btnOffsetHeight >
+              scrollTop + offsetHeight
+            ) {
+              btn.scrollIntoView({ behavior: "smooth", block: "end" });
+            }
+          }
+        }
+      }, 350);
     };
 
     const observer = new IntersectionObserver(callback, {
@@ -65,18 +69,19 @@ export const TocSideBar = () => {
 
     headingList.forEach((item) => {
       const { path } = item;
-
       const node = NodeApi.get(editor, path);
-
       if (!node) return;
-
       const element = editor.api.toDOMNode(node);
-
-      return element && observer.observe(element);
+      if (element) observer.observe(element);
     });
 
-    return () => observer.disconnect();
-  }, [headingList, editor]);
+    return () => {
+      observer.disconnect();
+      if (scrollEndTimeoutRef.current) {
+        window.clearTimeout(scrollEndTimeoutRef.current);
+      }
+    };
+  }, [headingList, editor, clickedItemId]);
 
   return (
     <div ref={tocRef} className="w-full h-full overflow-x-hidden p-2">
@@ -85,10 +90,11 @@ export const TocSideBar = () => {
           <Button
             key={item.title}
             ref={(ref) => {
-              if (ref) tocButtonRefs.current[item.id] = ref;
-              return () => {
+              if (ref) {
+                tocButtonRefs.current[item.id] = ref;
+              } else {
                 delete tocButtonRefs.current[item.id];
-              };
+              }
             }}
             variant={"ghost"}
             className={clsx(
@@ -106,7 +112,26 @@ export const TocSideBar = () => {
                 editor
                   ?.getApi(BlockSelectionPlugin)
                   .blockSelection.set([item.id]);
+
+                setClickedItemId(item.id);
                 setActiveItem(item.id);
+
+                const btn = tocButtonRefs.current[item.id];
+                if (btn && tocRef.current) {
+                  const {
+                    offsetTop: btnOffsetTop,
+                    offsetHeight: btnOffsetHeight,
+                  } = btn;
+                  const { scrollTop, offsetHeight } = tocRef.current;
+                  if (btnOffsetTop < scrollTop) {
+                    btn.scrollIntoView({ behavior: "auto", block: "start" });
+                  } else if (
+                    btnOffsetTop + btnOffsetHeight >
+                    scrollTop + offsetHeight
+                  ) {
+                    btn.scrollIntoView({ behavior: "auto", block: "end" });
+                  }
+                }
               }
             }}
           >

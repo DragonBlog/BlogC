@@ -102,7 +102,6 @@ export const TreeToolbar = ({
               disabled={!selectedItem}
               onClick={() => {
                 if (selectedItem) {
-                  console.log(tree.getItemInstance(selectedItem));
                   tree.getItemInstance(selectedItem)?.startRenaming();
                 }
               }}

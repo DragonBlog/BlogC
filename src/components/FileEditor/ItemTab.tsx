@@ -9,8 +9,11 @@ import {
   PlateEditor as TPlateEditor,
   usePlateEditor,
 } from "platejs/react";
-import { Ref, useImperativeHandle, useState } from "react";
-import { EditorTab } from "@/store/useEditorTabsStore";
+import { Ref, useImperativeHandle, useRef, useState } from "react";
+import { EditorTab, useEditorTabsStore } from "@/store/useEditorTabsStore";
+import { useTreeStore } from "@/store/useTreeStore";
+import { useAppStore } from "../../store/useAppStore";
+import { CreateModal, CreateModalRef } from "../EditorSide/CreateModal";
 import { EditorKit } from "../editor/editor-kit";
 import { PlateEditor } from "../editor/plate-editor";
 
@@ -40,8 +43,12 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
   const { fileItem } = data;
   const { message } = App.useApp();
   const { t } = useLingui();
-
+  const createModalRef = useRef<CreateModalRef>(null);
+  const treeRef = useTreeStore((state) => state.treeRef);
   const [isLoading, setIsLoading] = useState(false);
+  const [projectDir] = useAppStore((store) => [store.projectDir]);
+  const [selectedItem] =
+    useEditorTabsStore((store) => [store.selectedItem]) || projectDir;
 
   const editor = usePlateEditor({
     plugins: EditorKit,
@@ -89,7 +96,11 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
       <p
         className="text-[16px] cursor-pointer text-primary-active hover:text-primary-hover"
         onClick={() => {
-          onChange?.(data);
+          createModalRef.current?.open({
+            type: "createFile",
+            folderPath: selectedItem,
+            name: t`未命名.md`,
+          });
         }}
       >
         <Trans>创建新文件</Trans>
@@ -105,6 +116,14 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
       <Typography.Text type="secondary">
         <Trans>或者从左侧文件树中选择一个文件进行编辑</Trans>
       </Typography.Text>
+      <CreateModal
+        ref={createModalRef}
+        onRefresh={() => {
+          if (treeRef) {
+            treeRef.getItemInstance(selectedItem)?.invalidateChildrenIds();
+          }
+        }}
+      />
     </div>
   );
 };
