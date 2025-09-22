@@ -77,6 +77,10 @@ msgstr "你现在可以开始使用博客管理系统了，点击完成按钮进
 msgid "依赖安装失败 {0}"
 msgstr "依赖安装失败 {0}"
 
+#: src/components/FileEditor/ItemTab.tsx:53
+msgid "保存文件失败 {error}"
+msgstr "保存文件失败 {error}"
+
 #: src/components/ui/insert-toolbar-button.tsx:177
 msgid "公式"
 msgstr "公式"
@@ -85,7 +89,7 @@ msgstr "公式"
 msgid "关闭建议模式"
 msgstr "关闭建议模式"
 
-#: src/components/FileEditor/ItemTab.tsx:99
+#: src/components/FileEditor/ItemTab.tsx:119
 msgid "关闭标签页"
 msgstr "关闭标签页"
 
@@ -140,7 +144,7 @@ msgstr "创建失败: {e}"
 msgid "创建成功"
 msgstr "创建成功"
 
-#: src/components/FileEditor/ItemTab.tsx:91
+#: src/components/FileEditor/ItemTab.tsx:111
 msgid "创建新文件"
 msgstr "创建新文件"
 
@@ -389,7 +393,7 @@ msgstr "待办事项"
 msgid "待办列表"
 msgstr "待办列表"
 
-#: src/components/FileEditor/ItemTab.tsx:102
+#: src/components/FileEditor/ItemTab.tsx:122
 msgid "或者从左侧文件树中选择一个文件进行编辑"
 msgstr "或者从左侧文件树中选择一个文件进行编辑"
 
@@ -573,7 +577,7 @@ msgstr "标题 6"
 msgid "模版下载失败 {0}"
 msgstr "模版下载失败 {0}"
 
-#: src/components/FileEditor/ItemTab.tsx:71
+#: src/components/FileEditor/ItemTab.tsx:91
 msgid "正在加载文件..."
 msgstr "正在加载文件..."
 
@@ -714,7 +718,7 @@ msgstr "请输入名称"
 msgid "请输入正确的名称"
 msgstr "请输入正确的名称"
 
-#: src/components/FileEditor/ItemTab.tsx:57
+#: src/components/FileEditor/ItemTab.tsx:77
 msgid "读取文件失败 {error}"
 msgstr "读取文件失败 {error}"
 

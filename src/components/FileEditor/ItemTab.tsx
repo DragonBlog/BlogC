@@ -1,16 +1,12 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { MarkdownPlugin } from "@platejs/markdown";
-import { readTextFile } from "@tauri-apps/plugin-fs";
-import { useAsyncEffect } from "ahooks";
+import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
+import { useAsyncEffect, useDebounceFn } from "ahooks";
 import { App, Spin, Typography } from "antd";
-import {
-  PlateElement,
-  PlateEditor as TPlateEditor,
-  usePlateEditor,
-} from "platejs/react";
+import { PlateEditor as TPlateEditor, usePlateEditor } from "platejs/react";
 import { Ref, useImperativeHandle, useState } from "react";
-import { EditorTab } from "@/store/useEditorTabsStore";
+import { EditorTab, useEditorTabsStore } from "@/store/useEditorTabsStore";
 import { EditorKit } from "../editor/editor-kit";
 import { PlateEditor } from "../editor/plate-editor";
 
@@ -40,8 +36,28 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
   const { fileItem } = data;
   const { message } = App.useApp();
   const { t } = useLingui();
+  const [autoSave, autoSaveTimeout] = useEditorTabsStore((store) => [
+    store.autoSave,
+    store.autoSaveTimeout,
+  ]);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const { run: saveFile } = useDebounceFn(
+    async ({ editor }: { editor: TPlateEditor }) => {
+      if (fileItem && autoSave) {
+        const text = editor.getApi(MarkdownPlugin).markdown.serialize();
+        try {
+          await writeTextFile(fileItem.path, text);
+        } catch (error) {
+          message.error(t`保存文件失败 ${error}`);
+        }
+      }
+    },
+    {
+      wait: autoSaveTimeout,
+    },
+  );
 
   const editor = usePlateEditor({
     plugins: EditorKit,
@@ -78,7 +94,7 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
             <div className="w-30"></div>
           </Spin>
         ) : (
-          <PlateEditor editor={editor} />
+          <PlateEditor editor={editor} onValueChange={saveFile} />
         )}
       </div>
     );
