@@ -5,16 +5,14 @@ import remarkEmoji from "remark-emoji";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import Frontmatter from "../Frontmatter";
 
 const frontMatterPlugin = createPlatePlugin({
   key: "frontmatter",
   node: {
     isElement: true,
     type: "frontmatter",
-    component: (props) => {
-      console.log("frontMatterPlugin", props);
-      return <PlateElement {...props} />;
-    },
+    component: Frontmatter,
   },
 });
 

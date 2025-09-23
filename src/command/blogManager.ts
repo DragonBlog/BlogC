@@ -14,3 +14,18 @@ export async function installTemplate(
     onProgress: new Channel(cb),
   });
 }
+
+export function parseMetadata(metadataStr: string): Record<string, string> {
+  const result: Record<string, string> = {};
+  const lines = metadataStr.split("\n");
+
+  for (const line of lines) {
+    const index = line.indexOf(":");
+    if (index === -1) continue;
+    const key = line.slice(0, index).trim();
+    const value = line.slice(index + 1).trim();
+    result[key] = value;
+  }
+
+  return result;
+}

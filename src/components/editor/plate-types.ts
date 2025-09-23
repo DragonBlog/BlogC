@@ -25,7 +25,10 @@ import type {
 export interface MyBlockElement extends TElement, TListProps {
   id?: string;
 }
-
+export interface FrontmatterElement extends TElement {
+  type: "frontmatter";
+  value: string;
+}
 export interface MyTextBlockElement
   extends TElement,
     TLineHeightProps,
