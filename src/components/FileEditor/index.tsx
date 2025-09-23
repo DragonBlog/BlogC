@@ -105,6 +105,10 @@ export const FileEditor = () => {
             key={tab.id}
             data={tab}
             onClose={() => remove(tab.id)}
+            onChange={(data) => {
+              const newTabs = tabs.map((i) => (i.id === data.id ? data : i));
+              setTabs(newTabs);
+            }}
             ref={(ref) => {
               if (ref) {
                 editors.current[tab.id] = ref;
@@ -131,6 +135,10 @@ export const FileEditor = () => {
             key={newTab.id}
             data={newTab}
             onClose={() => remove(newTab.id)}
+            onChange={(data) => {
+              const newTabs = tabs.map((i) => (i.id === data.id ? data : i));
+              setTabs(newTabs);
+            }}
             ref={(ref) => {
               if (ref) {
                 editors.current[newTab.id] = ref;

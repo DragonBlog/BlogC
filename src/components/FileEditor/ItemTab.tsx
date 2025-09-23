@@ -4,14 +4,10 @@ import { MarkdownPlugin } from "@platejs/markdown";
 import { readTextFile } from "@tauri-apps/plugin-fs";
 import { useAsyncEffect } from "ahooks";
 import { App, Spin, Typography } from "antd";
-import {
-  PlateElement,
-  PlateEditor as TPlateEditor,
-  usePlateEditor,
-} from "platejs/react";
+import { PlateEditor as TPlateEditor, usePlateEditor } from "platejs/react";
 import { Ref, useImperativeHandle, useRef, useState } from "react";
+import { useTreeStore } from "@/components/EditorSide/useTreeStore";
 import { EditorTab, useEditorTabsStore } from "@/store/useEditorTabsStore";
-import { useTreeStore } from "@/store/useTreeStore";
 import { useAppStore } from "../../store/useAppStore";
 import { CreateModal, CreateModalRef } from "../EditorSide/CreateModal";
 import { EditorKit } from "../editor/editor-kit";
@@ -47,8 +43,10 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
   const treeRef = useTreeStore((state) => state.treeRef);
   const [isLoading, setIsLoading] = useState(false);
   const [projectDir] = useAppStore((store) => [store.projectDir]);
-  const [selectedItem] =
-    useEditorTabsStore((store) => [store.selectedItem]) || projectDir;
+  const [selectedItem, setSelectedItem] = useEditorTabsStore((store) => [
+    store.selectedItem,
+    store.setSelectedItem,
+  ]);
 
   const editor = usePlateEditor({
     plugins: EditorKit,
@@ -95,12 +93,20 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
     <div className="h-full flex flex-col items-center justify-center">
       <p
         className="text-[16px] cursor-pointer text-primary-active hover:text-primary-hover"
-        onClick={() => {
-          createModalRef.current?.open({
-            type: "createFile",
-            folderPath: selectedItem,
-            name: t`未命名.md`,
-          });
+        onClick={async () => {
+          if (!treeRef) return;
+          try {
+            const currentItem = treeRef.getItemInstance(selectedItem);
+            const isFolder = currentItem.isFolder();
+            const parent = isFolder ? currentItem : currentItem.getParent();
+            createModalRef.current?.open({
+              type: "createFile",
+              folderPath: parent?.getId() || projectDir,
+              name: t`未命名.md`,
+            });
+          } catch (e) {
+            message.error(t`创建失败: ${e}`);
+          }
         }}
       >
         <Trans>创建新文件</Trans>
@@ -118,10 +124,18 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
       </Typography.Text>
       <CreateModal
         ref={createModalRef}
-        onRefresh={() => {
+        onRefresh={(parentPath) => {
           if (treeRef) {
-            treeRef.getItemInstance(selectedItem)?.invalidateChildrenIds();
+            treeRef.getItemInstance(parentPath)?.invalidateChildrenIds();
           }
+        }}
+        onCreate={(fileItem) => {
+          onChange?.({
+            ...data,
+            fileItem,
+            isEdited: true,
+          });
+          setSelectedItem(fileItem.path);
         }}
       />
     </div>

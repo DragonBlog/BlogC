@@ -19,8 +19,8 @@ import { type } from "@tauri-apps/plugin-os";
 import { App, Dropdown } from "antd";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { match } from "ts-pattern";
+import { useTreeStore } from "@/components/EditorSide/useTreeStore";
 import { useEditorTabsStore } from "@/store/useEditorTabsStore";
-import { useTreeStore } from "@/store/useTreeStore";
 import { CommandError } from "../../command";
 import {
   FileTreeItem,
