@@ -1,5 +1,6 @@
 import { useLingui } from "@lingui/react/macro";
 import { BlockSelectionPlugin } from "@platejs/selection/react";
+import { useDebounceFn } from "ahooks";
 import { Empty, Typography } from "antd";
 import clsx from "clsx";
 import { NodeApi } from "platejs";
@@ -22,8 +23,31 @@ export const TocSideBar = () => {
     {},
   );
   const [clickedItemId, setClickedItemId] = useState<string | null>(null);
-  const scrollEndTimeoutRef = useRef<number | null>(null);
 
+  const handleScrollEnd = useDebounceFn(
+    () => {
+      if (clickedItemId) {
+        setActiveItem(clickedItemId);
+        const btn = tocButtonRefs.current[clickedItemId];
+        if (btn && tocRef.current) {
+          const { offsetTop: btnOffsetTop, offsetHeight: btnOffsetHeight } =
+            btn;
+          const { scrollTop, offsetHeight } = tocRef.current;
+          if (btnOffsetTop < scrollTop) {
+            btn.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else if (
+            btnOffsetTop + btnOffsetHeight >
+            scrollTop + offsetHeight
+          ) {
+            btn.scrollIntoView({ behavior: "smooth", block: "end" });
+          }
+        }
+      }
+    },
+    {
+      wait: 350,
+    },
+  );
   useEffect(() => {
     if (!editor) return;
     const callback: IntersectionObserverCallback = (headings) => {
@@ -39,28 +63,7 @@ export const TocSideBar = () => {
         if (headingElement.isIntersecting) visibleHeadings.push(key);
       });
       //实现防抖
-      if (scrollEndTimeoutRef.current) {
-        window.clearTimeout(scrollEndTimeoutRef.current);
-      }
-      scrollEndTimeoutRef.current = window.setTimeout(() => {
-        if (clickedItemId) {
-          setActiveItem(clickedItemId);
-          const btn = tocButtonRefs.current[clickedItemId];
-          if (btn && tocRef.current) {
-            const { offsetTop: btnOffsetTop, offsetHeight: btnOffsetHeight } =
-              btn;
-            const { scrollTop, offsetHeight } = tocRef.current;
-            if (btnOffsetTop < scrollTop) {
-              btn.scrollIntoView({ behavior: "smooth", block: "start" });
-            } else if (
-              btnOffsetTop + btnOffsetHeight >
-              scrollTop + offsetHeight
-            ) {
-              btn.scrollIntoView({ behavior: "smooth", block: "end" });
-            }
-          }
-        }
-      }, 350);
+      handleScrollEnd.run();
     };
 
     const observer = new IntersectionObserver(callback, {
@@ -77,11 +80,8 @@ export const TocSideBar = () => {
 
     return () => {
       observer.disconnect();
-      if (scrollEndTimeoutRef.current) {
-        window.clearTimeout(scrollEndTimeoutRef.current);
-      }
     };
-  }, [headingList, editor, clickedItemId]);
+  }, [headingList, editor, clickedItemId, handleScrollEnd]);
 
   return (
     <div ref={tocRef} className="w-full h-full overflow-x-hidden p-2">
