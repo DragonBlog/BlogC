@@ -85,7 +85,7 @@ msgstr "Formula"
 msgid "关闭建议模式"
 msgstr "Turn off suggestion mode"
 
-#: src/components/FileEditor/ItemTab.tsx:99
+#: src/components/FileEditor/ItemTab.tsx:103
 msgid "关闭标签页"
 msgstr "Close tab"
 
@@ -140,7 +140,7 @@ msgstr "Creation failed: {e}"
 msgid "创建成功"
 msgstr "Created successfully"
 
-#: src/components/FileEditor/ItemTab.tsx:91
+#: src/components/FileEditor/ItemTab.tsx:95
 msgid "创建新文件"
 msgstr "Create new file"
 
@@ -385,7 +385,7 @@ msgstr "To-do"
 msgid "待办列表"
 msgstr "To-do List"
 
-#: src/components/FileEditor/ItemTab.tsx:102
+#: src/components/FileEditor/ItemTab.tsx:106
 msgid "或者从左侧文件树中选择一个文件进行编辑"
 msgstr "Or select a file from the left file tree to edit"
 
@@ -569,7 +569,7 @@ msgstr "Heading 6"
 msgid "模版下载失败 {0}"
 msgstr "Template download failed {0}"
 
-#: src/components/FileEditor/ItemTab.tsx:71
+#: src/components/FileEditor/ItemTab.tsx:75
 msgid "正在加载文件..."
 msgstr "Loading file..."
 
@@ -710,7 +710,7 @@ msgstr "Please enter a name"
 msgid "请输入正确的名称"
 msgstr "Please enter a valid name"
 
-#: src/components/FileEditor/ItemTab.tsx:57
+#: src/components/FileEditor/ItemTab.tsx:61
 msgid "读取文件失败 {error}"
 msgstr "Failed to read file {error}"
 
