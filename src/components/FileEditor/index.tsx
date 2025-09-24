@@ -1,8 +1,7 @@
 import { useLingui } from "@lingui/react/macro";
 import { useMemoizedFn } from "ahooks";
 import { Tabs } from "antd";
-import { PlateEditor } from "platejs/react";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { v4 } from "uuid";
@@ -20,23 +19,14 @@ import styles from "./index.module.less";
  * - 标签页状态管理
  */
 export const FileEditor = () => {
-  const [
-    tabs,
-    activeTabId,
-    setActiveTabId,
-    setTabs,
-    setSelectedItem,
-    setCurrentMonitorEditor,
-  ] = useEditorTabsStore((store) => [
-    store.tabs,
-    store.activeTabId,
-    store.setActiveTabId,
-    store.setTabs,
-    store.setSelectedItem,
-    store.setCurrentMonitorEditor,
-  ]);
-
-  const editors = useRef<Record<string, PlateEditor>>({});
+  const [tabs, activeTabId, setActiveTabId, setTabs, setSelectedItem] =
+    useEditorTabsStore((store) => [
+      store.tabs,
+      store.activeTabId,
+      store.setActiveTabId,
+      store.setTabs,
+      store.setSelectedItem,
+    ]);
 
   const { t } = useLingui();
 
@@ -104,13 +94,10 @@ export const FileEditor = () => {
           <ItemFileTab
             key={tab.id}
             data={tab}
-            ref={(ref) => {
-              if (ref) {
-                editors.current[tab.id] = ref;
-              }
-              return () => {
-                delete editors.current[tab.id];
-              };
+            onClose={() => remove(tab.id)}
+            onChange={(data) => {
+              const newTabs = tabs.map((i) => (i.id === data.id ? data : i));
+              setTabs(newTabs);
             }}
           />
         ),
@@ -129,13 +116,10 @@ export const FileEditor = () => {
           <ItemFileTab
             key={newTab.id}
             data={newTab}
-            ref={(ref) => {
-              if (ref) {
-                editors.current[newTab.id] = ref;
-              }
-              return () => {
-                delete editors.current[newTab.id];
-              };
+            onClose={() => remove(newTab.id)}
+            onChange={(data) => {
+              const newTabs = tabs.map((i) => (i.id === data.id ? data : i));
+              setTabs(newTabs);
             }}
           />
         ),
@@ -144,11 +128,6 @@ export const FileEditor = () => {
     }
     return items;
   }, [t, tabs, setActiveTabId]);
-
-  useEffect(() => {
-    // 监听标签页激活事件，并更新当前监控的编辑器
-    setCurrentMonitorEditor(editors.current[activeTabId]);
-  }, [activeTabId, setCurrentMonitorEditor]);
 
   return (
     <DndProvider backend={HTML5Backend}>

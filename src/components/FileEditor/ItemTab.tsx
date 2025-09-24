@@ -1,12 +1,18 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { MarkdownPlugin } from "@platejs/markdown";
+import { BlockSelectionPlugin } from "@platejs/selection/react";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { useAsyncEffect, useDebounceFn } from "ahooks";
 import { App, Spin, Typography } from "antd";
 import { PlateEditor as TPlateEditor, usePlateEditor } from "platejs/react";
-import { Ref, useImperativeHandle, useState } from "react";
+import { useRef, useState } from "react";
+import { useTreeStore } from "@/components/EditorSide/useTreeStore";
 import { EditorTab, useEditorTabsStore } from "@/store/useEditorTabsStore";
+import { useAppStore } from "../../store/useAppStore";
+import { CreateModal, CreateModalRef } from "../EditorSide/CreateModal";
+import { useTocStore } from "../EditorSide/TocSide/useTocStore";
+import { getHeadingList } from "../EditorSide/TocSide/util";
 import { EditorKit } from "../editor/editor-kit";
 import { PlateEditor } from "../editor/plate-editor";
 
@@ -23,7 +29,6 @@ type ItemFileTabProps = {
   data: EditorTab;
   onChange?: (data: EditorTab) => void;
   onClose?: (data: EditorTab) => void;
-  ref?: Ref<TPlateEditor>;
 };
 
 /**
@@ -41,7 +46,27 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
     store.autoSaveTimeout,
   ]);
 
+  const createModalRef = useRef<CreateModalRef>(null);
+  const treeRef = useTreeStore((state) => state.treeRef);
   const [isLoading, setIsLoading] = useState(false);
+  const [projectDir] = useAppStore((store) => [store.projectDir]);
+  const [activeTabId, selectedItem, setSelectedItem] = useEditorTabsStore(
+    (store) => [store.activeTabId, store.selectedItem, store.setSelectedItem],
+  );
+  const [setHeadingMaps] = useTocStore((store) => [store.setHeadingMaps]);
+
+  const { run } = useDebounceFn(
+    (editor: TPlateEditor) => {
+      setHeadingMaps(data.id, getHeadingList(editor), (id) => {
+        editor
+          .getApi(BlockSelectionPlugin)
+          .blockSelection.setSelectedIds({ ids: [id] });
+      });
+    },
+    {
+      wait: 300,
+    },
+  );
 
   const { run: saveFile } = useDebounceFn(
     async ({ editor }: { editor: TPlateEditor }) => {
@@ -63,8 +88,6 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
     plugins: EditorKit,
   });
 
-  useImperativeHandle(props.ref, () => editor, [editor]);
-
   useAsyncEffect(async () => {
     if (fileItem) {
       setIsLoading(true);
@@ -73,6 +96,7 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
         editor.tf.setValue(
           editor.getApi(MarkdownPlugin).markdown.deserialize(res),
         );
+        run(editor);
       } catch (error) {
         message.error(t`读取文件失败 ${error}`);
       } finally {
@@ -94,7 +118,15 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
             <div className="w-30"></div>
           </Spin>
         ) : (
-          <PlateEditor editor={editor} onValueChange={saveFile} />
+          <PlateEditor
+            editor={editor}
+            onValueChange={({ editor }) => {
+              saveFile({ editor });
+              if (activeTabId === data.id) {
+                run(editor);
+              }
+            }}
+          />
         )}
       </div>
     );
@@ -104,8 +136,20 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
     <div className="h-full flex flex-col items-center justify-center">
       <p
         className="text-[16px] cursor-pointer text-primary-active hover:text-primary-hover"
-        onClick={() => {
-          onChange?.(data);
+        onClick={async () => {
+          if (!treeRef) return;
+          try {
+            const currentItem = treeRef.getItemInstance(selectedItem);
+            const isFolder = currentItem.isFolder();
+            const parent = isFolder ? currentItem : currentItem.getParent();
+            createModalRef.current?.open({
+              type: "createFile",
+              folderPath: parent?.getId() || projectDir,
+              name: t`未命名.md`,
+            });
+          } catch (e) {
+            message.error(t`创建失败: ${e}`);
+          }
         }}
       >
         <Trans>创建新文件</Trans>
@@ -121,6 +165,22 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
       <Typography.Text type="secondary">
         <Trans>或者从左侧文件树中选择一个文件进行编辑</Trans>
       </Typography.Text>
+      <CreateModal
+        ref={createModalRef}
+        onRefresh={(parentPath) => {
+          if (treeRef) {
+            treeRef.getItemInstance(parentPath)?.invalidateChildrenIds();
+          }
+        }}
+        onCreate={(fileItem) => {
+          onChange?.({
+            ...data,
+            fileItem,
+            isEdited: true,
+          });
+          setSelectedItem(fileItem.path);
+        }}
+      />
     </div>
   );
 };

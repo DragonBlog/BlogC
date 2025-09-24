@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import { match } from "ts-pattern";
-import type { ExistFileProcess } from "@/command/fileManager";
+import type { ExistFileProcess, FileTreeItem } from "@/command/fileManager";
 import { copyFileOrFolder, moveFileOrFolder } from "@/command/fileManager";
 import { useAppStore } from "@/store/useAppStore";
 import { FolderSelector } from "../FolderSelector";
@@ -32,10 +32,11 @@ export type CreateModalRef = {
 
 type CreateModalProps = {
   onRefresh?: (parentPath: string) => void;
+  onCreate?: (data: FileTreeItem) => void;
 };
 
 export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
-  ({ onRefresh }, ref) => {
+  ({ onRefresh, onCreate }, ref) => {
     const [form] = Form.useForm();
     const [open, setOpen] = useState(false);
     const { message } = App.useApp();
@@ -85,12 +86,22 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
               .with({ type: "createFolder" }, async () => {
                 await mkdir(`${folderPath}/${name}`);
                 onRefresh?.(folderPath);
+                onCreate?.({
+                  name,
+                  path: `${folderPath}/${name}`,
+                  isDir: true,
+                });
                 message.success(t`创建成功`);
               })
               .with({ type: "createFile" }, async () => {
                 const file = await create(`${folderPath}/${name}`);
                 await file.close();
                 onRefresh?.(folderPath);
+                onCreate?.({
+                  name,
+                  path: `${folderPath}/${name}`,
+                  isDir: false,
+                });
                 message.success(t`创建成功`);
               })
               .with({ type: "move" }, async (opts) => {
@@ -129,6 +140,7 @@ export const CreateModal = forwardRef<CreateModalRef, CreateModalProps>(
             setOpen(false);
             form.resetFields();
           } catch (error) {
+            console.log("创建失败", error);
             message.error("创建失败");
           }
         }}

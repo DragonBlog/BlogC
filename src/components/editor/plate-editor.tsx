@@ -1,5 +1,6 @@
 "use client";
 import { Plate, PlateProps } from "platejs/react";
+import { Ref } from "react";
 import { Editor, EditorContainer } from "@/components/ui/editor";
 
 export function PlateEditor(
@@ -11,11 +12,13 @@ export function PlateEditor(
     | "onValueChange"
     | "onTextChange"
     | "readOnly"
-  >,
+  > & {
+    ref?: Ref<HTMLDivElement>;
+  },
 ) {
   return (
     <Plate {...props}>
-      <EditorContainer variant="default">
+      <EditorContainer variant="default" ref={props.ref}>
         <Editor variant="fullWidth" />
       </EditorContainer>
       {/* <SettingsDialog /> */}
