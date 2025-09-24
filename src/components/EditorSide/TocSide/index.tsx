@@ -1,30 +1,39 @@
 import { useLingui } from "@lingui/react/macro";
-import { BlockSelectionPlugin } from "@platejs/selection/react";
 import { Empty, Typography } from "antd";
 import clsx from "clsx";
-import { NodeApi } from "platejs";
-import { useEffect, useRef, useState } from "react";
-import {
-  getHeadingList,
-  headingItemVariants,
-} from "@/components/ui/toc-node-static";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { headingItemVariants } from "@/components/ui/toc-node-static";
 import { useEditorTabsStore } from "@/store/useEditorTabsStore";
 import { Button } from "../../ui/button";
+import { useTocStore } from "./useTocStore";
 
 export const TocSideBar = () => {
   const { t } = useLingui();
-  const [editor] = useEditorTabsStore((store) => [store.currentMonitorEditor]);
   const tocRef = useRef<HTMLDivElement>(null);
   const tocButtonRefs = useRef<Record<string, HTMLButtonElement>>({});
-  const headingList = getHeadingList(editor);
+  const [headingMaps] = useTocStore((store) => [store.headingMaps]);
+  const [activeTabId] = useEditorTabsStore((store) => [store.activeTabId]);
+
+  const { headings: headingList, blockSelectFn } = useMemo(() => {
+    if (headingMaps[activeTabId]) {
+      return headingMaps[activeTabId];
+    } else {
+      return {
+        headings: [],
+        blockSelectFn: () => {},
+      };
+    }
+  }, [headingMaps, activeTabId]);
+
   const [activeItem, setActiveItem] = useState<string>();
   const headingElementsRef = useRef<Record<string, IntersectionObserverEntry>>(
     {},
   );
+  const clickRef = useRef(false);
 
   useEffect(() => {
-    if (!editor) return;
     const callback: IntersectionObserverCallback = (headings) => {
+      if (clickRef.current) return;
       headingElementsRef.current = headings.reduce((map, headingElement) => {
         const blockId = (headingElement.target as HTMLElement).dataset.blockId;
 
@@ -64,19 +73,12 @@ export const TocSideBar = () => {
     });
 
     headingList.forEach((item) => {
-      const { path } = item;
-
-      const node = NodeApi.get(editor, path);
-
-      if (!node) return;
-
-      const element = editor.api.toDOMNode(node);
-
+      const { element } = item;
       return element && observer.observe(element);
     });
 
     return () => observer.disconnect();
-  }, [headingList, editor]);
+  }, [headingList]);
 
   return (
     <div ref={tocRef} className="w-full h-full overflow-x-hidden p-2">
@@ -98,15 +100,16 @@ export const TocSideBar = () => {
               "rounded-md",
             )}
             onClick={() => {
-              const node = NodeApi.get(editor!, item.path);
-              if (!node) return;
-              const el = editor?.api.toDOMNode(node);
-              if (el) {
-                el.scrollIntoView({ behavior: "smooth", block: "center" });
-                editor
-                  ?.getApi(BlockSelectionPlugin)
-                  .blockSelection.set([item.id]);
+              if (item.element) {
+                item.element.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center",
+                });
+                blockSelectFn?.(item.id);
                 setActiveItem(item.id);
+                setTimeout(() => {
+                  clickRef.current = false;
+                }, 300);
               }
             }}
           >

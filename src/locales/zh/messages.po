@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/EditorSide/CreateModal.tsx:155
+#: src/components/EditorSide/CreateModal.tsx:167
 msgid "{value} 已存在"
 msgstr "{value} 已存在"
 
@@ -85,7 +85,7 @@ msgstr "公式"
 msgid "关闭建议模式"
 msgstr "关闭建议模式"
 
-#: src/components/FileEditor/ItemTab.tsx:99
+#: src/components/FileEditor/ItemTab.tsx:141
 msgid "关闭标签页"
 msgstr "关闭标签页"
 
@@ -93,7 +93,7 @@ msgstr "关闭标签页"
 msgid "内联"
 msgstr "内联"
 
-#: src/components/EditorSide/CreateModal.tsx:176
+#: src/components/EditorSide/CreateModal.tsx:188
 msgid "冲突处理"
 msgstr "冲突处理"
 
@@ -131,16 +131,17 @@ msgstr "列"
 msgid "列表"
 msgstr "列表"
 
-#: src/components/EditorSide/index.tsx:318
+#: src/components/EditorSide/index.tsx:324
+#: src/components/FileEditor/ItemTab.tsx:129
 msgid "创建失败: {e}"
 msgstr "创建失败: {e}"
 
-#: src/components/EditorSide/CreateModal.tsx:88
 #: src/components/EditorSide/CreateModal.tsx:94
+#: src/components/EditorSide/CreateModal.tsx:105
 msgid "创建成功"
 msgstr "创建成功"
 
-#: src/components/FileEditor/ItemTab.tsx:91
+#: src/components/FileEditor/ItemTab.tsx:133
 msgid "创建新文件"
 msgstr "创建新文件"
 
@@ -149,7 +150,7 @@ msgstr "创建新文件"
 msgid "初始化博客失败 {0}"
 msgstr "初始化博客失败 {0}"
 
-#: src/components/EditorSide/index.tsx:247
+#: src/components/EditorSide/index.tsx:253
 msgid "删除"
 msgstr "删除"
 
@@ -166,19 +167,19 @@ msgstr "删除列"
 #~ msgid "删除失败"
 #~ msgstr "删除失败"
 
-#: src/components/EditorSide/index.tsx:265
+#: src/components/EditorSide/index.tsx:271
 msgid "删除失败: {e}"
 msgstr "删除失败: {e}"
 
-#: src/components/EditorSide/index.tsx:263
+#: src/components/EditorSide/index.tsx:269
 msgid "删除成功"
 msgstr "删除成功"
 
-#: src/components/EditorSide/index.tsx:251
+#: src/components/EditorSide/index.tsx:257
 msgid "删除文件"
 msgstr "删除文件"
 
-#: src/components/EditorSide/index.tsx:251
+#: src/components/EditorSide/index.tsx:257
 msgid "删除文件夹"
 msgstr "删除文件夹"
 
@@ -223,11 +224,11 @@ msgstr "取消"
 msgid "合并单元格"
 msgstr "合并单元格"
 
-#: src/components/EditorSide/CreateModal.tsx:143
+#: src/components/EditorSide/CreateModal.tsx:155
 msgid "名称"
 msgstr "名称"
 
-#: src/components/EditorSide/index.tsx:147
+#: src/components/EditorSide/index.tsx:148
 msgid "名称不能为空"
 msgstr "名称不能为空"
 
@@ -256,19 +257,19 @@ msgstr "在右侧插入列"
 msgid "在左侧插入列"
 msgstr "在左侧插入列"
 
-#: src/components/EditorSide/index.tsx:237
+#: src/components/EditorSide/index.tsx:243
 msgid "在文件夹中打开"
 msgstr "在文件夹中打开"
 
-#: src/components/EditorSide/index.tsx:240
+#: src/components/EditorSide/index.tsx:246
 msgid "在文件夹中显示"
 msgstr "在文件夹中显示"
 
-#: src/components/EditorSide/index.tsx:239
+#: src/components/EditorSide/index.tsx:245
 msgid "在文件管理器中打开"
 msgstr "在文件管理器中打开"
 
-#: src/components/EditorSide/index.tsx:238
+#: src/components/EditorSide/index.tsx:244
 msgid "在访达中显示"
 msgstr "在访达中显示"
 
@@ -281,16 +282,16 @@ msgstr "基本"
 #~ msgid "增加缩进"
 #~ msgstr "增加缩进"
 
-#: src/components/EditorSide/CreateModal.tsx:59
-#: src/components/EditorSide/index.tsx:201
+#: src/components/EditorSide/CreateModal.tsx:60
+#: src/components/EditorSide/index.tsx:207
 msgid "复制"
 msgstr "复制"
 
-#: src/components/EditorSide/CreateModal.tsx:125
+#: src/components/EditorSide/CreateModal.tsx:136
 msgid "复制失败"
 msgstr "复制失败"
 
-#: src/components/EditorSide/CreateModal.tsx:122
+#: src/components/EditorSide/CreateModal.tsx:133
 msgid "复制成功"
 msgstr "复制成功"
 
@@ -346,7 +347,7 @@ msgstr "小写英文字母 (a, b, c)"
 #~ msgid "居中"
 #~ msgstr "居中"
 
-#: src/components/EditorSide/Toolbar.tsx:111
+#: src/components/EditorSide/Toolbar.tsx:110
 msgid "展开全部"
 msgstr "展开全部"
 
@@ -354,7 +355,7 @@ msgstr "展开全部"
 #~ msgid "左对齐"
 #~ msgstr "左对齐"
 
-#: src/components/EditorSide/index.tsx:124
+#: src/components/EditorSide/index.tsx:125
 msgid "已经在当前目录下，无需移动"
 msgstr "已经在当前目录下，无需移动"
 
@@ -376,7 +377,7 @@ msgstr "引用"
 #~ msgid "引用块"
 #~ msgstr "引用块"
 
-#: src/components/EditorSide/index.tsx:181
+#: src/components/EditorSide/index.tsx:187
 msgid "当前系统不支持此功能"
 msgstr "当前系统不支持此功能"
 
@@ -389,11 +390,11 @@ msgstr "待办事项"
 msgid "待办列表"
 msgstr "待办列表"
 
-#: src/components/FileEditor/ItemTab.tsx:102
+#: src/components/FileEditor/ItemTab.tsx:144
 msgid "或者从左侧文件树中选择一个文件进行编辑"
 msgstr "或者从左侧文件树中选择一个文件进行编辑"
 
-#: src/components/EditorSide/Toolbar.tsx:111
+#: src/components/EditorSide/Toolbar.tsx:110
 msgid "折叠全部"
 msgstr "折叠全部"
 
@@ -453,7 +454,7 @@ msgstr "文件"
 msgid "文件名："
 msgstr "文件名："
 
-#: src/components/EditorSide/CreateModal.tsx:166
+#: src/components/EditorSide/CreateModal.tsx:178
 msgid "文件夹路径"
 msgstr "文件夹路径"
 
@@ -470,20 +471,20 @@ msgstr "文本"
 #~ msgid "斜体 (⌘+I)"
 #~ msgstr "斜体 (⌘+I)"
 
-#: src/components/EditorSide/CreateModal.tsx:56
-#: src/components/EditorSide/index.tsx:276
+#: src/components/EditorSide/CreateModal.tsx:57
+#: src/components/EditorSide/index.tsx:282
 #: src/components/EditorSide/Toolbar.tsx:67
 msgid "新建文件"
 msgstr "新建文件"
 
-#: src/components/EditorSide/CreateModal.tsx:57
-#: src/components/EditorSide/index.tsx:287
+#: src/components/EditorSide/CreateModal.tsx:58
+#: src/components/EditorSide/index.tsx:293
 #: src/components/EditorSide/Toolbar.tsx:80
 msgid "新建文件夹"
 msgstr "新建文件夹"
 
-#: src/components/FileEditor/index.tsx:102
-#: src/components/FileEditor/index.tsx:127
+#: src/components/FileEditor/index.tsx:92
+#: src/components/FileEditor/index.tsx:114
 msgid "新标签页"
 msgstr "新标签页"
 
@@ -507,13 +508,14 @@ msgstr "日期"
 #~ msgid "有序列表"
 #~ msgstr "有序列表"
 
-#: src/components/EditorSide/index.tsx:292
-#: src/components/EditorSide/index.tsx:315
+#: src/components/EditorSide/index.tsx:298
+#: src/components/EditorSide/index.tsx:321
 msgid "未命名"
 msgstr "未命名"
 
-#: src/components/EditorSide/index.tsx:281
-#: src/components/EditorSide/index.tsx:315
+#: src/components/EditorSide/index.tsx:287
+#: src/components/EditorSide/index.tsx:321
+#: src/components/FileEditor/ItemTab.tsx:126
 msgid "未命名.md"
 msgstr "未命名.md"
 
@@ -521,7 +523,7 @@ msgstr "未命名.md"
 #~ msgid "未找到该语言。"
 #~ msgstr "未找到该语言。"
 
-#: src/components/EditorSide/CreateModal.tsx:99
+#: src/components/EditorSide/CreateModal.tsx:110
 msgid "未更改位置"
 msgstr "未更改位置"
 
@@ -573,7 +575,7 @@ msgstr "标题 6"
 msgid "模版下载失败 {0}"
 msgstr "模版下载失败 {0}"
 
-#: src/components/FileEditor/ItemTab.tsx:71
+#: src/components/FileEditor/ItemTab.tsx:94
 msgid "正在加载文件..."
 msgstr "正在加载文件..."
 
@@ -597,7 +599,7 @@ msgstr "深色模式"
 #~ msgid "添加:"
 #~ msgstr "添加:"
 
-#: src/components/EditorSide/index.tsx:62
+#: src/components/EditorSide/index.tsx:63
 msgid "监视文件夹失败: {e}"
 msgstr "监视文件夹失败: {e}"
 
@@ -609,11 +611,11 @@ msgstr "目录"
 msgid "确定"
 msgstr "确定"
 
-#: src/components/EditorSide/index.tsx:254
+#: src/components/EditorSide/index.tsx:260
 msgid "确定要删除文件 {name} 吗？此操作不可撤销。"
 msgstr "确定要删除文件 {name} 吗？此操作不可撤销。"
 
-#: src/components/EditorSide/index.tsx:253
+#: src/components/EditorSide/index.tsx:259
 msgid "确定要删除文件夹 {name} 吗？子文件夹和文件也会被删除，此操作不可撤销。"
 msgstr "确定要删除文件夹 {name} 吗？子文件夹和文件也会被删除，此操作不可撤销。"
 
@@ -622,18 +624,18 @@ msgstr "确定要删除文件夹 {name} 吗？子文件夹和文件也会被删�
 msgid "视频"
 msgstr "视频"
 
-#: src/components/EditorSide/CreateModal.tsx:58
-#: src/components/EditorSide/index.tsx:223
+#: src/components/EditorSide/CreateModal.tsx:59
+#: src/components/EditorSide/index.tsx:229
 msgid "移动"
 msgstr "移动"
 
 #. placeholder {0}: error.message
-#: src/components/EditorSide/index.tsx:142
+#: src/components/EditorSide/index.tsx:143
 msgid "移动失败: {0}"
 msgstr "移动失败: {0}"
 
-#: src/components/EditorSide/CreateModal.tsx:105
-#: src/components/EditorSide/index.tsx:139
+#: src/components/EditorSide/CreateModal.tsx:116
+#: src/components/EditorSide/index.tsx:140
 msgid "移动成功"
 msgstr "移动成功"
 
@@ -685,7 +687,7 @@ msgstr "表情符号"
 msgid "表格"
 msgstr "表格"
 
-#: src/components/EditorSide/CreateModal.tsx:181
+#: src/components/EditorSide/CreateModal.tsx:193
 msgid "覆盖"
 msgstr "覆盖"
 
@@ -702,24 +704,24 @@ msgstr "评论"
 #~ msgid "语言"
 #~ msgstr "语言"
 
-#: src/components/EditorSide/TocSide/index.tsx:132
+#: src/components/EditorSide/TocSide/index.tsx:135
 msgid "请创建一个标题以显示目录"
 msgstr "请创建一个标题以显示目录"
 
-#: src/components/EditorSide/CreateModal.tsx:145
+#: src/components/EditorSide/CreateModal.tsx:157
 msgid "请输入名称"
 msgstr "请输入名称"
 
-#: src/components/EditorSide/CreateModal.tsx:151
+#: src/components/EditorSide/CreateModal.tsx:163
 msgid "请输入正确的名称"
 msgstr "请输入正确的名称"
 
-#: src/components/FileEditor/ItemTab.tsx:57
+#: src/components/FileEditor/ItemTab.tsx:80
 msgid "读取文件失败 {error}"
 msgstr "读取文件失败 {error}"
 
 #. placeholder {0}: (error as Error).message
-#: src/components/EditorSide/index.tsx:104
+#: src/components/EditorSide/index.tsx:105
 #: src/components/FolderSelector/index.tsx:71
 msgid "读取文件夹失败: {0}"
 msgstr "读取文件夹失败: {0}"
@@ -728,7 +730,7 @@ msgstr "读取文件夹失败: {0}"
 msgid "跟随系统"
 msgstr "跟随系统"
 
-#: src/components/EditorSide/CreateModal.tsx:180
+#: src/components/EditorSide/CreateModal.tsx:192
 msgid "跳过"
 msgstr "跳过"
 
@@ -745,17 +747,17 @@ msgstr "通过URL插入"
 #~ msgid "重做"
 #~ msgstr "重做"
 
-#: src/components/EditorSide/index.tsx:194
+#: src/components/EditorSide/index.tsx:200
 #: src/components/EditorSide/Toolbar.tsx:93
 msgid "重命名"
 msgstr "重命名"
 
 #. placeholder {0}: (error as Error).message
-#: src/components/EditorSide/index.tsx:159
+#: src/components/EditorSide/index.tsx:160
 msgid "重命名失败: {0}"
 msgstr "重命名失败: {0}"
 
-#: src/components/EditorSide/index.tsx:157
+#: src/components/EditorSide/index.tsx:158
 msgid "重命名成功"
 msgstr "重命名成功"
 
