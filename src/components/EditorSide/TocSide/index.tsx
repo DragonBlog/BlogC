@@ -1,66 +1,71 @@
 import { useLingui } from "@lingui/react/macro";
-import { BlockSelectionPlugin } from "@platejs/selection/react";
 import { Empty, Typography } from "antd";
 import clsx from "clsx";
-import { NodeApi } from "platejs";
-import { useEffect, useRef, useState } from "react";
-import {
-  getHeadingList,
-  headingItemVariants,
-} from "@/components/ui/toc-node-static";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { headingItemVariants } from "@/components/ui/toc-node-static";
 import { useEditorTabsStore } from "@/store/useEditorTabsStore";
 import { Button } from "../../ui/button";
+import { useTocStore } from "./useTocStore";
 
 export const TocSideBar = () => {
   const { t } = useLingui();
-  const [editor] = useEditorTabsStore((store) => [store.currentMonitorEditor]);
   const tocRef = useRef<HTMLDivElement>(null);
   const tocButtonRefs = useRef<Record<string, HTMLButtonElement>>({});
-  const headingList = getHeadingList(editor);
+  const [headingMaps] = useTocStore((store) => [store.headingMaps]);
+  const [activeTabId] = useEditorTabsStore((store) => [store.activeTabId]);
+
+  const { headings: headingList, blockSelectFn } = useMemo(() => {
+    if (headingMaps[activeTabId]) {
+      return headingMaps[activeTabId];
+    } else {
+      return {
+        headings: [],
+        blockSelectFn: () => {},
+      };
+    }
+  }, [headingMaps, activeTabId]);
+
   const [activeItem, setActiveItem] = useState<string>();
   const headingElementsRef = useRef<Record<string, IntersectionObserverEntry>>(
     {},
   );
-  const [clickedItemId, setClickedItemId] = useState<string | null>(null);
-  const scrollEndTimeoutRef = useRef<number | null>(null);
+  const clickRef = useRef(false);
 
   useEffect(() => {
-    if (!editor) return;
     const callback: IntersectionObserverCallback = (headings) => {
+      if (clickRef.current) return;
       headingElementsRef.current = headings.reduce((map, headingElement) => {
         const blockId = (headingElement.target as HTMLElement).dataset.blockId;
-        if (blockId) map[blockId] = headingElement;
+
+        if (blockId) {
+          map[blockId] = headingElement;
+        }
+
         return map;
       }, headingElementsRef.current);
 
       const visibleHeadings: string[] = [];
+
       Object.keys(headingElementsRef.current).forEach((key) => {
         const headingElement = headingElementsRef.current[key];
+
         if (headingElement.isIntersecting) visibleHeadings.push(key);
       });
-      //实现防抖
-      if (scrollEndTimeoutRef.current) {
-        window.clearTimeout(scrollEndTimeoutRef.current);
-      }
-      scrollEndTimeoutRef.current = window.setTimeout(() => {
-        if (clickedItemId) {
-          setActiveItem(clickedItemId);
-          const btn = tocButtonRefs.current[clickedItemId];
-          if (btn && tocRef.current) {
-            const { offsetTop: btnOffsetTop, offsetHeight: btnOffsetHeight } =
-              btn;
-            const { scrollTop, offsetHeight } = tocRef.current;
-            if (btnOffsetTop < scrollTop) {
-              btn.scrollIntoView({ behavior: "smooth", block: "start" });
-            } else if (
-              btnOffsetTop + btnOffsetHeight >
-              scrollTop + offsetHeight
-            ) {
-              btn.scrollIntoView({ behavior: "smooth", block: "end" });
-            }
-          }
+      const lastKey = Object.keys(headingElementsRef.current).pop()!;
+      const activeItem = visibleHeadings[0] || lastKey;
+      visibleHeadings.length > 0 && setActiveItem(activeItem);
+      const btn = tocButtonRefs.current[activeItem];
+
+      if (btn && tocRef.current) {
+        const { offsetTop: btnOffsetTop, offsetHeight: btnOffsetHeight } = btn;
+        const { scrollTop, offsetHeight } = tocRef.current;
+        if (btnOffsetTop < scrollTop) {
+          btn.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else if (btnOffsetTop + btnOffsetHeight > scrollTop + offsetHeight) {
+          btn.scrollIntoView({ behavior: "smooth", block: "end" });
         }
-      }, 350);
+      }
+      headingElementsRef.current = {};
     };
 
     const observer = new IntersectionObserver(callback, {
@@ -68,20 +73,12 @@ export const TocSideBar = () => {
     });
 
     headingList.forEach((item) => {
-      const { path } = item;
-      const node = NodeApi.get(editor, path);
-      if (!node) return;
-      const element = editor.api.toDOMNode(node);
-      if (element) observer.observe(element);
+      const { element } = item;
+      return element && observer.observe(element);
     });
 
-    return () => {
-      observer.disconnect();
-      if (scrollEndTimeoutRef.current) {
-        window.clearTimeout(scrollEndTimeoutRef.current);
-      }
-    };
-  }, [headingList, editor, clickedItemId]);
+    return () => observer.disconnect();
+  }, [headingList]);
 
   return (
     <div ref={tocRef} className="w-full h-full overflow-x-hidden p-2">
@@ -90,11 +87,10 @@ export const TocSideBar = () => {
           <Button
             key={item.title}
             ref={(ref) => {
-              if (ref) {
-                tocButtonRefs.current[item.id] = ref;
-              } else {
+              if (ref) tocButtonRefs.current[item.id] = ref;
+              return () => {
                 delete tocButtonRefs.current[item.id];
-              }
+              };
             }}
             variant={"ghost"}
             className={clsx(
@@ -104,34 +100,16 @@ export const TocSideBar = () => {
               "rounded-md",
             )}
             onClick={() => {
-              const node = NodeApi.get(editor!, item.path);
-              if (!node) return;
-              const el = editor?.api.toDOMNode(node);
-              if (el) {
-                el.scrollIntoView({ behavior: "smooth", block: "center" });
-                editor
-                  ?.getApi(BlockSelectionPlugin)
-                  .blockSelection.set([item.id]);
-
-                setClickedItemId(item.id);
+              if (item.element) {
+                item.element.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center",
+                });
+                blockSelectFn?.(item.id);
                 setActiveItem(item.id);
-
-                const btn = tocButtonRefs.current[item.id];
-                if (btn && tocRef.current) {
-                  const {
-                    offsetTop: btnOffsetTop,
-                    offsetHeight: btnOffsetHeight,
-                  } = btn;
-                  const { scrollTop, offsetHeight } = tocRef.current;
-                  if (btnOffsetTop < scrollTop) {
-                    btn.scrollIntoView({ behavior: "auto", block: "start" });
-                  } else if (
-                    btnOffsetTop + btnOffsetHeight >
-                    scrollTop + offsetHeight
-                  ) {
-                    btn.scrollIntoView({ behavior: "auto", block: "end" });
-                  }
-                }
+                setTimeout(() => {
+                  clickRef.current = false;
+                }, 300);
               }
             }}
           >

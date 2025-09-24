@@ -1,15 +1,18 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { MarkdownPlugin } from "@platejs/markdown";
+import { BlockSelectionPlugin } from "@platejs/selection/react";
 import { readTextFile } from "@tauri-apps/plugin-fs";
-import { useAsyncEffect } from "ahooks";
+import { useAsyncEffect, useDebounceFn } from "ahooks";
 import { App, Spin, Typography } from "antd";
 import { PlateEditor as TPlateEditor, usePlateEditor } from "platejs/react";
-import { Ref, useImperativeHandle, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTreeStore } from "@/components/EditorSide/useTreeStore";
 import { EditorTab, useEditorTabsStore } from "@/store/useEditorTabsStore";
 import { useAppStore } from "../../store/useAppStore";
 import { CreateModal, CreateModalRef } from "../EditorSide/CreateModal";
+import { useTocStore } from "../EditorSide/TocSide/useTocStore";
+import { getHeadingList } from "../EditorSide/TocSide/util";
 import { EditorKit } from "../editor/editor-kit";
 import { PlateEditor } from "../editor/plate-editor";
 
@@ -26,7 +29,6 @@ type ItemFileTabProps = {
   data: EditorTab;
   onChange?: (data: EditorTab) => void;
   onClose?: (data: EditorTab) => void;
-  ref?: Ref<TPlateEditor>;
 };
 
 /**
@@ -43,16 +45,27 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
   const treeRef = useTreeStore((state) => state.treeRef);
   const [isLoading, setIsLoading] = useState(false);
   const [projectDir] = useAppStore((store) => [store.projectDir]);
-  const [selectedItem, setSelectedItem] = useEditorTabsStore((store) => [
-    store.selectedItem,
-    store.setSelectedItem,
-  ]);
+  const [activeTabId, selectedItem, setSelectedItem] = useEditorTabsStore(
+    (store) => [store.activeTabId, store.selectedItem, store.setSelectedItem],
+  );
+  const [setHeadingMaps] = useTocStore((store) => [store.setHeadingMaps]);
+
+  const { run } = useDebounceFn(
+    (editor: TPlateEditor) => {
+      setHeadingMaps(data.id, getHeadingList(editor), (id) => {
+        editor
+          .getApi(BlockSelectionPlugin)
+          .blockSelection.setSelectedIds({ ids: [id] });
+      });
+    },
+    {
+      wait: 300,
+    },
+  );
 
   const editor = usePlateEditor({
     plugins: EditorKit,
   });
-
-  useImperativeHandle(props.ref, () => editor, [editor]);
 
   useAsyncEffect(async () => {
     if (fileItem) {
@@ -62,6 +75,7 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
         editor.tf.setValue(
           editor.getApi(MarkdownPlugin).markdown.deserialize(res),
         );
+        run(editor);
       } catch (error) {
         message.error(t`读取文件失败 ${error}`);
       } finally {
@@ -83,7 +97,14 @@ export const ItemFileTab = (props: ItemFileTabProps) => {
             <div className="w-30"></div>
           </Spin>
         ) : (
-          <PlateEditor editor={editor} />
+          <PlateEditor
+            editor={editor}
+            onValueChange={({ editor }) => {
+              if (activeTabId === data.id) {
+                run(editor);
+              }
+            }}
+          />
         )}
       </div>
     );
