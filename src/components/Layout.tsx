@@ -2,10 +2,20 @@ import type { ProSettings } from "@ant-design/pro-components";
 import { ProLayout, SettingDrawer } from "@ant-design/pro-components";
 import { useLingui } from "@lingui/react/macro";
 import { Avatar, Dropdown } from "antd";
-import { Languages, Moon, Sun, SunMoon } from "lucide-react";
+import {
+  House,
+  Languages,
+  Moon,
+  Server,
+  Settings,
+  SquarePen,
+  Sun,
+  SunMoon,
+} from "lucide-react";
 import { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { match } from "ts-pattern";
+import { useConfigStore } from "@/pages/Config/useConfigStore";
 import { Language, Theme, useAppStore } from "@/store/useAppStore";
 
 export default () => {
@@ -22,6 +32,7 @@ export default () => {
     store.theme,
     store.setTheme,
   ]);
+  const [currentPage] = useConfigStore((store) => [store.currentPage]);
 
   return (
     <>
@@ -29,31 +40,43 @@ export default () => {
         location={{
           pathname,
         }}
+        collapsedButtonRender={false}
+        collapsed
+        disableMobile
         route={{
           routes: [
             {
               path: "/",
               key: "/",
-              name: "首页",
+              name: t`首页`,
+              icon: <House className="size-4" />,
             },
             {
               path: "/content-manager",
-              name: "内容管理",
+              name: t`写作`,
+              icon: <SquarePen className="size-4" />,
+            },
+            {
+              path: "/deploy",
+              name: t`部署`,
+              icon: <Server className="size-4" />,
             },
             {
               path: "/config",
-              name: "配置管理",
-            },
-            {
-              path: "/init",
-              name: "初始化",
+              name: t`设置`,
+              icon: <Settings className="size-4" />,
             },
           ],
         }}
+        siderWidth={220}
         menuProps={{
           onClick: (e) => {
             setPathname(e.key);
-            navigate(e.key);
+            if (e.key === "/config") {
+              navigate(`/config/${currentPage}`);
+            } else {
+              navigate(e.key);
+            }
           },
         }}
         onPageChange={(location) => {
@@ -65,6 +88,7 @@ export default () => {
           style: {
             margin: "auto",
           },
+          size: "small",
         }}
         {...settings}
         style={{

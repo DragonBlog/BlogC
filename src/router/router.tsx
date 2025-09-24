@@ -1,5 +1,8 @@
 import { createBrowserRouter, Link } from "react-router-dom";
 import { BasicLayout } from "@/components/BasicLayout";
+import { FileSetting } from "@/pages/Config/FileSetting";
+import { GeneralSetting } from "@/pages/Config/GeneralSetting";
+import { Deploy } from "@/pages/Deploy";
 import Layout from "../components/Layout";
 import { Config } from "../pages/Config";
 import { ContentManager } from "../pages/ContentManager";
@@ -26,6 +29,20 @@ const router = createBrowserRouter([
           {
             path: "/config",
             element: <Config />,
+            children: [
+              {
+                path: "general-setting",
+                element: <GeneralSetting />,
+              },
+              {
+                path: "file-setting",
+                element: <FileSetting />,
+              },
+            ],
+          },
+          {
+            path: "/deploy",
+            element: <Deploy />,
           },
         ],
       },
