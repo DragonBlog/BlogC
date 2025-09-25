@@ -1,4 +1,5 @@
 import { Trans, useLingui } from "@lingui/react/macro";
+import { getCurrentWindow, Window } from "@tauri-apps/api/window";
 import {
   App,
   Button,
@@ -12,7 +13,6 @@ import {
   theme,
 } from "antd";
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { match } from "ts-pattern";
 import { initOrOpenBlog, installTemplate } from "@/command/blogManager";
 import { checkDir } from "../../command";
@@ -30,6 +30,7 @@ export const Init = () => {
     store.projectDir,
     store.setProjectDir,
   ]);
+  const [tempProjectDir, setTempProjectDir] = useState(projectDir);
   const { t } = useLingui();
   const { message } = App.useApp();
   const [step, setStep] = useState(0);
@@ -37,7 +38,6 @@ export const Init = () => {
   const [percent, setPercent] = useState(0);
   const [bytes, setBytes] = useState(0);
   const terminalRef = useRef<TerminalRef>(null);
-  const navigate = useNavigate();
   const [installStatus, setInstallStatus] = useState<InstallStatus>();
   const [isNextDisabled, setIsNextDisabled] = useState(false);
 
@@ -78,7 +78,7 @@ export const Init = () => {
       ),
       onNext: async () => {
         const values = await form.validateFields();
-        setProjectDir(values.projectDir);
+        setTempProjectDir(values.projectDir);
 
         try {
           const shouldInstallTemplate = await initOrOpenBlog(values.projectDir);
@@ -149,7 +149,7 @@ export const Init = () => {
 
         try {
           await installDependencies({
-            cwd: `${projectDir}/template`,
+            cwd: `${tempProjectDir}/template`,
             onOutput: (output) => {
               terminalRef.current?.write(output.log);
             },
@@ -196,7 +196,7 @@ export const Init = () => {
             style={{ borderColor: token.colorBorder }}
           >
             <TerminalComponent
-              key={projectDir}
+              key={tempProjectDir}
               cols={10}
               rows={10}
               ref={terminalRef}
@@ -231,7 +231,18 @@ export const Init = () => {
       ),
       onPrev: () => setStep(0),
       onNext: async () => {
-        navigate("/content-manager");
+        try {
+          const window = getCurrentWindow();
+          setProjectDir(tempProjectDir);
+          const mainWindow = await Window.getByLabel("main");
+          if (mainWindow) {
+            await mainWindow.show();
+            await mainWindow.setFocus();
+            await window.close();
+          }
+        } catch (error) {
+          message.error(`${error}`);
+        }
       },
     },
   ];

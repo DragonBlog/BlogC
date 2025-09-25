@@ -1,9 +1,12 @@
 use crate::utils;
 use crate::{error::Result, utils::CommandStdout};
+use anyhow::anyhow;
 use camino::Utf8PathBuf;
 use serde::{Deserialize, Serialize};
 use tauri::{ipc::Channel, AppHandle};
+use tauri::{Emitter, Manager};
 use tauri_plugin_shell::ShellExt;
+use tauri_plugin_store::StoreExt;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -48,4 +51,19 @@ pub async fn exec(
         on_start,
     )
     .await
+}
+
+#[tauri::command]
+pub async fn store_save(app: AppHandle, store_name: &str, current_window: &str) -> Result<()> {
+    app.get_store(store_name)
+        .ok_or_else(|| anyhow::anyhow!("Store not found: {}", store_name))?
+        .save()
+        .map_err(|e| anyhow!(e))?;
+
+    for (label, window) in app.webview_windows().iter() {
+        if label != current_window {
+            window.emit("rehydrate", ()).map_err(|e| anyhow!(e))?;
+        }
+    }
+    Ok(())
 }

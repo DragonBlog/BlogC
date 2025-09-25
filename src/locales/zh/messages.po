@@ -40,10 +40,9 @@ msgstr "上标"
 msgid "下标"
 msgstr "下标"
 
-#. placeholder {0}: (error as Error).message
 #: src/pages/Config/index.tsx:58
-msgid "下载模型失败:{0}"
-msgstr "下载模型失败:{0}"
+#~ msgid "下载模型失败:{0}"
+#~ msgstr "下载模型失败:{0}"
 
 #: src/components/ui/import-toolbar-button.tsx:84
 msgid "从HTML导入"
@@ -96,6 +95,10 @@ msgstr "关闭标签页"
 #: src/components/ui/insert-toolbar-button.tsx:188
 msgid "内联"
 msgstr "内联"
+
+#: src/components/Layout.tsx:56
+msgid "写作"
+msgstr "写作"
 
 #: src/components/EditorSide/CreateModal.tsx:188
 msgid "冲突处理"
@@ -363,6 +366,10 @@ msgstr "展开全部"
 msgid "已经在当前目录下，无需移动"
 msgstr "已经在当前目录下，无需移动"
 
+#: src/pages/Config/MenuSide.tsx:17
+msgid "常规设置"
+msgstr "常规设置"
+
 #: src/components/ui/mode-toolbar-button.tsx:46
 msgid "建议"
 msgstr "建议"
@@ -455,12 +462,16 @@ msgid "文件"
 msgstr "文件"
 
 #: src/pages/Config/index.tsx:70
-msgid "文件名："
-msgstr "文件名："
+#~ msgid "文件名："
+#~ msgstr "文件名："
 
 #: src/components/EditorSide/CreateModal.tsx:178
 msgid "文件夹路径"
 msgstr "文件夹路径"
+
+#: src/pages/Config/MenuSide.tsx:25
+msgid "文件管理"
+msgstr "文件管理"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:117
 #~ msgid "文字颜色"
@@ -591,11 +602,11 @@ msgstr "段落"
 #~ msgid "水平线"
 #~ msgstr "水平线"
 
-#: src/components/Layout.tsx:109
+#: src/components/Layout.tsx:133
 msgid "浅色模式"
 msgstr "浅色模式"
 
-#: src/components/Layout.tsx:115
+#: src/components/Layout.tsx:139
 msgid "深色模式"
 msgstr "深色模式"
 
@@ -695,6 +706,10 @@ msgstr "表格"
 msgid "覆盖"
 msgstr "覆盖"
 
+#: src/components/Layout.tsx:66
+msgid "设置"
+msgstr "设置"
+
 #: src/components/ui/comment-toolbar-button.tsx:21
 msgid "评论"
 msgstr "评论"
@@ -730,7 +745,7 @@ msgstr "读取文件失败 {error}"
 msgid "读取文件夹失败: {0}"
 msgstr "读取文件夹失败: {0}"
 
-#: src/components/Layout.tsx:121
+#: src/components/Layout.tsx:145
 msgid "跟随系统"
 msgstr "跟随系统"
 
@@ -746,6 +761,10 @@ msgstr "转换为"
 #: src/components/ui/media-toolbar-button.tsx:137
 msgid "通过URL插入"
 msgstr "通过URL插入"
+
+#: src/components/Layout.tsx:61
+msgid "部署"
+msgstr "部署"
 
 #: src/components/ui/history-toolbar-button.tsx:25
 #~ msgid "重做"
@@ -786,6 +805,10 @@ msgstr "项目符号列表"
 #: src/components/ui/mode-toolbar-button.tsx:50
 msgid "预览"
 msgstr "预览"
+
+#: src/components/Layout.tsx:51
+msgid "首页"
+msgstr "首页"
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:168
 #~ msgid "高亮"

@@ -79,6 +79,7 @@ pub fn run() {
             commands::check_dir,
             commands::get_command_path,
             commands::exec,
+            commands::store_save,
             // oauth
             commands::start,
             // file manager

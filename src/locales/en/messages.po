@@ -40,10 +40,9 @@ msgstr "Superscript"
 msgid "下标"
 msgstr "Subscript"
 
-#. placeholder {0}: (error as Error).message
 #: src/pages/Config/index.tsx:58
-msgid "下载模型失败:{0}"
-msgstr ""
+#~ msgid "下载模型失败:{0}"
+#~ msgstr ""
 
 #: src/components/ui/import-toolbar-button.tsx:84
 msgid "从HTML导入"
@@ -96,6 +95,10 @@ msgstr "Close tab"
 #: src/components/ui/insert-toolbar-button.tsx:188
 msgid "内联"
 msgstr "Inline"
+
+#: src/components/Layout.tsx:56
+msgid "写作"
+msgstr ""
 
 #: src/components/EditorSide/CreateModal.tsx:188
 msgid "冲突处理"
@@ -359,6 +362,10 @@ msgstr "Expand all"
 msgid "已经在当前目录下，无需移动"
 msgstr "Already in the current directory, no need to move"
 
+#: src/pages/Config/MenuSide.tsx:17
+msgid "常规设置"
+msgstr ""
+
 #: src/components/ui/mode-toolbar-button.tsx:46
 msgid "建议"
 msgstr "Suggestion"
@@ -451,12 +458,16 @@ msgid "文件"
 msgstr "File"
 
 #: src/pages/Config/index.tsx:70
-msgid "文件名："
-msgstr ""
+#~ msgid "文件名："
+#~ msgstr ""
 
 #: src/components/EditorSide/CreateModal.tsx:178
 msgid "文件夹路径"
 msgstr "Folder path"
+
+#: src/pages/Config/MenuSide.tsx:25
+msgid "文件管理"
+msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:117
 #~ msgid "文字颜色"
@@ -587,11 +598,11 @@ msgstr "Paragraph"
 #~ msgid "水平线"
 #~ msgstr "Horizontal line"
 
-#: src/components/Layout.tsx:109
+#: src/components/Layout.tsx:133
 msgid "浅色模式"
 msgstr "Light Mode"
 
-#: src/components/Layout.tsx:115
+#: src/components/Layout.tsx:139
 msgid "深色模式"
 msgstr "Dark Mode"
 
@@ -691,6 +702,10 @@ msgstr "Table"
 msgid "覆盖"
 msgstr "Overwrite"
 
+#: src/components/Layout.tsx:66
+msgid "设置"
+msgstr ""
+
 #: src/components/ui/comment-toolbar-button.tsx:21
 msgid "评论"
 msgstr "Comment"
@@ -726,7 +741,7 @@ msgstr "Failed to read file {error}"
 msgid "读取文件夹失败: {0}"
 msgstr "Failed to read folder: {0}"
 
-#: src/components/Layout.tsx:121
+#: src/components/Layout.tsx:145
 msgid "跟随系统"
 msgstr "Follow System"
 
@@ -742,6 +757,10 @@ msgstr "Convert to"
 #: src/components/ui/media-toolbar-button.tsx:137
 msgid "通过URL插入"
 msgstr "Insert by URL"
+
+#: src/components/Layout.tsx:61
+msgid "部署"
+msgstr ""
 
 #: src/components/ui/history-toolbar-button.tsx:25
 #~ msgid "重做"
@@ -782,6 +801,10 @@ msgstr "Bulleted List"
 #: src/components/ui/mode-toolbar-button.tsx:50
 msgid "预览"
 msgstr "Preview"
+
+#: src/components/Layout.tsx:51
+msgid "首页"
+msgstr ""
 
 #: src/components/ui/fixed-toolbar-buttons.tsx:168
 #~ msgid "高亮"

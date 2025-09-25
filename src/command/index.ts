@@ -163,3 +163,7 @@ export async function exec(
     cwd: options.cwd,
   });
 }
+
+export async function storeSave(storeName: string, currentWindow: string) {
+  return await invoke<void>("store_save", { storeName, currentWindow });
+}

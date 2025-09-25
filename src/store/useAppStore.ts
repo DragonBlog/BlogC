@@ -1,9 +1,17 @@
 import { combine, createJSONStorage, persist } from "zustand/middleware";
 import { shallow } from "zustand/shallow";
 import { createWithEqualityFn } from "zustand/traditional";
+import { storeSave } from "@/command";
 import { TauriStoreState } from "./tauriStoreState";
 
-const store = new TauriStoreState("app-store.json");
+const store = new TauriStoreState("app-store.json", {
+  onRehydrate: () => {
+    useAppStore.persist.rehydrate();
+  },
+  saveFn: async (currentWindow, storeName) => {
+    await storeSave(storeName, currentWindow.label);
+  },
+});
 
 await store.init();
 
