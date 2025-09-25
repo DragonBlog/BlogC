@@ -13,8 +13,6 @@ export type Options = {
   ) => Promise<void>;
 };
 
-let allWindows: Window[] = [];
-
 export class TauriStoreState implements StateStorage {
   private store: Store | null = null;
   private debouncedSave: (() => void) | null = null;
@@ -26,7 +24,6 @@ export class TauriStoreState implements StateStorage {
   async init() {
     this.store = await load(this.storename);
     const window = getCurrentWindow();
-    allWindows.push(window);
 
     if (this.options?.onRehydrate) {
       window.listen("rehydrate", this.options.onRehydrate);
